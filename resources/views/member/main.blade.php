@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>{{config('app.name')}} - Member</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="{{asset('vendor/fontawesome-free/css/all.min.css')}}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{asset('vendor/adminlte/css/adminlte.min.css')}}">
+    <!-- Custom styles for this template -->
+    <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet">
+    <!-- Google Font: Nunito -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+</head>
+
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                </li>
+            </ul>
+
+            <!-- Right navbar links -->
+            <ul class="navbar-nav ml-auto">
+                <!-- Notifications Dropdown Menu -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link" href="{{url('member/poin')}}">
+                        Tukar Poin
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link" data-toggle="dropdown" href="#">
+                        {{$name}} <i class="ml-1 far fa-user"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
+                        <a href="{{url('member/edit')}}" class="dropdown-item">
+                            <i class="fas fa-edit mr-2"></i> Edit Profil
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item" data-toggle="modal" data-target="#logoutModal">
+                            <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+        <!-- /.navbar -->
+
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <!-- Brand Logo -->
+            <a href="" class="brand-link mt-2">
+                <i class="fas fa-tshirt brand-image mt-1 ml-3"></i>
+                <h4 class="brand-text text-center">{{config('app.name')}}</h4>
+            </a>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                        data-accordion="false">
+                        <li class="nav-item">
+                            <a href="{{url('member')}}" class="nav-link {{(request()->is('member')) ? 'active' : ''}}">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>Beranda</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{url('member/harga')}}"
+                                class="nav-link {{(request()->is('member/harga')) ? 'active' : ''}}">
+                                <i class="nav-icon fas fa-list"></i>
+                                <p>Daftar Harga</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{url('member/transaksi')}}"
+                                class="nav-link {{(request()->is('member/transaksi')) ? 'active' : ''}}">
+                                <i class="nav-icon fas fa-history"></i>
+                                <p>Riwayat Transaksi</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{url('member/poin')}}"
+                                class="nav-link {{(request()->is('member/poin')) ? 'active' : ''}}">
+                                <i class="nav-icon fas fa-star"></i>
+                                <p>Tukar Poin</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{url('member/edit')}}"
+                                class="nav-link {{(request()->is('member/edit')) ? 'active' : ''}}">
+                                <i class="nav-icon fas fa-edit"></i>
+                                <p>Edit Profil</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{url('member/saran')}}"
+                                class="nav-link {{(request()->is('member/saran')) ? 'active' : ''}}">
+                                <i class="nav-icon fas fa-sticky-note"></i>
+                                <p>Saran / Komplain</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#logoutModal">
+                                <i class="nav-icon fas fa-sign-out-alt"></i>
+                                <p>Logout</p>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+        </aside>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Main content -->
+            @yield('main-content')
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+
+        <!-- Main Footer -->
+        <footer class="main-footer">
+            Copyright &copy; 2020 {{config('app.name')}} All rights reserved.
+        </footer>
+    </div>
+    <!-- ./wrapper -->
+
+    {{-- Logout Modal --}}
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logoutModalLabel">Konfirmasi Keluar</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Apakah anda yakin ingin keluar?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <a href="{{url('logout')}}" class="btn btn-primary">Keluar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- REQUIRED SCRIPTS -->
+
+    <!-- jQuery -->
+    <script src="{{asset('vendor/jquery/jquery.min.js')}}"></script>
+    <!-- Bootstrap 4 -->
+    <script src="{{asset('vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+    <!-- AdminLTE App -->
+    <script src="{{asset('vendor/adminlte/js/adminlte.min.js')}}"></script>
+</body>
+
+</html>
