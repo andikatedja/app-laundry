@@ -20,42 +20,70 @@
                     <div class="card-body">
                         <form action="" method="POST">
                             @csrf
-                            <div class="form-group">
-                                <label for="name">Email</label>
-                                <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
-                                    value="{{$email}}" disabled>
-                            </div>
-                            <div class="form-group">
-                                <label for="name">@lang('auth.name_label')</label>
-                                <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
-                                    name="name" placeholder="@lang('auth.name_placeholder')" value="{{$name}}" required>
-                                @error('name')
-                                <div class="invalid-feedback">
-                                    {{$message}}
+                            <div class="row">
+                                <div class="col-md-4 text-center">
+                                    <i class="p-5 mt-md-5 bg-primary img-circle fas fa-user"></i>
+                                    <div class="form-group mt-3">
+                                        <label for="foto_profil">Pilih Foto Profil</label>
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="foto_profil"
+                                                name="foto_profil">
+                                            <label class="custom-file-label" for="foto_profil">Choose file</label>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-danger">Reset Foto</button>
                                 </div>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <label for="alamat">Alamat</label>
-                                <input type="text" class="form-control @error('alamat') is-invalid @enderror"
-                                    id="alamat" name="alamat" placeholder="Masukkan alamat anda" value="" required>
-                                @error('alamat')
-                                <div class="invalid-feedback">
-                                    {{$message}}
+                                <div class="col-md-2">
                                 </div>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <label for="telp">No Telp</label>
-                                <input type="text" class="form-control @error('telp') is-invalid @enderror" id="telp"
-                                    name="telp" placeholder="Masukkan no telp" value="" required>
-                                @error('telp')
-                                <div class="invalid-feedback">
-                                    {{$message}}
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="name">Email</label>
+                                        <input type="text" class="form-control @error('name') is-invalid @enderror"
+                                            id="name" value="{{$email}}" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="name">@lang('auth.name_label')</label>
+                                        <input type="text" class="form-control @error('name') is-invalid @enderror"
+                                            id="name" name="name" placeholder="@lang('auth.name_placeholder')"
+                                            value="{{$name}}" required>
+                                        @error('name')
+                                        <div class="invalid-feedback">
+                                            {{$message}}
+                                        </div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="jenis_kelamin">Jenis Kelamin</label>
+                                        <select class="form-control" id="jenis_kelamin" name="jenis_kelamin">
+                                            <option value="">Pilih Jenis Kelamin</option>
+                                            <option value="L">Laki - Laki</>
+                                            <option value="P">Perempuan</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="alamat">Alamat</label>
+                                        <input type="text" class="form-control @error('alamat') is-invalid @enderror"
+                                            id="alamat" name="alamat" placeholder="Masukkan alamat anda" value=""
+                                            required>
+                                        @error('alamat')
+                                        <div class="invalid-feedback">
+                                            {{$message}}
+                                        </div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="telp">No Telp</label>
+                                        <input type="text" class="form-control @error('telp') is-invalid @enderror"
+                                            id="telp" name="telp" placeholder="Masukkan no telp" value="" required>
+                                        @error('telp')
+                                        <div class="invalid-feedback">
+                                            {{$message}}
+                                        </div>
+                                        @enderror
+                                    </div>
                                 </div>
-                                @enderror
                             </div>
-                            <button class="btn btn-primary" type="submit">Edit Profil</button>
+                            <button class="btn btn-primary" type="submit">Simpan Profil</button>
                         </form>
                     </div>
                 </div>
@@ -70,7 +98,7 @@
                             <div class="form-group">
                                 <label for="password">Kata Sandi Sekarang</label>
                                 <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                    id="password" name="password_now" placeholder="@lang('auth.password_placeholder')"
+                                    id="password" name="password_now" placeholder="Masukkan kata sandi sekarang"
                                     required>
                                 @error('password')
                                 <div class="invalid-feedback">

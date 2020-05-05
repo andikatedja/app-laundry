@@ -33,18 +33,18 @@
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
                 <!-- Notifications Dropdown Menu -->
-                <li class="nav-item dropdown">
+                <li class="nav-item">
                     <a class="nav-link" href="{{url('member/poin')}}">
-                        Tukar Poin
+                        <i class="mr-2 fas fa-star"></i>Tukar Poin
                     </a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
-                        {{$name}} <i class="ml-1 far fa-user"></i>
+                        <i class="mr-2 far fa-user"></i> {{$name}}
                     </a>
                     <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
                         <a href="{{url('member/edit')}}" class="dropdown-item">
-                            <i class="fas fa-edit mr-2"></i> Edit Profil
+                            <i class="fas fa-user-edit mr-2"></i> Edit Profil
                         </a>
                         <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item" data-toggle="modal" data-target="#logoutModal">
@@ -101,7 +101,7 @@
                         <li class="nav-item">
                             <a href="{{url('member/edit')}}"
                                 class="nav-link {{(request()->is('member/edit')) ? 'active' : ''}}">
-                                <i class="nav-icon fas fa-edit"></i>
+                                <i class="nav-icon fas fa-user-edit"></i>
                                 <p>Edit Profil</p>
                             </a>
                         </li>
@@ -168,8 +168,14 @@
     <script src="{{asset('vendor/jquery/jquery.min.js')}}"></script>
     <!-- Bootstrap 4 -->
     <script src="{{asset('vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{asset('vendor/bs-custom-file-input/bs-custom-file-input.min.js')}}"></script>
     <!-- AdminLTE App -->
     <script src="{{asset('vendor/adminlte/js/adminlte.min.js')}}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+          bsCustomFileInput.init();
+        });
+    </script>
 </body>
 
 </html>

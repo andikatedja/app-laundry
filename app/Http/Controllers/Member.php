@@ -16,7 +16,7 @@ class Member extends Controller
             return $next($request);
         });
     }
-    public function index(Request $request)
+    public function index()
     {
         $user = DB::table('users')->where('email', '=', $this->logged_email)->first();
         $data['name'] = $user->name;
