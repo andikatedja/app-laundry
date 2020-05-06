@@ -59,9 +59,9 @@
                                         onclick="return confirm('Apakah anda yakin ingin reset foto profil?')"
                                         class="btn btn-danger">Reset Foto</a>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-1">
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-7">
                                     <div class="form-group">
                                         <label for="name">Email</label>
                                         <input type="text" class="form-control @error('name') is-invalid @enderror"

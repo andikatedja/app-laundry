@@ -1,3 +1,9 @@
+$(document).ready(function () {
+    bsCustomFileInput.init();
+    $('#tbl-satuan').DataTable();
+    $('#tbl-kiloan').DataTable();
+});
+
 function previewImage() {
     var oFReader = new FileReader();
     oFReader.readAsDataURL(document.getElementById("foto_profil").files[0]);

@@ -16,6 +16,7 @@
     <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet">
     <!-- Google Font: Nunito -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+    @yield('css')
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -172,12 +173,8 @@
     <script src="{{asset('vendor/bs-custom-file-input/bs-custom-file-input.min.js')}}"></script>
     <!-- AdminLTE App -->
     <script src="{{asset('vendor/adminlte/js/adminlte.min.js')}}"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-          bsCustomFileInput.init();
-        });
-    </script>
     <script src="{{asset('js/myscript.js')}}"></script>
+    @yield('scripts')
 </body>
 
 </html>

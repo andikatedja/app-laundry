@@ -28,7 +28,13 @@ class Member extends Controller
     {
         $user = DB::table('users')->join('users_info', 'users.id', '=', 'users_info.id_user')
             ->select('users_info.*')->where('email', '=', $this->logged_email)->first();
-        return view('member.harga', compact('user'));
+        $satuan = DB::table('daftar_harga')->select('daftar_harga.harga', 'servis.nama_servis', 'barang.nama_barang')
+            ->join('barang', 'daftar_harga.id_barang', '=', 'barang.id_barang')
+            ->join('servis', 'daftar_harga.id_servis', '=', 'servis.id_servis')->where('daftar_harga.id_kategori', '=', 's')->get();
+        $kiloan = DB::table('daftar_harga')->select('daftar_harga.harga', 'servis.nama_servis', 'barang.nama_barang')
+            ->join('barang', 'daftar_harga.id_barang', '=', 'barang.id_barang')
+            ->join('servis', 'daftar_harga.id_servis', '=', 'servis.id_servis')->where('daftar_harga.id_kategori', '=', 'k')->get();
+        return view('member.harga', compact('user', 'satuan', 'kiloan'));
     }
 
     public function riwayatTransaksi()

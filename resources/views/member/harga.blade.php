@@ -1,5 +1,10 @@
 @extends('member.main')
 
+@section('css')
+<link href="{{asset('vendor/datatables-bs4/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
+<link href="{{asset('vendor/datatables-responsive/css/responsive.bootstrap4.min.css')}}" rel="stylesheet">
+@endsection
+
 @section('main-content')
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -21,68 +26,57 @@
                     <div class="card-body">
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" id="paket-tab" data-toggle="tab" href="#paket" role="tab"
-                                    aria-controls="paket" aria-selected="true">Paket</a>
+                                <a class="nav-link active" id="kiloan-tab" data-toggle="tab" href="#kiloan" role="tab"
+                                    aria-controls="kiloan" aria-selected="true">Kiloan</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" id="satuan-tab" data-toggle="tab" href="#satuan" role="tab"
                                     aria-controls="satuan" aria-selected="false">Satuan</a>
                             </li>
                         </ul>
-                        <div class="tab-content" id="myTabContent">
-                            <div class="tab-pane fade show active" id="paket" role="tabpanel"
-                                aria-labelledby="paket-tab">
-                                <table class="table">
+                        <div class="tab-content mt-3" id="myTabContent">
+                            <div class="tab-pane fade show active" id="kiloan" role="tabpanel"
+                                aria-labelledby="kiloan-tab">
+                                <table id="tbl-kiloan" class="table dataTable dt-responsive nowrap" style="width:100%">
                                     <thead class="thead-light">
                                         <tr>
                                             <th>No</th>
-                                            <th>Nama Paket</th>
-                                            <th>Keterangan</th>
+                                            <th>Barang</th>
                                             <th>Servis</th>
                                             <th>Harga</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @foreach ($kiloan as $item)
                                         <tr>
-                                            <td>1</td>
-                                            <td>Paket Cuci 1</td>
-                                            <td>5 Baju, 2 Celana</td>
-                                            <td>Cuci</td>
-                                            <td>10.000</td>
+                                            <td>{{$loop->iteration}}</td>
+                                            <td>{{$item->nama_barang}}</td>
+                                            <td>{{$item->nama_servis}}</td>
+                                            <td>{{$item->harga}}</td>
                                         </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Paket Cuci 2</td>
-                                            <td>2 Baju, 5 Celana</td>
-                                            <td>Cuci</td>
-                                            <td>15.000</td>
-                                        </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
                             <div class="tab-pane fade" id="satuan" role="tabpanel" aria-labelledby="satuan-tab">
-                                <table class="table">
+                                <table id="tbl-satuan" class="table dataTable dt-responsive nowrap" style="width:100%">
                                     <thead class="thead-light">
                                         <tr>
                                             <th>No</th>
-                                            <th>Nama Satuan</th>
+                                            <th>Barang</th>
                                             <th>Servis</th>
                                             <th>Harga</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @foreach ($satuan as $item)
                                         <tr>
-                                            <td>1</td>
-                                            <td>Cuci Baju</td>
-                                            <td>Cuci</td>
-                                            <td>2.000</td>
+                                            <td>{{$loop->iteration}}</td>
+                                            <td>{{$item->nama_barang}}</td>
+                                            <td>{{$item->nama_servis}}</td>
+                                            <td>{{$item->harga}}</td>
                                         </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Cuci Celana</td>
-                                            <td>Cuci</td>
-                                            <td>2.500</td>
-                                        </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -95,4 +89,11 @@
         <!-- /.row -->
     </div><!-- /.container-fluid -->
 </div>
+@endsection
+
+@section('scripts')
+<script src="{{asset('vendor/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('vendor/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
+<script src="{{asset('vendor/datatables-responsive/js/dataTables.responsive.min.js')}}"></script>
+<script src="{{asset('vendor/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script>
 @endsection

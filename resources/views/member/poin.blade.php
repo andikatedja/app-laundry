@@ -18,7 +18,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <h4>Poin Anda : 10</h4>
+                        <h4>Poin Anda : {{$user->poin}}</h4>
                     </div>
                 </div>
             </div>
