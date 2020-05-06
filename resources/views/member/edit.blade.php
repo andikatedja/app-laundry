@@ -16,22 +16,48 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
+                @if (session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @elseif (session('warning'))
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    {{ session('warning') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @elseif (session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @endif
                 <div class="card">
                     <div class="card-body">
-                        <form action="" method="POST">
+                        <form action="" method="POST" enctype="multipart/form-data">
                             @csrf
+                            @method('patch')
                             <div class="row">
                                 <div class="col-md-4 text-center">
-                                    <i class="p-5 mt-md-5 bg-primary img-circle fas fa-user"></i>
+                                    <img id="profil_preview" class="img-fit img-circle" width="200" height="200"
+                                        src="{{asset('img/profile') . '/' . $user->profil}}" alt="Foto Profil">
                                     <div class="form-group mt-3">
                                         <label for="foto_profil">Pilih Foto Profil</label>
                                         <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="foto_profil"
-                                                name="foto_profil">
+                                            <input type="file" class="custom-file-input" id="foto_profil" name="image"
+                                                onchange="previewImage();">
                                             <label class="custom-file-label" for="foto_profil">Choose file</label>
                                         </div>
                                     </div>
-                                    <button class="btn btn-danger">Reset Foto</button>
+                                    <a href="{{url('member/edit/resetfoto')}}"
+                                        onclick="return confirm('Apakah anda yakin ingin reset foto profil?')"
+                                        class="btn btn-danger">Reset Foto</a>
                                 </div>
                                 <div class="col-md-2">
                                 </div>
@@ -39,13 +65,13 @@
                                     <div class="form-group">
                                         <label for="name">Email</label>
                                         <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                            id="name" value="{{$email}}" disabled>
+                                            id="name" value="{{session('login')}}" disabled>
                                     </div>
                                     <div class="form-group">
                                         <label for="name">@lang('auth.name_label')</label>
                                         <input type="text" class="form-control @error('name') is-invalid @enderror"
                                             id="name" name="name" placeholder="@lang('auth.name_placeholder')"
-                                            value="{{$name}}" required>
+                                            value="{{$user->nama}}" required>
                                         @error('name')
                                         <div class="invalid-feedback">
                                             {{$message}}
@@ -54,17 +80,25 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="jenis_kelamin">Jenis Kelamin</label>
-                                        <select class="form-control" id="jenis_kelamin" name="jenis_kelamin">
+                                        <select class="form-control" id="jenis_kelamin" name="jenis_kelamin" required>
+                                            @if ($user->jenis_kelamin == 'L')
+                                            <option value="L" selected>Laki - Laki</>
+                                            <option value="P">Perempuan</option>
+                                            @elseif ($user->jenis_kelamin == 'P')
+                                            <option value="P" selected>Perempuan</option>
+                                            <option value="L">Laki - Laki</>
+                                                @else
                                             <option value="">Pilih Jenis Kelamin</option>
                                             <option value="L">Laki - Laki</>
                                             <option value="P">Perempuan</option>
+                                            @endif
                                         </select>
                                     </div>
                                     <div class="form-group">
                                         <label for="alamat">Alamat</label>
                                         <input type="text" class="form-control @error('alamat') is-invalid @enderror"
-                                            id="alamat" name="alamat" placeholder="Masukkan alamat anda" value=""
-                                            required>
+                                            id="alamat" name="alamat" placeholder="Masukkan alamat anda"
+                                            value="{{$user->alamat}}" required>
                                         @error('alamat')
                                         <div class="invalid-feedback">
                                             {{$message}}
@@ -74,7 +108,8 @@
                                     <div class="form-group">
                                         <label for="telp">No Telp</label>
                                         <input type="text" class="form-control @error('telp') is-invalid @enderror"
-                                            id="telp" name="telp" placeholder="Masukkan no telp" value="" required>
+                                            id="telp" name="telp" placeholder="Masukkan no telp"
+                                            value="{{$user->no_telp}}" required>
                                         @error('telp')
                                         <div class="invalid-feedback">
                                             {{$message}}
@@ -95,6 +130,7 @@
                     <div class="card-body">
                         <form action="{{url('member/edit/password')}}" method="POST">
                             @csrf
+                            @method('patch')
                             <div class="form-group">
                                 <label for="password">Kata Sandi Sekarang</label>
                                 <input type="password" class="form-control @error('password') is-invalid @enderror"

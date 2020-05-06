@@ -40,7 +40,8 @@
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
-                        <i class="mr-2 far fa-user"></i> {{$name}}
+                        <img class="img-circle img-fit mr-1" width="25" height="25"
+                            src="{{asset('img/profile') . '/' . $user->profil}}" alt="Foto Profil"> {{$user->nama}}
                     </a>
                     <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
                         <a href="{{url('member/edit')}}" class="dropdown-item">
@@ -176,6 +177,7 @@
           bsCustomFileInput.init();
         });
     </script>
+    <script src="{{asset('js/myscript.js')}}"></script>
 </body>
 
 </html>

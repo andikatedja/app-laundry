@@ -20,17 +20,18 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-10">
-                                <i class="member-icon mr-1 far fa-user fa-lg float-left"></i>
+                                <img class="img-circle img-fit float-left" width="100" height="100"
+                                    src="{{asset('img/profile') . '/' . $user->profil}}" alt="Foto Profil">
                                 <div class="member-content">
-                                    <h2 class="m-0">{{$name}}</h2>
-                                    <p class="small m-0">ID Member: {{$id}}</p>
+                                    <h2 class="m-0">{{$user->nama}}</h2>
+                                    <p class="small m-0">ID Member: {{$user->id_user}}</p>
                                     <a href="{{url('member/edit')}}" class="badge badge-primary badge-pill">Edit
                                         Profil</a>
                                 </div>
                             </div>
                             <div class="col-2 text-center">
                                 <p class="small m-0">Poin</p>
-                                <h2 class="m-0">10</h2>
+                                <h2 class="m-0">{{$user->poin}}</h2>
                                 <a href="{{url('member/poin')}}" class="badge badge-primary badge-pill">Tukar Poin</a>
                             </div>
                         </div>

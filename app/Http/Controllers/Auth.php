@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Hash;
 
 class Auth extends Controller
 {
@@ -29,7 +30,7 @@ class Auth extends Controller
 
         $user = DB::table('users')->where('email', '=', $email)->first();
 
-        if (password_verify($password, $user->password)) {
+        if (Hash::check($password, $user->password)) {
             if ($user->role == '1') {
                 $request->session()->put('login', $email);
                 return redirect('admin');
@@ -63,14 +64,23 @@ class Auth extends Controller
         //     return redirect('register')->with('error', 'Password and confirm password not match');
         // }
 
-        $hash_password = password_hash($password, PASSWORD_DEFAULT);
+        $hash_password = Hash::make($password);
 
-        DB::table('users')->insert([
+        $user_id = DB::table('users')->insertGetId([
             'id' => null,
             'email' => $email,
             'password' => $hash_password,
-            'name' => $name,
             'role' => '2'
+        ]);
+
+        DB::table('users_info')->insert([
+            'id_user' => $user_id,
+            'nama' => $name,
+            'jenis_kelamin' => '',
+            'alamat' => '',
+            'no_telp' => '',
+            'profil' => 'default.jpg',
+            'poin' => 0
         ]);
 
         return redirect('register')->with('success', Lang::get('auth.register_success'));

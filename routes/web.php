@@ -40,6 +40,9 @@ Route::group(['prefix' => 'member', 'middleware' => ['language', 'ismember']], f
     Route::get('harga', 'Member@harga');
     Route::get('poin', 'Member@poin');
     Route::get('edit', 'Member@edit');
+    Route::get('edit/resetfoto', 'Member@resetfoto');
+    Route::patch('edit', 'Member@editprofil');
+    Route::patch('edit/password', 'Member@editpassword');
     Route::get('transaksi', 'Member@riwayatTransaksi');
     Route::get('saran', 'Member@saranKomplain');
 });

@@ -10,9 +10,13 @@ body {
 }
 
 .member-content {
-    margin-left: 90px;
+    margin-left: 110px;
 }
 
 .member-name {
     font-size: 24pt;
+}
+
+.img-fit {
+    object-fit: cover;
 }
