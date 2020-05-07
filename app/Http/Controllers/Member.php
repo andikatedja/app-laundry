@@ -17,6 +17,7 @@ class Member extends Controller
             return $next($request);
         });
     }
+
     public function index()
     {
         $user = DB::table('users')->join('users_info', 'users.id', '=', 'users_info.id_user')

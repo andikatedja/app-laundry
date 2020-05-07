@@ -7,13 +7,20 @@ use Illuminate\Support\Facades\DB;
 
 class Admin extends Controller
 {
-    private $folder = 'admin';
+    protected $logged_email;
+
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->logged_email = session()->get('login');
+            return $next($request);
+        });
+    }
+
     public function index(Request $request)
     {
-        $email = $request->session()->get('login');
-        $user_login = DB::table('users')->where('email', '=', $email)->first();
-
-        $name = $user_login->name;
-        return view($this->folder . '.index', compact('name'));
+        $user = DB::table('users')->join('users_info', 'users.id', '=', 'users_info.id_user')
+            ->select('users_info.*')->where('email', '=', $this->logged_email)->first();
+        return view('admin.index', compact('user'));
     }
 }
