@@ -96,4 +96,10 @@
 <script src="{{asset('vendor/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
 <script src="{{asset('vendor/datatables-responsive/js/dataTables.responsive.min.js')}}"></script>
 <script src="{{asset('vendor/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#tbl-satuan').DataTable();
+        $('#tbl-kiloan').DataTable();
+    });
+</script>
 @endsection

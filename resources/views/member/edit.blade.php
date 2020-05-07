@@ -63,9 +63,9 @@
                                 </div>
                                 <div class="col-md-7">
                                     <div class="form-group">
-                                        <label for="name">Email</label>
-                                        <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                            id="name" value="{{session('login')}}" disabled>
+                                        <label for="email">Email</label>
+                                        <input type="email" class="form-control" id="email" value="{{session('login')}}"
+                                            disabled>
                                     </div>
                                     <div class="form-group">
                                         <label for="name">@lang('auth.name_label')</label>
@@ -132,10 +132,10 @@
                             @csrf
                             @method('patch')
                             <div class="form-group">
-                                <label for="password">Kata Sandi Sekarang</label>
+                                <label for="current-password">Kata Sandi Sekarang</label>
                                 <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                    id="password" name="password_now" placeholder="Masukkan kata sandi sekarang"
-                                    required>
+                                    id="current-password" name="current-password"
+                                    placeholder="Masukkan kata sandi sekarang" required autocomplete="off">
                                 @error('password')
                                 <div class="invalid-feedback">
                                     {{$message}}
@@ -173,4 +173,12 @@
         <!-- /.row -->
     </div><!-- /.container-fluid -->
 </div>
+@endsection
+
+@section('scripts')
+<script type="text/javascript">
+    $(document).ready(function () {
+        bsCustomFileInput.init();
+    });
+</script>
 @endsection

@@ -88,7 +88,7 @@
                         </li>
                         <li class="nav-item">
                             <a href="{{url('member/transaksi')}}"
-                                class="nav-link {{(request()->is('member/transaksi')) ? 'active' : ''}}">
+                                class="nav-link {{(request()->is('member/transaksi*')) ? 'active' : ''}}">
                                 <i class="nav-icon fas fa-history"></i>
                                 <p>Riwayat Transaksi</p>
                             </a>

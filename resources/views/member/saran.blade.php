@@ -16,16 +16,43 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
+                @if (session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @elseif (session('warning'))
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    {{ session('warning') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @elseif (session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @endif
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6">
                                 <form action="{{url('member/kirimsaran')}}" method="POST">
                                     @csrf
+                                    <h5>Silahkan isi form dibawah ini sesuai kriteria</h5>
                                     <div class="form-group">
-                                        <label for="form_sarankomplain">Silahkan isi saran atau komplain pada form
-                                            ini:</label>
-                                        <textarea class="form-control" id="form_sarankomplain" rows="3"
+                                        <select class="form-control" id="tipe" name="tipe">
+                                            <option value="1">Saran</option>
+                                            <option value="2">Komplain</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <textarea class="form-control" id="form_sarankomplain" rows="4"
                                             name="isi_sarankomplain"></textarea>
                                     </div>
                                     <button class="btn btn-primary badge-pill float-right w-25"

@@ -44,7 +44,9 @@ Route::group(['prefix' => 'member', 'middleware' => ['language', 'ismember']], f
     Route::patch('edit', 'Member@editprofil');
     Route::patch('edit/password', 'Member@editpassword');
     Route::get('transaksi', 'Member@riwayatTransaksi');
+    Route::get('transaksi/{id_transaksi}', 'Member@detailTransaksi');
     Route::get('saran', 'Member@saranKomplain');
+    Route::post('kirimsaran', 'Member@kirimSaranKomplain');
 });
 
 // Set language route

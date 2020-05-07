@@ -11,7 +11,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark">Riwayat Transaksi</h1>
+                <h1 class="m-0 text-dark">Detail Transaksi</h1>
             </div><!-- /.col -->
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -23,31 +23,27 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <table id="tbl-riwayat" class="table dataTable dt-responsive nowrap" style="width:100%">
+                        <h5>ID Transaksi: {{$id_transaksi}}</h5>
+                        <table id="tbl-detail" class="table dataTable dt-responsive nowrap" style="width:100%">
                             <thead class="thead-light">
                                 <tr>
                                     <th>No</th>
-                                    <th>Tanggal</th>
-                                    <th>Status</th>
-                                    <th>Aksi</th>
+                                    <th>Barang</th>
+                                    <th>Kategori</th>
+                                    <th>Servis</th>
+                                    <th>Banyak</th>
+                                    <th>Sub Total</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($transaksi as $item)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
-                                    <td>{{date('d F Y', strtotime($item->tgl_masuk))}}</td>
-                                    <td>
-                                        @if ($item->id_status == '1')
-                                        <span class="text-warning">{{$item->nama_status}}</span>
-                                        @else
-                                        <span class="text-success">{{$item->nama_status}}</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <a href="{{url('member/transaksi') . '/' . $item->id_transaksi}}"
-                                            class="badge badge-primary">Lihat Detail ></a>
-                                    </td>
+                                    <td>{{$item->nama_barang}}</td>
+                                    <td>{{$item->nama_kategori}}</td>
+                                    <td>{{$item->nama_servis}}</td>
+                                    <td>{{$item->banyak}}</td>
+                                    <td>{{$item->sub_total}}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -68,7 +64,7 @@
 <script src="{{asset('vendor/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#tbl-riwayat').DataTable();
+        $('#tbl-detail').DataTable();
     });
 </script>
 @endsection

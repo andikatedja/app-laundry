@@ -57,22 +57,23 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach ($transaksi_terakhir as $item)
                                 <tr>
-                                    <td>1</td>
-                                    <td>24 Januari 2020</td>
-                                    <td><span class="text-success">Selesai</span></td>
+                                    <td>{{$loop->iteration}}</td>
+                                    <td>{{date('d F Y', strtotime($item->tgl_masuk))}}</td>
                                     <td>
-                                        <a href="#" class="badge badge-primary">Lihat Detail ></a>
+                                        @if ($item->id_status == '1')
+                                        <span class="text-warning">{{$item->nama_status}}</span>
+                                        @else
+                                        <span class="text-success">{{$item->nama_status}}</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <a href="{{url('member/transaksi') . '/' . $item->id_transaksi}}"
+                                            class="badge badge-primary">Lihat Detail ></a>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>28 Januari 2020</td>
-                                    <td><span class="text-warning">Dalam Pengerjaan</span></td>
-                                    <td>
-                                        <a href="#" class="badge badge-primary">Lihat Detail ></a>
-                                    </td>
-                                </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>

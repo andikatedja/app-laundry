@@ -21,7 +21,9 @@ class Member extends Controller
     {
         $user = DB::table('users')->join('users_info', 'users.id', '=', 'users_info.id_user')
             ->select('users_info.*')->where('email', '=', $this->logged_email)->first();
-        return view('member.index', compact('user'));
+        $transaksi_terakhir = DB::table('transaksi')->select('id_transaksi', 'tgl_masuk', 'transaksi.id_status', 'status.nama_status')
+            ->join('status', 'transaksi.id_status', '=', 'status.id_status')->where('id_user', '=', $user->id_user)->orderBy('tgl_masuk')->limit(5)->get();
+        return view('member.index', compact('user', 'transaksi_terakhir'));
     }
 
     public function harga()
@@ -41,7 +43,9 @@ class Member extends Controller
     {
         $user = DB::table('users')->join('users_info', 'users.id', '=', 'users_info.id_user')
             ->select('users_info.*')->where('email', '=', $this->logged_email)->first();
-        return view('member.riwayat', compact('user'));
+        $transaksi = DB::table('transaksi')->select('id_transaksi', 'tgl_masuk', 'transaksi.id_status', 'status.nama_status')
+            ->join('status', 'transaksi.id_status', '=', 'status.id_status')->where('id_user', '=', $user->id_user)->orderBy('tgl_masuk')->get();
+        return view('member.riwayat', compact('user', 'transaksi'));
     }
 
     public function poin()
@@ -113,13 +117,13 @@ class Member extends Controller
     public function editpassword(Request $request)
     {
         $request->validate([
-            'password_now' => 'required',
+            'current-password' => 'required',
             'password' => 'required|min:6|confirmed',
         ]);
         $db_password = DB::table('users')->where('email', '=', $this->logged_email)->pluck('password');
 
         //Cek apakah password lama sama
-        if (!Hash::check($request->input('password_now'), $db_password[0])) {
+        if (!Hash::check($request->input('current-password'), $db_password[0])) {
             return redirect('member/edit')->with('error', 'Kata sandi sekarang salah!');
         }
 
@@ -128,5 +132,34 @@ class Member extends Controller
             'password' => $password_hash
         ]);
         return redirect('member/edit')->with('success', 'Kata sandi berhasil diubah');
+    }
+
+    public function kirimSaranKomplain(Request $request)
+    {
+        $request->validate([
+            'isi_sarankomplain' => 'required'
+        ]);
+        $id_user = DB::table('users')->where('email', '=', $this->logged_email)->pluck('id');
+        DB::table('saran_komplain')->insert([
+            'id' => null,
+            'tgl' => date('Y-m-d H:i:s'),
+            'isi' => $request->input('isi_sarankomplain'),
+            'tipe' => $request->input('tipe'),
+            'id_user' => $id_user[0]
+        ]);
+
+        return redirect('member/saran')->with('success', 'Saran/komplain berhasil dikirim!');
+    }
+
+    public function detailTransaksi($id_transaksi)
+    {
+        $user = DB::table('users')->join('users_info', 'users.id', '=', 'users_info.id_user')
+            ->select('users_info.*')->where('email', '=', $this->logged_email)->first();
+        $transaksi = DB::table('detail_transaksi')->select('barang.nama_barang', 'kategori.nama_kategori', 'servis.nama_servis', 'detail_transaksi.banyak', 'detail_transaksi.sub_total')
+            ->join('barang', 'detail_transaksi.id_barang', '=', 'barang.id_barang')
+            ->join('kategori', 'detail_transaksi.id_kategori', '=', 'kategori.id_kategori')
+            ->join('servis', 'detail_transaksi.id_servis', '=', 'servis.id_servis')->where('detail_transaksi.id_transaksi', '=', $id_transaksi)
+            ->get();
+        return view('member.detail', compact('user', 'transaksi', 'id_transaksi'));
     }
 }
