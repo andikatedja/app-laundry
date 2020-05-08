@@ -75,13 +75,6 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{url('admin/harga')}}"
-                                class="nav-link {{(request()->is('admin/harga')) ? 'active' : ''}}">
-                                <i class="nav-icon fas fa-list"></i>
-                                <p>Daftar Harga</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a href="{{url('admin/input-transaksi')}}"
                                 class="nav-link {{(request()->is('admin/input-transaksi')) ? 'active' : ''}}">
                                 <i class="nav-icon fas fa-file-invoice"></i>
@@ -96,10 +89,31 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{url('admin/harga')}}"
+                                class="nav-link {{(request()->is('admin/harga')) ? 'active' : ''}}">
+                                <i class="nav-icon fas fa-list"></i>
+                                <p>Daftar Harga</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{url('admin/members')}}"
+                                class="nav-link {{(request()->is('admin/members*')) ? 'active' : ''}}">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>Daftar Member</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{url('admin/saran')}}"
                                 class="nav-link {{(request()->is('admin/saran')) ? 'active' : ''}}">
                                 <i class="nav-icon fas fa-sticky-note"></i>
                                 <p>Saran / Komplain</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{url('admin/laporan')}}"
+                                class="nav-link {{(request()->is('admin/laporan')) ? 'active' : ''}}">
+                                <i class="nav-icon fas fa-file-alt"></i>
+                                <p>Laporan Keuangan</p>
                             </a>
                         </li>
                         <li class="nav-item">

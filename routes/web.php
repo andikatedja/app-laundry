@@ -32,6 +32,12 @@ Route::group(['middleware' => 'language'], function () {
 // Admin routes
 Route::group(['prefix' => 'admin', 'middleware' => ['language', 'isadmin']], function () {
     Route::get('/', 'Admin@index');
+    Route::get('input-transaksi', 'Admin@inputTransaksi');
+    Route::get('transaksi', 'Admin@riwayatTransaksi');
+    Route::get('harga', 'Admin@harga');
+    Route::get('members', 'Admin@members');
+    Route::get('saran', 'Admin@saran');
+    Route::get('laporan', 'Admin@laporan');
 });
 
 //Member routes
