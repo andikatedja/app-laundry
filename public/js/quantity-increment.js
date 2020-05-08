@@ -16,7 +16,6 @@ $(document).ready(function () {
         // Increment
 
     });
-
     $('.quantity-left-minus').click(function (e) {
         // Stop acting like a button
         e.preventDefault();
@@ -30,5 +29,4 @@ $(document).ready(function () {
             $('#quantity').val(quantity - 1);
         }
     });
-
 });

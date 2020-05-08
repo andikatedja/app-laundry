@@ -40,10 +40,6 @@
                             src="{{asset('img/profile') . '/' . $user->profil}}" alt="Foto Profil"> {{$user->nama}}
                     </a>
                     <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
-                        <a href="{{url('admin/edit')}}" class="dropdown-item">
-                            <i class="fas fa-user-edit mr-2"></i> Edit Profil
-                        </a>
-                        <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item" data-toggle="modal" data-target="#logoutModal">
                             <i class="fas fa-sign-out-alt mr-2"></i> Logout
                         </a>

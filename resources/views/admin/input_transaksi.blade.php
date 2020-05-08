@@ -18,65 +18,74 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <div class="form-group row">
-                            <label for="id-member" class="col-sm-2 col-form-label">ID Member</label>
-                            <div class="col-sm-2">
-                                <input type="number" class="form-control" id="id-member" name="id_member" required>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="barang" class="col-sm-2 col-form-label">Barang</label>
-                            <div class="col-sm-4">
-                                <select class="form-control" id="barang" name="barang">
-                                    <option value="b">Baju</option>
-                                    <option value="c">Celana</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="servis" class="col-sm-2 col-form-label">Servis</label>
-                            <div class="col-sm-4">
-                                <select class="form-control" id="servis" name="servis">
-                                    <option value="c">Cuci</option>
-                                    <option value="s">Setrika</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="kategori" class="col-sm-2 col-form-label">Kategori</label>
-                            <div class="col-sm-4">
-                                <select class="form-control" id="kategori" name="kategori">
-                                    <option value="s">Satuan</option>
-                                    <option value="k">Kiloan</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="banyak" class="col-sm-2 col-form-label">Banyak</label>
-                            <div class="col-sm-2">
-                                <div class="input-group">
-                                    <span class="input-group-btn">
-                                        <button type="button" class="quantity-left-minus btn btn-danger btn-number"
-                                            data-type="minus" data-field="">
-                                            <i class="fas fa-minus"></i>
-                                        </button>
-                                    </span>
-                                    <input type="text" id="quantity" name="banyak" class="form-control input-number"
-                                        value="1" min="1" max="100">
-                                    <span class="input-group-btn">
-                                        <button type="button" class="quantity-right-plus btn btn-success btn-number"
-                                            data-type="plus" data-field="">
-                                            <i class="fas fa-plus"></i>
-                                        </button>
-                                    </span>
+                        <form action="{{url('admin/tambah-transaksi')}}" method="post">
+                            @csrf
+                            <div class="form-group row">
+                                <label for="id-member" class="col-sm-2 col-form-label">ID Member</label>
+                                <div class="col-sm-2">
+                                    <input type="number" min="1" class="form-control" id="id-member" name="id_member"
+                                        @if (isset($id_member_transaksi)) value="{{$id_member_transaksi}}" disabled
+                                        title="Harap selesaikan transaksi yang ada untuk mengganti id member" @endif
+                                        required>
                                 </div>
                             </div>
-                            <div class="col-sm-4">
-                                <button id="tambah-transaksi" class="btn btn-primary">Tambah Transaksi</button>
+                            <div class="form-group row">
+                                <label for="barang" class="col-sm-2 col-form-label">Barang</label>
+                                <div class="col-sm-4">
+                                    <select class="form-control" id="barang" name="barang">
+                                        @foreach ($barang as $item)
+                                        <option value="{{$item->id_barang}}">{{$item->nama_barang}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-
-                        <table id="tbl-input-transaksi" class="table">
+                            <div class="form-group row">
+                                <label for="servis" class="col-sm-2 col-form-label">Servis</label>
+                                <div class="col-sm-4">
+                                    <select class="form-control" id="servis" name="servis">
+                                        @foreach ($servis as $item)
+                                        <option value="{{$item->id_servis}}">{{$item->nama_servis}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="kategori" class="col-sm-2 col-form-label">Kategori</label>
+                                <div class="col-sm-4">
+                                    <select class="form-control" id="kategori" name="kategori">
+                                        @foreach ($kategori as $item)
+                                        <option value="{{$item->id_kategori}}">{{$item->nama_kategori}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="banyak" class="col-sm-2 col-form-label">Banyak</label>
+                                <div class="col-sm-2">
+                                    <div class="input-group">
+                                        <span class="input-group-btn">
+                                            <button type="button" class="quantity-left-minus btn btn-danger btn-number"
+                                                data-type="minus" data-field="">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                        </span>
+                                        <input type="text" id="quantity" name="banyak" class="form-control input-number"
+                                            value="1" min="1" max="100">
+                                        <span class="input-group-btn">
+                                            <button type="button" class="quantity-right-plus btn btn-success btn-number"
+                                                data-type="plus" data-field="">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <button type="submit" id="tambah-transaksi" class="btn btn-primary">Tambah
+                                        Transaksi</button>
+                                </div>
+                            </div>
+                        </form>
+                        <table id="tbl-input-transaksi" class="table mt-2">
                             <thead class="thead-light">
                                 <tr>
                                     <th>No</th>
@@ -89,9 +98,27 @@
                                 </tr>
                             </thead>
                             <tbody>
-
+                                @if (isset($transaksi))
+                                @foreach ($transaksi as $item)
+                                <tr>
+                                    <td>{{$loop->iteration}}</td>
+                                    <td>{{$item['nama_barang']}}</td>
+                                    <td>{{$item['nama_servis']}}</td>
+                                    <td>{{$item['nama_kategori']}}</td>
+                                    <td>{{$item['banyak']}}</td>
+                                    <td>{{$item['harga']}}</td>
+                                    <td>
+                                        <a href="{{url('admin/hapus-transaksi') . '/' . $item['row_id']}}"
+                                            class="btn btn-danger">Hapus</a>
+                                    </td>
+                                </tr>
+                                @endforeach
+                                @endif
                             </tbody>
                         </table>
+                        @if (isset($transaksi))
+                        <a href="{{url('admin/simpan-transaksi')}}" class="btn btn-success">Simpan Transaksi</a>
+                        @endif
                     </div>
                 </div>
             </div>

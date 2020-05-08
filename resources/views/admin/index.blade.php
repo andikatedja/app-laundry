@@ -31,7 +31,8 @@
                     <div class="icon">
                         <i class="ion ion-ios-people"></i>
                     </div>
-                    <a href="#" class="small-box-footer">Lihat member <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="{{url('admin/members')}}" class="small-box-footer">Lihat member <i
+                            class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <div class="col-6">
@@ -45,7 +46,8 @@
                     <div class="icon">
                         <i class="ion ion-bag"></i>
                     </div>
-                    <a href="#" class="small-box-footer">Lihat transaksi <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="{{url('admin/transaksi')}}" class="small-box-footer">Lihat transaksi <i
+                            class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
         </div>
