@@ -174,7 +174,7 @@ class Admin extends Controller
         ]);
         $request->session()->forget('transaksi');
         $request->session()->forget('id_member_transaksi');
-        return redirect('admin/input-transaksi');
+        return redirect('admin/input-transaksi')->with('success', 'Transaksi berhasil disimpan');
     }
 
     public function hapusSessTransaksi(Request $request)
@@ -188,7 +188,29 @@ class Admin extends Controller
     {
         $user = DB::table('users')->join('users_info', 'users.id', '=', 'users_info.id_user')
             ->select('users_info.*')->where('email', '=', $this->logged_email)->first();
-        return view('admin.riwayat_transaksi', compact('user'));
+        $transaksi = DB::table('transaksi')->join('users_info', 'transaksi.id_user', '=', 'users_info.id_user')
+            ->select('transaksi.*', 'users_info.nama')->get();
+        return view('admin.riwayat_transaksi', compact('user', 'transaksi'));
+    }
+
+    public function ambilDetailTransaksi(Request $request)
+    {
+        $id_transaksi = $request->input('id_transaksi');
+        $detail_transaksi = DB::table('detail_transaksi')->select('barang.nama_barang', 'kategori.nama_kategori', 'servis.nama_servis', 'detail_transaksi.banyak', 'detail_transaksi.sub_total')
+            ->join('barang', 'detail_transaksi.id_barang', '=', 'barang.id_barang')
+            ->join('kategori', 'detail_transaksi.id_kategori', '=', 'kategori.id_kategori')
+            ->join('servis', 'detail_transaksi.id_servis', '=', 'servis.id_servis')->where('detail_transaksi.id_transaksi', '=', $id_transaksi)
+            ->get();
+        echo json_encode($detail_transaksi);
+    }
+
+    public function ubahStatusTransaksi(Request $request)
+    {
+        $id_transaksi = $request->input('id_transaksi');
+        DB::table('transaksi')->where('id_transaksi', '=', $id_transaksi)->update([
+            'id_status' => 2,
+            'tgl_selesai' => date('Y-m-d H:i:s')
+        ]);
     }
 
     public function harga()

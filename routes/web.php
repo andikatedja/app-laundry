@@ -38,6 +38,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['language', 'isadmin']], fun
     Route::get('hapus-transaksi/{row_id}', 'Admin@hapusTransaksi');
     Route::get('simpan-transaksi', 'Admin@simpanTransaksi');
     Route::post('tambah-transaksi', 'Admin@tambahTransaksi');
+    Route::post('ambil-detail-transaksi', 'Admin@ambilDetailTransaksi');
+    Route::post('ubah-status-transaksi', 'Admin@ubahStatusTransaksi');
     Route::get('harga', 'Admin@harga');
     Route::get('members', 'Admin@members');
     Route::get('saran', 'Admin@saran');
