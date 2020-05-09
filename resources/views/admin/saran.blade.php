@@ -1,5 +1,10 @@
 @extends('admin.main')
 
+@section('css')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<meta name="base_url" content="{{url('admin')}}">
+@endsection
+
 @section('main-content')
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -14,7 +19,67 @@
 <!-- /.content-header -->
 <div class="content">
     <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Daftar Saran atau Komplain</h5>
+                        <div class="row">
+                            <div class="col-sm-6">
 
+                                <table class="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>Nama</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($komplain as $item)
+                                        <tr class="bg-warning">
+                                            <td>{{$item->nama}}</td>
+                                            <td><button href="#" class="badge badge-info lihat-isi"
+                                                    data-id="{{$item->id}}">Lihat isi
+                                                    komplain</button></td>
+                                        </tr>
+                                        @endforeach
+                                        @foreach ($saran as $item)
+                                        <tr>
+                                            <td>{{$item->nama}}</td>
+                                            <td><button href="#" class="badge badge-info lihat-isi"
+                                                    data-id="{{$item->id}}">Lihat isi
+                                                    saran</button></td>
+                                        </tr>
+                                        @endforeach
+                                        <hr>
+                                        <tr class="text-center">
+                                            <td>Jumlah</td>
+                                            <td>{{$jumlah}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="isi-aduan">Isi Aduan</label>
+                                    <textarea class="form-control" id="isi-aduan" rows="3" disabled></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="balas">Balas</label>
+                                    <textarea class="form-control" id="balas" rows="3"></textarea>
+                                </div>
+                                <button class="btn btn-danger">Hapus Aduan</button>
+                                <button class="btn btn-primary">Kirim</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div><!-- /.container-fluid -->
 </div>
+@endsection
+
+@section('scripts')
+<script src="{{asset('js/ajax-saran.js')}}"></script>
 @endsection

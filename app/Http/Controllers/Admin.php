@@ -217,21 +217,86 @@ class Admin extends Controller
     {
         $user = DB::table('users')->join('users_info', 'users.id', '=', 'users_info.id_user')
             ->select('users_info.*')->where('email', '=', $this->logged_email)->first();
-        return view('admin.harga', compact('user'));
+        $satuan = DB::table('daftar_harga')->select('daftar_harga.id_harga', 'daftar_harga.harga', 'servis.nama_servis', 'barang.nama_barang')
+            ->join('barang', 'daftar_harga.id_barang', '=', 'barang.id_barang')
+            ->join('servis', 'daftar_harga.id_servis', '=', 'servis.id_servis')->where('daftar_harga.id_kategori', '=', 's')->get();
+        $kiloan = DB::table('daftar_harga')->select('daftar_harga.id_harga', 'daftar_harga.harga', 'servis.nama_servis', 'barang.nama_barang')
+            ->join('barang', 'daftar_harga.id_barang', '=', 'barang.id_barang')
+            ->join('servis', 'daftar_harga.id_servis', '=', 'servis.id_servis')->where('daftar_harga.id_kategori', '=', 'k')->get();
+        $barang = DB::table('barang')->get();
+        $servis = DB::table('servis')->get();
+        $kategori = DB::table('kategori')->get();
+        return view('admin.harga', compact('user', 'satuan', 'kiloan', 'barang', 'servis', 'kategori'));
+    }
+
+    public function tambahHarga(Request $request)
+    {
+        $request->validate([
+            'harga' => 'required'
+        ]);
+
+        $ada_harga = DB::table('daftar_harga')->where([
+            'id_barang' => $request->input('barang'),
+            'id_kategori' => $request->input('kategori'),
+            'id_servis' => $request->input('servis')
+        ])->exists();
+
+        if ($ada_harga) {
+            return redirect('admin/harga')->with('error', 'Harga tidak dapat ditambah karena sudah tersedia!');
+        }
+
+        DB::table('daftar_harga')->insert([
+            'id_harga' => null,
+            'id_barang' => $request->input('barang'),
+            'id_kategori' => $request->input('kategori'),
+            'id_servis' => $request->input('servis')
+        ]);
+
+        return redirect('admin/harga')->with('success', 'Harga berhasil ditambahkan!');
+    }
+
+    public function ambilHarga(Request $request)
+    {
+        $id_harga = $request->input('id_harga');
+        $harga = DB::table('daftar_harga')->select('harga')->where('id_harga', '=', $id_harga)->get();
+        echo json_encode($harga);
+    }
+
+    public function ubahHarga(Request $request)
+    {
+        $id_harga = $request->input('id_harga');
+        DB::table('daftar_harga')->where('id_harga', '=', $id_harga)->update([
+            'harga' => $request->input('harga')
+        ]);
+        return redirect('admin/harga')->with('success', 'Harga berhasil diubah!');
     }
 
     public function members()
     {
         $user = DB::table('users')->join('users_info', 'users.id', '=', 'users_info.id_user')
             ->select('users_info.*')->where('email', '=', $this->logged_email)->first();
-        return view('admin.members', compact('user'));
+        $members = DB::table('users_info')->join('users', 'users.id', '=', 'users_info.id_user')->select('users_info.*')->where('role', '=', 2)->get();
+        return view('admin.members', compact('user', 'members'));
     }
 
     public function saran()
     {
         $user = DB::table('users')->join('users_info', 'users.id', '=', 'users_info.id_user')
             ->select('users_info.*')->where('email', '=', $this->logged_email)->first();
-        return view('admin.saran', compact('user'));
+        $saran = DB::table('saran_komplain')->join('users_info', 'saran_komplain.id_user', '=', 'users_info.id_user')
+            ->select('saran_komplain.id', 'users_info.nama')
+            ->where('tipe', '=', '1')->get();
+        $komplain = DB::table('saran_komplain')->join('users_info', 'saran_komplain.id_user', '=', 'users_info.id_user')
+            ->select('saran_komplain.id', 'users_info.nama')
+            ->where('tipe', '=', '2')->get();
+        $jumlah = DB::table('saran_komplain')->count();
+        return view('admin.saran', compact('user', 'saran', 'komplain', 'jumlah'));
+    }
+
+    public function ambilSaranKomplain(Request $request)
+    {
+        $isi = DB::table('saran_komplain')->select('isi')->where('id', '=', $request->input('id'))->get();
+        echo json_encode($isi);
     }
 
     public function laporan()

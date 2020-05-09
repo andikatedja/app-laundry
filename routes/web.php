@@ -41,8 +41,12 @@ Route::group(['prefix' => 'admin', 'middleware' => ['language', 'isadmin']], fun
     Route::post('ambil-detail-transaksi', 'Admin@ambilDetailTransaksi');
     Route::post('ubah-status-transaksi', 'Admin@ubahStatusTransaksi');
     Route::get('harga', 'Admin@harga');
+    Route::post('ambil-harga', 'Admin@ambilHarga');
+    Route::post('tambah-harga', 'Admin@tambahHarga');
+    Route::post('ubah-harga', 'Admin@ubahHarga');
     Route::get('members', 'Admin@members');
     Route::get('saran', 'Admin@saran');
+    Route::post('ambil-sarankomplain', 'Admin@ambilSaranKomplain');
     Route::get('laporan', 'Admin@laporan');
 });
 

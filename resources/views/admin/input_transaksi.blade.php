@@ -1,5 +1,10 @@
 @extends('admin.main')
 
+@section('css')
+<link href="{{asset('vendor/datatables-bs4/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
+<link href="{{asset('vendor/datatables-responsive/css/responsive.bootstrap4.min.css')}}" rel="stylesheet">
+@endsection
+
 @section('main-content')
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -107,7 +112,7 @@
                                 </div>
                             </div>
                         </form>
-                        <table id="tbl-input-transaksi" class="table mt-2">
+                        <table id="tbl-input-transaksi" class="table mt-2 dt-responsive nowrap" style="width: 100%">
                             <thead class="thead-light">
                                 <tr>
                                     <th>No</th>
@@ -152,4 +157,19 @@
 @section('scripts')
 <script src="{{asset('js/quantity-increment.js')}}"></script>
 <script src="{{asset('js/input-transaksi.js')}}"></script>
+<script src="{{asset('vendor/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('vendor/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
+<script src="{{asset('vendor/datatables-responsive/js/dataTables.responsive.min.js')}}"></script>
+<script src="{{asset('vendor/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#tbl-input-transaksi').DataTable({
+            "searching": false,
+            "bPaginate": false,
+            "bLengthChange": false,
+            "bFilter": false,
+            "bInfo": false
+        });
+    });
+</script>
 @endsection
