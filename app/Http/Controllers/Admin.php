@@ -287,11 +287,17 @@ class Admin extends Controller
             ->select('users_info.*')->where('email', '=', $this->logged_email)->first();
         $saran = DB::table('saran_komplain')->join('users_info', 'saran_komplain.id_user', '=', 'users_info.id_user')
             ->select('saran_komplain.id', 'users_info.nama')
-            ->where('tipe', '=', '1')->get();
+            ->where([
+                'tipe' => '1',
+                'balasan' => NULL
+            ])->get();
         $komplain = DB::table('saran_komplain')->join('users_info', 'saran_komplain.id_user', '=', 'users_info.id_user')
             ->select('saran_komplain.id', 'users_info.nama')
-            ->where('tipe', '=', '2')->get();
-        $jumlah = DB::table('saran_komplain')->count();
+            ->where([
+                'tipe' => '2',
+                'balasan' => NULL
+            ])->get();
+        $jumlah = DB::table('saran_komplain')->where('balasan', '=', NULL)->count();
         return view('admin.saran', compact('user', 'saran', 'komplain', 'jumlah'));
     }
 
@@ -299,6 +305,13 @@ class Admin extends Controller
     {
         $isi = DB::table('saran_komplain')->select('isi')->where('id', '=', $request->input('id'))->get();
         echo json_encode($isi);
+    }
+
+    public function kirimBalasan(Request $request)
+    {
+        DB::table('saran_komplain')->where('id', '=', $request->input('id'))->update([
+            'balasan' => $request->input('balasan')
+        ]);
     }
 
     public function laporan()

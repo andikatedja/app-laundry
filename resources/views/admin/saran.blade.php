@@ -66,10 +66,9 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="balas">Balas</label>
-                                    <textarea class="form-control" id="balas" rows="3"></textarea>
+                                    <textarea class="form-control" id="balas" rows="3" disabled></textarea>
                                 </div>
-                                <button class="btn btn-danger">Hapus Aduan</button>
-                                <button class="btn btn-primary">Kirim</button>
+                                <button id="btn-kirim-balasan" class="btn btn-primary" data-id="">Kirim</button>
                             </div>
                         </div>
                     </div>

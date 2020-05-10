@@ -67,7 +67,8 @@ class Member extends Controller
     {
         $user = DB::table('users')->join('users_info', 'users.id', '=', 'users_info.id_user')
             ->select('users_info.*')->where('email', '=', $this->logged_email)->first();
-        return view('member.saran', compact('user'));
+        $saran_komplain = DB::table('saran_komplain')->where('id_user', '=', $user->id_user)->get();
+        return view('member.saran', compact('user', 'saran_komplain'));
     }
 
     public function editprofil(Request $request)

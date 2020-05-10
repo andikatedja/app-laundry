@@ -7,6 +7,8 @@ $.ajaxSetup({
 
 $(document).on('click', '.lihat-isi', function () {
     let id = $(this).data('id');
+    $('#btn-kirim-balasan').data('id', id);
+    $('#btn-hapus-aduan').data('id', id);
     $.ajax({
         url: base_url + '/ambil-sarankomplain',
         data: {
@@ -16,6 +18,27 @@ $(document).on('click', '.lihat-isi', function () {
         dataType: 'json',
         success: function (data) {
             $('#isi-aduan').html(data[0].isi);
+            $('#balas').prop('disabled', false);
+            $('#balas').val('');
         },
     });
+});
+
+$(document).on('click', '#btn-kirim-balasan', function () {
+    let id = $(this).data('id');
+    if (id != '') {
+        let balasan = $('#balas').val();
+        $.ajax({
+            url: base_url + '/kirim-balasan',
+            data: {
+                id: id,
+                balasan: balasan
+            },
+            method: 'POST',
+            success: function () {
+                alert('Balasan berhasil dikirim');
+                location.reload();
+            },
+        });
+    }
 });

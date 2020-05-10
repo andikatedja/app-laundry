@@ -47,6 +47,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['language', 'isadmin']], fun
     Route::get('members', 'Admin@members');
     Route::get('saran', 'Admin@saran');
     Route::post('ambil-sarankomplain', 'Admin@ambilSaranKomplain');
+    Route::post('kirim-balasan', 'Admin@kirimBalasan');
     Route::get('laporan', 'Admin@laporan');
     Route::post('cetak-laporan', 'Admin@cetakLaporan');
 });

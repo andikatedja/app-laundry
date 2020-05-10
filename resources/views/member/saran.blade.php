@@ -85,6 +85,49 @@
                     </div>
                 </div>
             </div>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Riwayat Saran atau Komplain</h5>
+                        <table class="table">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>Tipe</th>
+                                    <th>Isi</th>
+                                    <th>Balasan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($saran_komplain as $item)
+                                <tr>
+                                    <td>{{$loop->iteration}}</td>
+                                    <td>{{date('d F Y', strtotime($item->tgl))}}</td>
+                                    <td>
+                                        @if ($item->tipe == 1)
+                                        Saran
+                                        @else
+                                        Komplain
+                                        @endif
+                                    </td>
+                                    <td>{{$item->isi}}</td>
+                                    @if ($item->balasan == null)
+                                    <td class="text-danger">
+                                        Belum ada balasan
+                                    </td>
+                                    @else
+                                    <td>
+                                        {{$item->balasan}}
+                                    </td>
+                                    @endif
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- /.row -->
     </div><!-- /.container-fluid -->

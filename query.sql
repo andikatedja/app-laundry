@@ -79,5 +79,6 @@ CREATE TABLE saran_komplain (
     id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     tgl DATETIME,
     isi TEXT,
-    tipe CHAR(1)
+    tipe CHAR(1),
+    balasan TEXT
 );
