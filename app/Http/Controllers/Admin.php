@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PDF;
+use DateTime;
 
 class Admin extends Controller
 {
@@ -303,6 +305,20 @@ class Admin extends Controller
     {
         $user = DB::table('users')->join('users_info', 'users.id', '=', 'users_info.id_user')
             ->select('users_info.*')->where('email', '=', $this->logged_email)->first();
-        return view('admin.laporan', compact('user'));
+        $tahun = DB::table('transaksi')->selectRaw('YEAR(tgl_masuk) as Tahun')->distinct()->get();
+        $bulan = DB::table('transaksi')->selectRaw('MONTH(tgl_masuk) as Bulan')->distinct()->get();
+        return view('admin.laporan', compact('user', 'bulan', 'tahun'));
+    }
+
+    public function cetakLaporan(Request $request)
+    {
+        $bulan_num = $request->input('bulan');
+        $tahun = $request->input('tahun');
+        $dateObj   = DateTime::createFromFormat('!m', $bulan_num);
+        $bulan = $dateObj->format('F');
+        $pendapatan = DB::table('transaksi')->whereMonth('tgl_masuk', '=', $bulan_num)
+            ->whereYear('tgl_masuk', '=', $tahun)->sum('total_harga');
+        $pdf = PDF::loadview('admin.laporan_pdf', compact('bulan', 'tahun', 'pendapatan'));
+        return $pdf->download('laporan-keuangan-' . $bulan . '-' . $tahun);
     }
 }
