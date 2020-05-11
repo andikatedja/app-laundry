@@ -172,4 +172,10 @@
         });
     });
 </script>
+
+@if (session('id_trs'))
+<script type="text/javascript">
+    window.open('{{url('admin/cetak-transaksi' . '/' . session('id_trs'))}}', '_blank');
+</script>
+@endif
 @endsection

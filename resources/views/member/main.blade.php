@@ -34,11 +34,11 @@
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
                 <!-- Notifications Dropdown Menu -->
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a class="nav-link" href="{{url('member/poin')}}">
-                        <i class="mr-2 fas fa-star"></i>Tukar Poin
-                    </a>
-                </li>
+                <i class="mr-2 fas fa-star"></i>Tukar Poin
+                </a>
+                </li> --}}
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
                         <img class="img-circle img-fit mr-1" width="25" height="25"
@@ -93,13 +93,13 @@
                                 <p>Riwayat Transaksi</p>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a href="{{url('member/poin')}}"
-                                class="nav-link {{(request()->is('member/poin')) ? 'active' : ''}}">
-                                <i class="nav-icon fas fa-star"></i>
-                                <p>Tukar Poin</p>
-                            </a>
-                        </li>
+                        class="nav-link {{(request()->is('member/poin')) ? 'active' : ''}}">
+                        <i class="nav-icon fas fa-star"></i>
+                        <p>Tukar Poin</p>
+                        </a>
+                        </li> --}}
                         <li class="nav-item">
                             <a href="{{url('member/edit')}}"
                                 class="nav-link {{(request()->is('member/edit')) ? 'active' : ''}}">

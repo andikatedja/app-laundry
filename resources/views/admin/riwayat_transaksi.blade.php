@@ -60,6 +60,8 @@
                                         <a href="#" class="badge badge-info btn-detail" data-toggle="modal"
                                             data-target="#detailTransaksiModal"
                                             data-id="{{$item->id_transaksi}}">Detail</a>
+                                        <a href="{{url('admin/cetak-transaksi') . '/' . $item->id_transaksi}}"
+                                            class="badge badge-primary" target="_blank">Cetak</a>
                                     </td>
                                 </tr>
                                 @endforeach

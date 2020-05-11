@@ -23,7 +23,7 @@ class Member extends Controller
         $user = DB::table('users')->join('users_info', 'users.id', '=', 'users_info.id_user')
             ->select('users_info.*')->where('email', '=', $this->logged_email)->first();
         $transaksi_terakhir = DB::table('transaksi')->select('id_transaksi', 'tgl_masuk', 'transaksi.id_status', 'status.nama_status')
-            ->join('status', 'transaksi.id_status', '=', 'status.id_status')->where('id_user', '=', $user->id_user)->orderBy('tgl_masuk')->limit(5)->get();
+            ->join('status', 'transaksi.id_status', '=', 'status.id_status')->where('id_user', '=', $user->id_user)->orderBy('tgl_masuk', 'desc')->limit(5)->get();
         return view('member.index', compact('user', 'transaksi_terakhir'));
     }
 
@@ -45,7 +45,7 @@ class Member extends Controller
         $user = DB::table('users')->join('users_info', 'users.id', '=', 'users_info.id_user')
             ->select('users_info.*')->where('email', '=', $this->logged_email)->first();
         $transaksi = DB::table('transaksi')->select('id_transaksi', 'tgl_masuk', 'transaksi.id_status', 'status.nama_status')
-            ->join('status', 'transaksi.id_status', '=', 'status.id_status')->where('id_user', '=', $user->id_user)->orderBy('tgl_masuk')->get();
+            ->join('status', 'transaksi.id_status', '=', 'status.id_status')->where('id_user', '=', $user->id_user)->orderBy('tgl_masuk', 'desc')->get();
         return view('member.riwayat', compact('user', 'transaksi'));
     }
 

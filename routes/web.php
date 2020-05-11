@@ -40,6 +40,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['language', 'isadmin']], fun
     Route::post('tambah-transaksi', 'Admin@tambahTransaksi');
     Route::post('ambil-detail-transaksi', 'Admin@ambilDetailTransaksi');
     Route::post('ubah-status-transaksi', 'Admin@ubahStatusTransaksi');
+    Route::get('cetak-transaksi/{id}', 'Admin@cetakTransaksi');
     Route::get('harga', 'Admin@harga');
     Route::post('ambil-harga', 'Admin@ambilHarga');
     Route::post('tambah-harga', 'Admin@tambahHarga');

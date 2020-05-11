@@ -176,7 +176,20 @@ class Admin extends Controller
         ]);
         $request->session()->forget('transaksi');
         $request->session()->forget('id_member_transaksi');
-        return redirect('admin/input-transaksi')->with('success', 'Transaksi berhasil disimpan');
+        return redirect('admin/input-transaksi')->with('success', 'Transaksi berhasil disimpan')->with('id_trs', $id_transaksi);
+    }
+
+    public function cetakTransaksi($id)
+    {
+        $member = DB::table('transaksi')->join('users_info', 'transaksi.id_user', 'users_info.id_user')->where('transaksi.id_transaksi', '=', $id)->pluck('users_info.nama');
+        $tanggal = DB::table('transaksi')->join('users_info', 'transaksi.id_user', 'users_info.id_user')->where('transaksi.id_transaksi', '=', $id)->pluck('transaksi.tgl_masuk');
+        $total = DB::table('transaksi')->join('users_info', 'transaksi.id_user', 'users_info.id_user')->where('transaksi.id_transaksi', '=', $id)->pluck('transaksi.total_harga');
+        $transaksi = $detail_transaksi = DB::table('detail_transaksi')->select('barang.nama_barang', 'kategori.nama_kategori', 'servis.nama_servis', 'detail_transaksi.banyak', 'detail_transaksi.sub_total')
+            ->join('barang', 'detail_transaksi.id_barang', '=', 'barang.id_barang')
+            ->join('kategori', 'detail_transaksi.id_kategori', '=', 'kategori.id_kategori')
+            ->join('servis', 'detail_transaksi.id_servis', '=', 'servis.id_servis')->where('detail_transaksi.id_transaksi', '=', $id)
+            ->get();
+        return view('admin.cetak_transaksi', compact('id', 'member', 'tanggal', 'total', 'transaksi'));
     }
 
     public function hapusSessTransaksi(Request $request)
