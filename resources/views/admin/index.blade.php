@@ -62,7 +62,6 @@
                                     <th>No</th>
                                     <th>Tanggal</th>
                                     <th>Status</th>
-                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -76,10 +75,6 @@
                                         @else
                                         <span class="text-success">{{$item->nama_status}}</span>
                                         @endif
-                                    </td>
-                                    <td>
-                                        <a href="{{url('member/transaksi') . '/' . $item->id_transaksi}}"
-                                            class="badge badge-primary">Lihat Detail ></a>
                                     </td>
                                 </tr>
                                 @endforeach
