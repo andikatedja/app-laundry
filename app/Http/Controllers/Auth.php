@@ -33,10 +33,10 @@ class Auth extends Controller
         if (Hash::check($password, $user->password)) {
             if ($user->role == '1') {
                 $request->session()->put('login', $email);
-                return redirect()->route('admin');
+                return redirect('admin');
             } else {
                 $request->session()->put('login', $email);
-                return redirect()->route('member');
+                return redirect('member');
             }
         } else {
             return redirect('login')->with('error', Lang::get('auth.error_email_password'));
