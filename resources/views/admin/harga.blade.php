@@ -54,19 +54,39 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="barang">Barang</label>
-                                        <select class="form-control" id="barang" name="barang">
-                                            @foreach ($barang as $item)
-                                            <option value="{{$item->id_barang}}">{{$item->nama_barang}}</option>
-                                            @endforeach
-                                        </select>
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <select class="form-control" id="barang" name="barang">
+                                                    @foreach ($barang as $item)
+                                                    <option value="{{$item->id_barang}}">{{$item->nama_barang}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-4">
+                                                <a id="tambah-barang" class="text-white btn btn-primary"
+                                                    data-toggle="modal" data-target="#tambahBarangModal"><i
+                                                        class="fas fa-plus"></i>
+                                                    Barang</a>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="servis">Servis</label>
-                                        <select class="form-control" id="servis" name="servis">
-                                            @foreach ($servis as $item)
-                                            <option value="{{$item->id_servis}}">{{$item->nama_servis}}</option>
-                                            @endforeach
-                                        </select>
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <select class="form-control" id="servis" name="servis">
+                                                    @foreach ($servis as $item)
+                                                    <option value="{{$item->id_servis}}">{{$item->nama_servis}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-4">
+                                                <a id="tambah-servis" class="text-white btn btn-primary"
+                                                    data-toggle="modal" data-target="#tambahServisModal"><i
+                                                        class="fas fa-plus"></i>
+                                                    Servis</a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-6">
@@ -186,6 +206,60 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="submit" class="btn btn-primary">Ubah Harga</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="tambahBarangModal" tabindex="-1" role="dialog" aria-labelledby="tambahBarangModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="tambahBarangModalLabel">Tambah Barang</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{{url('admin/tambah-barang')}}" method="post">
+                    @csrf
+                    <div class="form-group">
+                        <label for="barang">Nama Barang</label>
+                        <input type="text" class="form-control" id="barang" name="barang">
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Tambah Barang</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="tambahServisModal" tabindex="-1" role="dialog" aria-labelledby="tambahServisModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="tambahServisModalLabel">Tambah Servis</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{{url('admin/tambah-servis')}}" method="post">
+                    @csrf
+                    <div class="form-group">
+                        <label for="servis">Nama Servis</label>
+                        <input type="text" class="form-control" id="servis" name="servis">
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Tambah Servis</button>
                 </form>
             </div>
         </div>

@@ -264,7 +264,8 @@ class Admin extends Controller
             'id_harga' => null,
             'id_barang' => $request->input('barang'),
             'id_kategori' => $request->input('kategori'),
-            'id_servis' => $request->input('servis')
+            'id_servis' => $request->input('servis'),
+            'harga' => $request->input('harga')
         ]);
 
         return redirect('admin/harga')->with('success', 'Harga berhasil ditambahkan!');
@@ -284,6 +285,28 @@ class Admin extends Controller
             'harga' => $request->input('harga')
         ]);
         return redirect('admin/harga')->with('success', 'Harga berhasil diubah!');
+    }
+
+    public function tambahBarang(Request $request)
+    {
+        $barang = $request->input('barang');
+        $id = strtolower($barang[0]);
+        DB::table('barang')->insert([
+            'id_barang' => $id,
+            'nama_barang' => $barang
+        ]);
+        return redirect('admin/harga')->with('success', 'Barang baru berhasil ditambah!');
+    }
+
+    public function tambahServis(Request $request)
+    {
+        $servis = $request->input('servis');
+        $id = strtolower($servis[0]);
+        DB::table('servis')->insert([
+            'id_servis' => $id,
+            'nama_servis' => $servis
+        ]);
+        return redirect('admin/harga')->with('success', 'Servis baru berhasil ditambah!');
     }
 
     public function members()
