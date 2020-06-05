@@ -69,6 +69,15 @@ class Admin extends Controller
         }
 
         $id_member = $request->input('id_member');
+
+        //Cek member
+        if ($id_member != null && !DB::table('users')->where([
+            'id' => $id_member,
+            'role' => 2
+        ])->exists()) {
+            return redirect('admin/input-transaksi')->with('error', 'Member tidak ditemukan!');
+        }
+
         $id_barang = $request->input('barang');
         $id_servis = $request->input('servis');
         $id_kategori = $request->input('kategori');
