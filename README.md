@@ -4,6 +4,8 @@
 
 Aplikasi ini merupakan aplikasi laundry sederhana yang dibuat dengan framework Laravel. Aplikasi ini adalah project untuk menyelesaikan UAS Metodologi Penulisan Ilmiah ITB Stikom Bali.
 
+Demo website: [App Laundry Heroku](https://mpi-applaundry.herokuapp.com)
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
