@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Member_model;
 
 class Member extends Controller
 {
@@ -18,59 +19,68 @@ class Member extends Controller
         });
     }
 
+    /*
+    | Fungsi untuk menampilkan halaman dashboard member (Beranda)
+    */
     public function index()
     {
-        $user = DB::table('users')->join('users_info', 'users.id', '=', 'users_info.id_user')
-            ->select('users_info.*')->where('email', '=', $this->logged_email)->first();
-        $transaksi_terakhir = DB::table('transaksi')->select('id_transaksi', 'tgl_masuk', 'transaksi.id_status', 'status.nama_status')
-            ->join('status', 'transaksi.id_status', '=', 'status.id_status')->where('id_user', '=', $user->id_user)->orderBy('tgl_masuk', 'desc')->limit(5)->get();
+        $user = Member_model::getUserInfo($this->logged_email);
+        $transaksi_terakhir = Member_model::getTransaksi($user->id_user, 5);
         return view('member.index', compact('user', 'transaksi_terakhir'));
     }
 
+    /*
+    | Fungsi untuk menampilkan daftar harga
+    */
     public function harga()
     {
-        $user = DB::table('users')->join('users_info', 'users.id', '=', 'users_info.id_user')
-            ->select('users_info.*')->where('email', '=', $this->logged_email)->first();
-        $satuan = DB::table('daftar_harga')->select('daftar_harga.harga', 'servis.nama_servis', 'barang.nama_barang')
-            ->join('barang', 'daftar_harga.id_barang', '=', 'barang.id_barang')
-            ->join('servis', 'daftar_harga.id_servis', '=', 'servis.id_servis')->where('daftar_harga.id_kategori', '=', 's')->get();
-        $kiloan = DB::table('daftar_harga')->select('daftar_harga.harga', 'servis.nama_servis', 'barang.nama_barang')
-            ->join('barang', 'daftar_harga.id_barang', '=', 'barang.id_barang')
-            ->join('servis', 'daftar_harga.id_servis', '=', 'servis.id_servis')->where('daftar_harga.id_kategori', '=', 'k')->get();
+        $user = Member_model::getUserInfo($this->logged_email);
+        $satuan = Member_model::getSatuanKiloan('s');
+        $kiloan = Member_model::getSatuanKiloan('k');
         return view('member.harga', compact('user', 'satuan', 'kiloan'));
     }
 
+    /*
+    | Fungsi untuk menampilkan halaman riwayat transaksi member
+    */
     public function riwayatTransaksi()
     {
-        $user = DB::table('users')->join('users_info', 'users.id', '=', 'users_info.id_user')
-            ->select('users_info.*')->where('email', '=', $this->logged_email)->first();
-        $transaksi = DB::table('transaksi')->select('id_transaksi', 'tgl_masuk', 'transaksi.id_status', 'status.nama_status')
-            ->join('status', 'transaksi.id_status', '=', 'status.id_status')->where('id_user', '=', $user->id_user)->orderBy('tgl_masuk', 'desc')->get();
+        $user = Member_model::getUserInfo($this->logged_email);
+        $transaksi = Member_model::getTransaksi($user->id_user);
         return view('member.riwayat', compact('user', 'transaksi'));
     }
 
+    /*
+    | Fungsi untuk menampilkan halaman poin
+    */
     public function poin()
     {
-        $user = DB::table('users')->join('users_info', 'users.id', '=', 'users_info.id_user')
-            ->select('users_info.*')->where('email', '=', $this->logged_email)->first();
+        $user = Member_model::getUserInfo($this->logged_email);
         return view('member.poin', compact('user'));
     }
 
+    /*
+    | Fungsi untuk menampilkan halaman edit profil
+    */
     public function edit()
     {
-        $user = DB::table('users')->join('users_info', 'users.id', '=', 'users_info.id_user')
-            ->select('users_info.*')->where('email', '=', $this->logged_email)->first();
+        $user = Member_model::getUserInfo($this->logged_email);
         return view('member.edit', compact('user'));
     }
 
+    /*
+    | Fungsi untuk menampilkan halaman saran komplain
+    */
     public function saranKomplain()
     {
-        $user = DB::table('users')->join('users_info', 'users.id', '=', 'users_info.id_user')
-            ->select('users_info.*')->where('email', '=', $this->logged_email)->first();
+        $user = Member_model::getUserInfo($this->logged_email);
         $saran_komplain = DB::table('saran_komplain')->where('id_user', '=', $user->id_user)->get();
         return view('member.saran', compact('user', 'saran_komplain'));
     }
 
+    /*
+    | Fungsi untuk melakukan edit profil
+    */
     public function editprofil(Request $request)
     {
         $request->validate([
@@ -79,34 +89,39 @@ class Member extends Controller
             'alamat' => 'required',
             'telp' => 'required'
         ]);
-        $nama = $request->input('name');
-        $jenis_kelamin = $request->input('jenis_kelamin');
-        $alamat = $request->input('alamat');
-        $no_telp = $request->input('telp');
 
-        $user_id = DB::table('users')->where('email', '=', $this->logged_email)->pluck('id');
+        $id_user = DB::table('users')->where('email', '=', $this->logged_email)->pluck('id')[0];
 
-        $filename = 'default.jpg';
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $extension = $image->getClientOriginalExtension();
-            $filename = $user_id[0] . '.' . $extension;
+            $filename = $id_user . '.' . $extension;
             $path = public_path('img/profile');
             $image->move($path, $filename);
-        }
 
-        DB::table('users_info')->where('id_user', '=', $user_id)->update([
-            'nama' => $nama,
-            'jenis_kelamin' => $jenis_kelamin,
-            'alamat' => $alamat,
-            'no_telp' => $no_telp,
-            'profil' => $filename
-        ]);
+            Member_model::updateProfil($id_user, [
+                'nama' => $request->input('name'),
+                'jenis_kelamin' => $request->input('jenis_kelamin'),
+                'alamat' => $request->input('alamat'),
+                'no_telp' => $request->input('telp'),
+                'profil' => $filename
+            ]);
+        } else {
+            Member_model::updateProfil($id_user, [
+                'nama' => $request->input('name'),
+                'jenis_kelamin' => $request->input('jenis_kelamin'),
+                'alamat' => $request->input('alamat'),
+                'no_telp' => $request->input('telp')
+            ]);
+        }
 
         return redirect('member/edit')->with('success', 'Profil berhasil diedit!');
     }
 
+    /*
+    | Fungsi untuk reset foto
+    */
     public function resetfoto()
     {
         $user_id = DB::table('users')->where('email', '=', $this->logged_email)->pluck('id');
@@ -116,6 +131,9 @@ class Member extends Controller
         return redirect('member/edit')->with('success', 'Foto profil berhasil direset');
     }
 
+    /*
+    | Fungsi untuk melakukan update password
+    */
     public function editpassword(Request $request)
     {
         $request->validate([
@@ -136,6 +154,9 @@ class Member extends Controller
         return redirect('member/edit')->with('success', 'Kata sandi berhasil diubah');
     }
 
+    /*
+    | Fungsi untuk mengirimkan saran komplain
+    */
     public function kirimSaranKomplain(Request $request)
     {
         $request->validate([
@@ -153,15 +174,13 @@ class Member extends Controller
         return redirect('member/saran')->with('success', 'Saran/komplain berhasil dikirim!');
     }
 
+    /*
+    | Fungsi untuk menampilkan halaman detail transaksi
+    */
     public function detailTransaksi($id_transaksi)
     {
-        $user = DB::table('users')->join('users_info', 'users.id', '=', 'users_info.id_user')
-            ->select('users_info.*')->where('email', '=', $this->logged_email)->first();
-        $transaksi = DB::table('detail_transaksi')->select('barang.nama_barang', 'kategori.nama_kategori', 'servis.nama_servis', 'detail_transaksi.banyak', 'detail_transaksi.sub_total')
-            ->join('barang', 'detail_transaksi.id_barang', '=', 'barang.id_barang')
-            ->join('kategori', 'detail_transaksi.id_kategori', '=', 'kategori.id_kategori')
-            ->join('servis', 'detail_transaksi.id_servis', '=', 'servis.id_servis')->where('detail_transaksi.id_transaksi', '=', $id_transaksi)
-            ->get();
+        $user = Member_model::getUserInfo($this->logged_email);
+        $transaksi = Member_model::getDetailTransaksi($id_transaksi);
         return view('member.detail', compact('user', 'transaksi', 'id_transaksi'));
     }
 }
