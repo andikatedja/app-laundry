@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Admin_model;
 use PDF;
 use DateTime;
 
@@ -19,10 +20,12 @@ class Admin extends Controller
         });
     }
 
+    /*
+    | Fungsi index untuk menampilkan halaman dashboard admin
+    */
     public function index()
     {
-        $user = DB::table('users')->join('users_info', 'users.id', '=', 'users_info.id_user')
-            ->select('users_info.*')->where('email', '=', $this->logged_email)->first();
+        $user = Admin_model::getUserInfo($this->logged_email);
         $transaksi_terbaru = DB::table('transaksi')->select('id_transaksi', 'tgl_masuk', 'transaksi.id_status', 'status.nama_status')
             ->join('status', 'transaksi.id_status', '=', 'status.id_status')->orderBy('tgl_masuk', 'desc')->limit(10)->get();
         $banyak_member = DB::table('users')->where('role', '=', 2)->count();
@@ -30,24 +33,17 @@ class Admin extends Controller
         return view('admin.index', compact('user', 'transaksi_terbaru', 'banyak_member', 'banyak_transaksi'));
     }
 
+    /*
+    | Fungsi untuk menampilkan halaman input transaksi
+    */
     public function inputTransaksi(Request $request)
     {
-        $user = DB::table('users')->join('users_info', 'users.id', '=', 'users_info.id_user')
-            ->select('users_info.*')->where('email', '=', $this->logged_email)->first();
-        // $barang = DB::table('daftar_harga')->join('barang', 'daftar_harga.id_barang', '=', 'barang.id_barang')
-        //     ->join('kategori', 'daftar_harga.id_kategori', '=', 'kategori.id_kategori')
-        //     ->join('servis', 'daftar_harga.id_servis', '=', 'servis.id_servis')->select('barang.nama_barang')->distinct()->get();
-        // $servis = DB::table('daftar_harga')->join('barang', 'daftar_harga.id_barang', '=', 'barang.id_barang')
-        //     ->join('kategori', 'daftar_harga.id_kategori', '=', 'kategori.id_kategori')
-        //     ->join('servis', 'daftar_harga.id_servis', '=', 'servis.id_servis')->select('service.nama_service')->distinct()->get();
-        // $kategori = DB::table('daftar_harga')->join('barang', 'daftar_harga.id_barang', '=', 'barang.id_barang')
-        //     ->join('kategori', 'daftar_harga.id_kategori', '=', 'kategori.id_kategori')
-        //     ->join('servis', 'daftar_harga.id_servis', '=', 'servis.id_servis')->select('kategori.nama_kategori')->distinct()->get();
-
+        $user = Admin_model::getUserInfo($this->logged_email);
         $barang = DB::table('barang')->get();
         $kategori = DB::table('kategori')->get();
         $servis = DB::table('servis')->get();
 
+        // Mengecek apakah ada sesi transaksi atau tidak, 
         if ($request->session()->has('transaksi') && $request->session()->has('id_member_transaksi')) {
             $transaksi = $request->session()->get('transaksi');
             $id_member_transaksi = $request->session()->get('id_member_transaksi');
@@ -56,45 +52,39 @@ class Admin extends Controller
         return view('admin.input_transaksi', compact('user', 'barang', 'kategori', 'servis'));
     }
 
+    /*
+    | Fungsi untuk menambahkan transaksi baru ke dalam sesi (session) transaksi
+    */
     public function tambahTransaksi(Request $request)
     {
-        $ada_harga = DB::table('daftar_harga')->where([
-            'id_barang' => $request->input('barang'),
-            'id_kategori' => $request->input('kategori'),
-            'id_servis' => $request->input('servis')
-        ])->exists();
-
-        if (!$ada_harga) {
-            return redirect('admin/input-transaksi')->with('error', 'Harga tidak ditemukan!');
-        }
-
-        $id_member = $request->input('id_member');
-
-        //Cek member
-        if ($id_member != null && !DB::table('users')->where([
-            'id' => $id_member,
-            'role' => 2
-        ])->exists()) {
-            return redirect('admin/input-transaksi')->with('error', 'Member tidak ditemukan!');
-        }
-
         $id_barang = $request->input('barang');
         $id_servis = $request->input('servis');
         $id_kategori = $request->input('kategori');
+        $id_member = $request->input('id_member');
         $banyak = $request->input('banyak');
 
-        $dbharga = DB::table('daftar_harga')->where([
-            'id_barang' => $id_barang,
-            'id_kategori' => $id_kategori,
-            'id_servis' => $id_servis
-        ])->pluck('harga');
+        // Cek apakah harga tertera pada database
+        if (!Admin_model::cekHarga($id_barang, $id_kategori, $id_servis)) {
+            return redirect('admin/input-transaksi')->with('error', 'Harga tidak ditemukan!');
+        }
 
+        //Cek member
+        if ($id_member != null && !Admin_model::cekMember($id_member)) {
+            return redirect('admin/input-transaksi')->with('error', 'Member tidak ditemukan!');
+        }
+
+        // Ambil harga dari database
+        $dbharga = Admin_model::getHarga($id_barang, $id_kategori, $id_servis);
+
+        // Hitung subtotal
         $harga = $dbharga[0] * $banyak;
 
+        // Ambil nama barang, servis, kategori berdasarkan id
         $nama_barang = DB::table('barang')->where('id_barang', '=', $id_barang)->pluck('nama_barang');
         $nama_servis = DB::table('servis')->where('id_servis', '=', $id_servis)->pluck('nama_servis');
         $nama_kategori = DB::table('kategori')->where('id_kategori', '=', $id_kategori)->pluck('nama_kategori');
 
+        // Membuat row baru untuk disimpan dalam session
         $row_id = md5($id_member . serialize($id_barang) . serialize($id_servis) . serialize($id_kategori));
 
         $data = [
@@ -111,12 +101,15 @@ class Admin extends Controller
             ]
         ];
 
+        // Jika tidak ada sesi transaksi, buat baru transaksi
         if (!$request->session()->has('transaksi') && !$request->session()->has('id_member_transaksi')) {
             $request->session()->put('transaksi', $data);
             $request->session()->put('id_member_transaksi', $id_member);
         } else {
             $exist = 0;
             $transaksi = $request->session()->get('transaksi');
+
+            // Mengecek apakah ada input transaksi yang sama, jika ada maka tambahkan banyak dan harga dari sesi transaksi
             foreach ($transaksi as $k => $v) {
                 if ($transaksi[$k]['id_barang'] == $id_barang && $transaksi[$k]['id_kategori'] == $id_kategori && $transaksi[$k]['id_servis'] == $id_servis) {
                     $transaksi[$k]['banyak'] += $banyak;
@@ -124,32 +117,42 @@ class Admin extends Controller
                     $exist++;
                 }
             }
-            $request->session()->put('transaksi', $transaksi);
+
+            // Cek jika tidak ada input transaksi yang sama, jika tidak ada maka tambahkan data baru ke sesi transaksi
             if ($exist == 0) {
-                $oldtransaksi = $request->session()->get('transaksi');
-                $newtransaksi = array_merge_recursive($oldtransaksi, $data);
+                $newtransaksi = array_merge_recursive($transaksi, $data);
                 $request->session()->put('transaksi', $newtransaksi);
+            } else {
+                $request->session()->put('transaksi', $transaksi);
             }
         }
 
         return redirect('admin/input-transaksi');
     }
 
+    /*
+    | Fungsi untuk menghapus transaksi dari sesi transaksi, diakses dari menekan tombol hapus
+    */
     public function hapusTransaksi($row_id, Request $request)
     {
         $newtransaksi = $request->session()->get('transaksi');
         unset($newtransaksi[$row_id]);
 
+        // Cek jika setelah unset transaksi menjadi kosong [] maka hapus semua sesi yang berhubungan dengan transaksi
         if ($newtransaksi == []) {
             $request->session()->forget('transaksi');
             $request->session()->forget('id_member_transaksi');
             return redirect('admin/input-transaksi');
+        } else {
+            $request->session()->put('transaksi', $newtransaksi);
         }
 
-        $request->session()->put('transaksi', $newtransaksi);
         return redirect('admin/input-transaksi');
     }
 
+    /*
+    | Fungsi untuk menyimpan transaksi dari sesi transaksi
+    */
     public function simpanTransaksi(Request $request)
     {
         $id_member = $request->session()->get('id_member_transaksi');
@@ -159,48 +162,27 @@ class Admin extends Controller
             $total_harga += $transaksi[$key]['harga'];
         }
 
-        $id_transaksi = DB::table('transaksi')->insertGetId([
-            'tgl_masuk' => date('Y-m-d H:i:s'),
-            'id_status' => 1,
-            'id_user' => $id_member,
-            'tgl_selesai' => null,
-            'total_harga' => $total_harga
-        ]);
-
-        foreach ($transaksi as $key => $value) {
-            DB::table('detail_transaksi')->insert([
-                'id_transaksi' => $id_transaksi,
-                'id_barang' => $transaksi[$key]['id_barang'],
-                'id_kategori' => $transaksi[$key]['id_kategori'],
-                'id_servis' => $transaksi[$key]['id_servis'],
-                'banyak' => $transaksi[$key]['banyak'],
-                'sub_total' => $transaksi[$key]['harga']
-            ]);
-        }
-
-        $poin = DB::table('users_info')->where('id_user', '=', $id_member)->pluck('poin')[0];
-        $poin += 1;
-        DB::table('users_info')->where('id_user', '=', $id_member)->update([
-            'poin' => $poin
-        ]);
+        $id_transaksi = Admin_model::simpanTransaksi($transaksi, $id_member, $total_harga);
         $request->session()->forget('transaksi');
         $request->session()->forget('id_member_transaksi');
         return redirect('admin/input-transaksi')->with('success', 'Transaksi berhasil disimpan')->with('id_trs', $id_transaksi);
     }
 
+    /*
+    | Fungsi untuk mencetak transaksi
+    */
     public function cetakTransaksi($id)
     {
         $member = DB::table('transaksi')->join('users_info', 'transaksi.id_user', 'users_info.id_user')->where('transaksi.id_transaksi', '=', $id)->pluck('users_info.nama');
         $tanggal = DB::table('transaksi')->join('users_info', 'transaksi.id_user', 'users_info.id_user')->where('transaksi.id_transaksi', '=', $id)->pluck('transaksi.tgl_masuk');
         $total = DB::table('transaksi')->join('users_info', 'transaksi.id_user', 'users_info.id_user')->where('transaksi.id_transaksi', '=', $id)->pluck('transaksi.total_harga');
-        $transaksi = $detail_transaksi = DB::table('detail_transaksi')->select('barang.nama_barang', 'kategori.nama_kategori', 'servis.nama_servis', 'detail_transaksi.banyak', 'detail_transaksi.sub_total')
-            ->join('barang', 'detail_transaksi.id_barang', '=', 'barang.id_barang')
-            ->join('kategori', 'detail_transaksi.id_kategori', '=', 'kategori.id_kategori')
-            ->join('servis', 'detail_transaksi.id_servis', '=', 'servis.id_servis')->where('detail_transaksi.id_transaksi', '=', $id)
-            ->get();
+        $transaksi = Admin_model::getTransaksiForCetak($id);
         return view('admin.cetak_transaksi', compact('id', 'member', 'tanggal', 'total', 'transaksi'));
     }
 
+    /*
+    | Fungsi untuk menghapus sesi transaksi
+    */
     public function hapusSessTransaksi(Request $request)
     {
         $request->session()->forget('transaksi');
@@ -208,26 +190,28 @@ class Admin extends Controller
         return redirect('admin/input-transaksi');
     }
 
+    /*
+    | Fungsi untuk menampilkan halaman riwayat transaksi
+    */
     public function riwayatTransaksi()
     {
-        $user = DB::table('users')->join('users_info', 'users.id', '=', 'users_info.id_user')
-            ->select('users_info.*')->where('email', '=', $this->logged_email)->first();
-        $transaksi = DB::table('transaksi')->join('users_info', 'transaksi.id_user', '=', 'users_info.id_user')
-            ->select('transaksi.*', 'users_info.nama')->get();
+        $user = Admin_model::getUserInfo($this->logged_email);
+        $transaksi = Admin_model::getRiwayatTransaksi();
         return view('admin.riwayat_transaksi', compact('user', 'transaksi'));
     }
 
+    /*
+    | Fungsi untuk mengambil detail transaksi dari ajax
+    */
     public function ambilDetailTransaksi(Request $request)
     {
-        $id_transaksi = $request->input('id_transaksi');
-        $detail_transaksi = DB::table('detail_transaksi')->select('barang.nama_barang', 'kategori.nama_kategori', 'servis.nama_servis', 'detail_transaksi.banyak', 'detail_transaksi.sub_total')
-            ->join('barang', 'detail_transaksi.id_barang', '=', 'barang.id_barang')
-            ->join('kategori', 'detail_transaksi.id_kategori', '=', 'kategori.id_kategori')
-            ->join('servis', 'detail_transaksi.id_servis', '=', 'servis.id_servis')->where('detail_transaksi.id_transaksi', '=', $id_transaksi)
-            ->get();
+        $detail_transaksi = Admin_model::getDetailTransaksi($request->input('id_transaksi'));
         echo json_encode($detail_transaksi);
     }
 
+    /*
+    | Fungsi untuk mengubah status transaksi dari sedang dikerjakan menjadi selesai
+    */
     public function ubahStatusTransaksi(Request $request)
     {
         $id_transaksi = $request->input('id_transaksi');
@@ -237,10 +221,12 @@ class Admin extends Controller
         ]);
     }
 
+    /*
+    | Fungsi untuk menampilkan halaman daftar harga
+    */
     public function harga()
     {
-        $user = DB::table('users')->join('users_info', 'users.id', '=', 'users_info.id_user')
-            ->select('users_info.*')->where('email', '=', $this->logged_email)->first();
+        $user = Admin_model::getUserInfo($this->logged_email);
         $satuan = DB::table('daftar_harga')->select('daftar_harga.id_harga', 'daftar_harga.harga', 'servis.nama_servis', 'barang.nama_barang')
             ->join('barang', 'daftar_harga.id_barang', '=', 'barang.id_barang')
             ->join('servis', 'daftar_harga.id_servis', '=', 'servis.id_servis')->where('daftar_harga.id_kategori', '=', 's')->get();
@@ -253,33 +239,32 @@ class Admin extends Controller
         return view('admin.harga', compact('user', 'satuan', 'kiloan', 'barang', 'servis', 'kategori'));
     }
 
+    /*
+    | Fungsi untuk menambah harga baru
+    */
     public function tambahHarga(Request $request)
     {
         $request->validate([
             'harga' => 'required'
         ]);
 
-        $ada_harga = DB::table('daftar_harga')->where([
-            'id_barang' => $request->input('barang'),
-            'id_kategori' => $request->input('kategori'),
-            'id_servis' => $request->input('servis')
-        ])->exists();
-
-        if ($ada_harga) {
+        if (Admin_model::cekHarga($request->input('barang'), $request->input('kategori'), $request->input('servis'))) {
             return redirect('admin/harga')->with('error', 'Harga tidak dapat ditambah karena sudah tersedia!');
         }
 
-        DB::table('daftar_harga')->insert([
-            'id_harga' => null,
-            'id_barang' => $request->input('barang'),
-            'id_kategori' => $request->input('kategori'),
-            'id_servis' => $request->input('servis'),
-            'harga' => $request->input('harga')
-        ]);
+        Admin_model::tambahHarga(
+            $request->input('barang'),
+            $request->input('kategori'),
+            $request->input('servis'),
+            $request->input('harga')
+        );
 
         return redirect('admin/harga')->with('success', 'Harga berhasil ditambahkan!');
     }
 
+    /*
+    | Fungsi untuk mengambil harga untuk ajax
+    */
     public function ambilHarga(Request $request)
     {
         $id_harga = $request->input('id_harga');
@@ -287,6 +272,9 @@ class Admin extends Controller
         echo json_encode($harga);
     }
 
+    /*
+    | Fungsi untuk mengubah harga
+    */
     public function ubahHarga(Request $request)
     {
         $id_harga = $request->input('id_harga');
@@ -296,6 +284,9 @@ class Admin extends Controller
         return redirect('admin/harga')->with('success', 'Harga berhasil diubah!');
     }
 
+    /*
+    | Fungsi untuk menambah barang baru
+    */
     public function tambahBarang(Request $request)
     {
         $barang = $request->input('barang');
@@ -307,6 +298,9 @@ class Admin extends Controller
         return redirect('admin/harga')->with('success', 'Barang baru berhasil ditambah!');
     }
 
+    /*
+    | Fungsi untuk menambah servis baru
+    */
     public function tambahServis(Request $request)
     {
         $servis = $request->input('servis');
@@ -318,40 +312,41 @@ class Admin extends Controller
         return redirect('admin/harga')->with('success', 'Servis baru berhasil ditambah!');
     }
 
+
+    /*
+    | Fungsi untuk menampilkan halaman daftar member
+    */
     public function members()
     {
-        $user = DB::table('users')->join('users_info', 'users.id', '=', 'users_info.id_user')
-            ->select('users_info.*')->where('email', '=', $this->logged_email)->first();
+        $user = Admin_model::getUserInfo($this->logged_email);
         $members = DB::table('users_info')->join('users', 'users.id', '=', 'users_info.id_user')->select('users_info.*')->where('role', '=', 2)->get();
         return view('admin.members', compact('user', 'members'));
     }
 
+    /*
+    | Fungsi untuk menampilkan halaman saran komplain
+    */
     public function saran()
     {
-        $user = DB::table('users')->join('users_info', 'users.id', '=', 'users_info.id_user')
-            ->select('users_info.*')->where('email', '=', $this->logged_email)->first();
-        $saran = DB::table('saran_komplain')->join('users_info', 'saran_komplain.id_user', '=', 'users_info.id_user')
-            ->select('saran_komplain.id', 'users_info.nama')
-            ->where([
-                'tipe' => '1',
-                'balasan' => NULL
-            ])->get();
-        $komplain = DB::table('saran_komplain')->join('users_info', 'saran_komplain.id_user', '=', 'users_info.id_user')
-            ->select('saran_komplain.id', 'users_info.nama')
-            ->where([
-                'tipe' => '2',
-                'balasan' => NULL
-            ])->get();
+        $user = Admin_model::getUserInfo($this->logged_email);
+        $saran = Admin_model::getSaranKomplain(1);
+        $komplain = Admin_model::getSaranKomplain(2);
         $jumlah = DB::table('saran_komplain')->where('balasan', '=', NULL)->count();
         return view('admin.saran', compact('user', 'saran', 'komplain', 'jumlah'));
     }
 
+    /*
+    | Fungsi untuk mengambil isi saran komplain melalui ajax
+    */
     public function ambilSaranKomplain(Request $request)
     {
         $isi = DB::table('saran_komplain')->select('isi')->where('id', '=', $request->input('id'))->get();
         echo json_encode($isi);
     }
 
+    /*
+    | Fungsi untuk mengirim balasan dari saran komplain
+    */
     public function kirimBalasan(Request $request)
     {
         DB::table('saran_komplain')->where('id', '=', $request->input('id'))->update([
@@ -359,15 +354,20 @@ class Admin extends Controller
         ]);
     }
 
+    /*
+    | Fungsi untuk menampilkan halaman laporan keuangan
+    */
     public function laporan()
     {
-        $user = DB::table('users')->join('users_info', 'users.id', '=', 'users_info.id_user')
-            ->select('users_info.*')->where('email', '=', $this->logged_email)->first();
+        $user = Admin_model::getUserInfo($this->logged_email);
         $tahun = DB::table('transaksi')->selectRaw('YEAR(tgl_masuk) as Tahun')->distinct()->get();
         $bulan = DB::table('transaksi')->selectRaw('MONTH(tgl_masuk) as Bulan')->distinct()->get();
         return view('admin.laporan', compact('user', 'bulan', 'tahun'));
     }
 
+    /*
+    | Fungsi untuk mencetak laporan dengan konversi ke pdf
+    */
     public function cetakLaporan(Request $request)
     {
         $bulan_num = $request->input('bulan');
