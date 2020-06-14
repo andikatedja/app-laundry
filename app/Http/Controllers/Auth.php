@@ -6,14 +6,21 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Hash;
+use App\Auth_model;
 
 class Auth extends Controller
 {
+    /*
+    | Fungsi untuk menampilkan halaman login
+    */
     public function index()
     {
         return view('auth.login');
     }
 
+    /*
+    | Fungsi untuk melakukan proses login
+    */
     public function auth(Request $request)
     {
         $request->validate([
@@ -43,11 +50,17 @@ class Auth extends Controller
         }
     }
 
+    /*
+    | Fungsi untuk menampilkan halaman register
+    */
     public function registerView()
     {
         return view('auth.register');
     }
 
+    /*
+    | Fungsi untuk melakukan proses register
+    */
     public function register(Request $request)
     {
         $request->validate([
@@ -55,37 +68,24 @@ class Auth extends Controller
             'email' => 'required|email',
             'password' => 'required|confirmed|min:6'
         ]);
-        $name = $request->input('name');
-        $email = $request->input('email');
         $password = $request->input('password');
-        // $password2 = $request->input('password2');
-
-        // if ($password != $password2) {
-        //     return redirect('register')->with('error', 'Password and confirm password not match');
-        // }
 
         $hash_password = Hash::make($password);
 
-        $user_id = DB::table('users')->insertGetId([
-            'id' => null,
-            'email' => $email,
+        $data = [
+            'email' => $request->input('email'),
             'password' => $hash_password,
-            'role' => '2'
-        ]);
+            'nama' => $request->input('name')
+        ];
 
-        DB::table('users_info')->insert([
-            'id_user' => $user_id,
-            'nama' => $name,
-            'jenis_kelamin' => '',
-            'alamat' => '',
-            'no_telp' => '',
-            'profil' => 'default.jpg',
-            'poin' => 0
-        ]);
+        Auth_model::insertNewMember($data);
 
-        return redirect('register')->with('success', Lang::get('auth.register_success'));
+        return redirect('login')->with('success', Lang::get('auth.register_success'));
     }
 
+    /*
+    | Fungsi untuk melakukan proses logout
+    */
     public function logout(Request $request)
     {
         $request->session()->forget('login');
