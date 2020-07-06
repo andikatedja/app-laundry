@@ -4,7 +4,13 @@
 
 Aplikasi ini merupakan aplikasi laundry sederhana yang dibuat dengan framework Laravel. Aplikasi ini adalah project untuk menyelesaikan UAS Metodologi Penulisan Ilmiah ITB Stikom Bali.
 
+Daftar/Register admin masih manual dengan mengubah role menjadi 1 pada tabel users database.
+
+Belum menggunakan migration atau eloquent, masi belajar :D
+
 Demo website: [App Laundry Heroku](https://mpi-applaundry.herokuapp.com)
+
+Database SQL : [App Laundry SQL](https://drive.google.com/file/d/1TjOoYKXGAalKcJUIhSXJjAP5NxgwDtTn/view?usp=sharing)
 
 ## About Laravel
 
