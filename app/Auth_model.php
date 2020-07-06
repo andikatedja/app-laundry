@@ -26,4 +26,9 @@ class Auth_model extends Model
             'poin' => 0
         ]);
     }
+
+    public static function isEmailExist($email)
+    {
+        return DB::table('users')->where(['email' => $email])->exists();
+    }
 }

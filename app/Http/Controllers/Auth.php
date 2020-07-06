@@ -68,6 +68,12 @@ class Auth extends Controller
             'email' => 'required|email',
             'password' => 'required|confirmed|min:6'
         ]);
+
+        // Cek apakah email sudah terdaftar
+        if (Auth_model::isEmailExist($request->input('email'))) {
+            return redirect('register')->with('error', 'Email sudah terdaftar, harap memasukkan email yang lain.');
+        }
+
         $password = $request->input('password');
 
         $hash_password = Hash::make($password);
