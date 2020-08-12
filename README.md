@@ -10,7 +10,13 @@ Belum menggunakan migration atau eloquent, masi belajar :D
 
 Demo website: [App Laundry Heroku](https://mpi-applaundry.herokuapp.com)
 
-Database SQL : [App Laundry SQL](https://drive.google.com/file/d/1TjOoYKXGAalKcJUIhSXJjAP5NxgwDtTn/view?usp=sharing)
+Login admin:
+
+Email : admin@laundryxyz.com
+
+Pass  : admin123
+
+Database dapat dilihat pada file query.sql
 
 ## About Laravel
 
