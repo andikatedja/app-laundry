@@ -27,6 +27,7 @@ $(document).on('click', '.btn-detail', function () {
                     '<td>' + val.nama_servis + '</td>' +
                     '<td>' + val.nama_kategori + '</td>' +
                     '<td>' + val.banyak + '</td>' +
+                    '<td>' + val.harga + '</td>' +
                     '<td>' + val.sub_total + '</td>' +
                     '</tr>'
             });
@@ -37,11 +38,13 @@ $(document).on('click', '.btn-detail', function () {
 
 $(document).on('change', '.select-status', function () {
     let id_transaksi = $(this).data('id');
-    if (confirm('Apakah anda yakin menyelesaikan transaksi ini?')) {
+    if (confirm('Apakah anda yakin mengubah status transaksi ini?')) {
+        let val = $(this).val();
         $.ajax({
             url: base_url + '/ubah-status-transaksi',
             data: {
                 id_transaksi: id_transaksi,
+                val: val
             },
             method: 'POST',
             success: function (data) {
@@ -49,7 +52,7 @@ $(document).on('change', '.select-status', function () {
             },
         });
     } else {
-        $(this).val('1');
+        $(this).val($(this).data('val'));
         return;
     }
 });

@@ -53,6 +53,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['language', 'isadmin']], fun
     Route::post('kirim-balasan', 'Admin@kirimBalasan');
     Route::get('laporan', 'Admin@laporan');
     Route::post('cetak-laporan', 'Admin@cetakLaporan');
+    Route::get('laporanview', 'Admin@laporanview');
 });
 
 //Member routes

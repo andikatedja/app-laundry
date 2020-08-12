@@ -9,15 +9,11 @@ class Auth_model extends Model
 {
     public static function insertNewMember($data)
     {
-        $id_user = DB::table('users')->insertGetId([
-            'id' => null,
+        DB::table('users')->insert([
+            'id' => NULL,
             'email' => $data['email'],
             'password' => $data['password'],
-            'role' => '2'
-        ]);
-
-        DB::table('users_info')->insert([
-            'id_user' => $id_user,
+            'role' => '2',
             'nama' => $data['nama'],
             'jenis_kelamin' => '',
             'alamat' => '',

@@ -9,16 +9,16 @@ class Admin_model extends Model
 {
     public static function getUserInfo($logged_email)
     {
-        return DB::table('users')->join('users_info', 'users.id', '=', 'users_info.id_user')
-            ->select('users_info.*')->where('email', '=', $logged_email)->first();
+        return DB::table('users')->where('email', '=', $logged_email)->first();
     }
 
     public static function getTransaksiForCetak($id)
     {
-        return DB::table('detail_transaksi')->select('barang.nama_barang', 'kategori.nama_kategori', 'servis.nama_servis', 'detail_transaksi.banyak', 'detail_transaksi.sub_total')
-            ->join('barang', 'detail_transaksi.id_barang', '=', 'barang.id_barang')
-            ->join('kategori', 'detail_transaksi.id_kategori', '=', 'kategori.id_kategori')
-            ->join('servis', 'detail_transaksi.id_servis', '=', 'servis.id_servis')->where('detail_transaksi.id_transaksi', '=', $id)
+        return DB::table('detail_transaksi')->select('barang.nama_barang', 'kategori.nama_kategori', 'servis.nama_servis', 'detail_transaksi.banyak', 'detail_transaksi.sub_total', 'detail_transaksi.harga')
+            ->join('daftar_harga', 'detail_transaksi.id_harga', '=', 'daftar_harga.id_harga')
+            ->join('barang', 'daftar_harga.id_barang', '=', 'barang.id_barang')
+            ->join('kategori', 'daftar_harga.id_kategori', '=', 'kategori.id_kategori')
+            ->join('servis', 'daftar_harga.id_servis', '=', 'servis.id_servis')->where('detail_transaksi.id_transaksi', '=', $id)
             ->get();
     }
 
@@ -48,30 +48,36 @@ class Admin_model extends Model
         ])->pluck('harga');
     }
 
-    public static function simpanTransaksi($transaksi, $id_member, $total_harga)
+    public static function simpanTransaksi($transaksi, $id_member, $total_harga, $id_admin)
     {
         $id_transaksi = DB::table('transaksi')->insertGetId([
             'tgl_masuk' => date('Y-m-d H:i:s'),
             'id_status' => 1,
-            'id_user' => $id_member,
+            'id_member' => $id_member,
+            'id_admin' => $id_admin,
             'tgl_selesai' => null,
             'total_harga' => $total_harga
         ]);
 
         foreach ($transaksi as $key => $value) {
-            DB::table('detail_transaksi')->insert([
-                'id_transaksi' => $id_transaksi,
+            $harga = DB::table('daftar_harga')->select('id_harga', 'harga')->where([
                 'id_barang' => $transaksi[$key]['id_barang'],
                 'id_kategori' => $transaksi[$key]['id_kategori'],
-                'id_servis' => $transaksi[$key]['id_servis'],
+                'id_servis' => $transaksi[$key]['id_servis']
+            ])->get();
+
+            DB::table('detail_transaksi')->insert([
+                'id_transaksi' => $id_transaksi,
+                'id_harga' => $harga[0]->id_harga,
                 'banyak' => $transaksi[$key]['banyak'],
+                'harga' => $harga[0]->harga,
                 'sub_total' => $transaksi[$key]['harga']
             ]);
         }
 
-        $poin = DB::table('users_info')->where('id_user', '=', $id_member)->pluck('poin')[0];
+        $poin = DB::table('users')->where('id', '=', $id_member)->pluck('poin')[0];
         $poin += 1;
-        DB::table('users_info')->where('id_user', '=', $id_member)->update([
+        DB::table('users')->where('id', '=', $id_member)->update([
             'poin' => $poin
         ]);
 
@@ -80,16 +86,17 @@ class Admin_model extends Model
 
     public static function getRiwayatTransaksi()
     {
-        return DB::table('transaksi')->join('users_info', 'transaksi.id_user', '=', 'users_info.id_user')
-            ->select('transaksi.*', 'users_info.nama')->get();
+        return DB::table('transaksi')->join('users', 'transaksi.id_member', '=', 'users.id')
+            ->select('transaksi.*', 'users.nama')->get();
     }
 
     public static function getDetailTransaksi($id)
     {
-        return DB::table('detail_transaksi')->select('barang.nama_barang', 'kategori.nama_kategori', 'servis.nama_servis', 'detail_transaksi.banyak', 'detail_transaksi.sub_total')
-            ->join('barang', 'detail_transaksi.id_barang', '=', 'barang.id_barang')
-            ->join('kategori', 'detail_transaksi.id_kategori', '=', 'kategori.id_kategori')
-            ->join('servis', 'detail_transaksi.id_servis', '=', 'servis.id_servis')->where('detail_transaksi.id_transaksi', '=', $id)
+        return DB::table('detail_transaksi')->select('barang.nama_barang', 'kategori.nama_kategori', 'servis.nama_servis', 'detail_transaksi.banyak', 'detail_transaksi.sub_total', 'detail_transaksi.harga')
+            ->join('daftar_harga', 'detail_transaksi.id_harga', '=', 'daftar_harga.id_harga')
+            ->join('barang', 'daftar_harga.id_barang', '=', 'barang.id_barang')
+            ->join('kategori', 'daftar_harga.id_kategori', '=', 'kategori.id_kategori')
+            ->join('servis', 'daftar_harga.id_servis', '=', 'servis.id_servis')->where('detail_transaksi.id_transaksi', '=', $id)
             ->get();
     }
 
@@ -106,8 +113,8 @@ class Admin_model extends Model
 
     public static function getSaranKomplain($tipe)
     {
-        return DB::table('saran_komplain')->join('users_info', 'saran_komplain.id_user', '=', 'users_info.id_user')
-            ->select('saran_komplain.id', 'users_info.nama')
+        return DB::table('saran_komplain')->join('users', 'saran_komplain.id_member', '=', 'users.id')
+            ->select('saran_komplain.id', 'users.nama')
             ->where([
                 'tipe' => $tipe,
                 'balasan' => NULL

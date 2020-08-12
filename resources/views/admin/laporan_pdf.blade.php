@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Document</title>
+    <title>Laporan Keuangan</title>
     <link rel="stylesheet" href="{{public_path('vendor/adminlte/css/adminlte.min.css')}}">
 </head>
 

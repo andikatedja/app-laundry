@@ -45,15 +45,16 @@
                                     <td>{{date('d F Y', strtotime($item->tgl_masuk))}}</td>
                                     <td>{{$item->nama}}</td>
                                     <td>
-                                        @if ($item->id_status == 1)
                                         <select name="" id="status" data-id="{{$item->id_transaksi}}"
-                                            class="select-status">
-                                            <option value="1">Dalam Pengerjaan</option>
-                                            <option value="2">Selesai</option>
+                                            data-val="{{$item->id_status}}" class="select-status">
+                                            @foreach ($status as $s)
+                                            @if ($item->id_status == $s->id_status)
+                                            <option selected value="{{$s->id_status}}">{{$s->nama_status}}</option>
+                                            @else
+                                            <option value="{{$s->id_status}}">{{$s->nama_status}}</option>
+                                            @endif
+                                            @endforeach
                                         </select>
-                                        @else
-                                        <span class="text-success">Selesai</span>
-                                        @endif
                                     </td>
                                     <td>{{$item->total_harga}}</td>
                                     <td>
@@ -95,6 +96,7 @@
                             <th>Servis</th>
                             <th>Kategori</th>
                             <th>Banyak</th>
+                            <th>Harga</th>
                             <th>Sub Total</th>
                         </tr>
                     </thead>

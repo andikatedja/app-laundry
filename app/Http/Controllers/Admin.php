@@ -43,7 +43,7 @@ class Admin extends Controller
         $kategori = DB::table('kategori')->get();
         $servis = DB::table('servis')->get();
 
-        // Mengecek apakah ada sesi transaksi atau tidak, 
+        // Mengecek apakah ada sesi transaksi atau tidak
         if ($request->session()->has('transaksi') && $request->session()->has('id_member_transaksi')) {
             $transaksi = $request->session()->get('transaksi');
             $id_member_transaksi = $request->session()->get('id_member_transaksi');
@@ -156,13 +156,17 @@ class Admin extends Controller
     public function simpanTransaksi(Request $request)
     {
         $id_member = $request->session()->get('id_member_transaksi');
+        $id_admin = DB::table('users')->where([
+            'email' => $this->logged_email,
+            'role' => 1
+        ])->pluck('id');
         $transaksi = $request->session()->get('transaksi');
         $total_harga = 0;
         foreach ($transaksi as $key => $value) {
             $total_harga += $transaksi[$key]['harga'];
         }
 
-        $id_transaksi = Admin_model::simpanTransaksi($transaksi, $id_member, $total_harga);
+        $id_transaksi = Admin_model::simpanTransaksi($transaksi, $id_member, $total_harga, $id_admin[0]);
         $request->session()->forget('transaksi');
         $request->session()->forget('id_member_transaksi');
         return redirect('admin/input-transaksi')->with('success', 'Transaksi berhasil disimpan')->with('id_trs', $id_transaksi);
@@ -173,11 +177,12 @@ class Admin extends Controller
     */
     public function cetakTransaksi($id)
     {
-        $member = DB::table('transaksi')->join('users_info', 'transaksi.id_user', 'users_info.id_user')->where('transaksi.id_transaksi', '=', $id)->pluck('users_info.nama');
-        $tanggal = DB::table('transaksi')->join('users_info', 'transaksi.id_user', 'users_info.id_user')->where('transaksi.id_transaksi', '=', $id)->pluck('transaksi.tgl_masuk');
-        $total = DB::table('transaksi')->join('users_info', 'transaksi.id_user', 'users_info.id_user')->where('transaksi.id_transaksi', '=', $id)->pluck('transaksi.total_harga');
-        $transaksi = Admin_model::getTransaksiForCetak($id);
-        return view('admin.cetak_transaksi', compact('id', 'member', 'tanggal', 'total', 'transaksi'));
+        $member = DB::table('transaksi')->join('users', 'transaksi.id_member', 'users.id')->where('transaksi.id_transaksi', '=', $id)->pluck('users.nama');
+        $admin = DB::table('transaksi')->join('users', 'transaksi.id_admin', 'users.id')->where('transaksi.id_transaksi', '=', $id)->pluck('users.nama');
+        $tanggal = DB::table('transaksi')->where('transaksi.id_transaksi', '=', $id)->pluck('transaksi.tgl_masuk');
+        $total = DB::table('transaksi')->where('transaksi.id_transaksi', '=', $id)->pluck('transaksi.total_harga');
+        $transaksi = Admin_model::getDetailTransaksi($id);
+        return view('admin.cetak_transaksi', compact('id', 'member', 'tanggal', 'total', 'transaksi', 'admin'));
     }
 
     /*
@@ -197,7 +202,8 @@ class Admin extends Controller
     {
         $user = Admin_model::getUserInfo($this->logged_email);
         $transaksi = Admin_model::getRiwayatTransaksi();
-        return view('admin.riwayat_transaksi', compact('user', 'transaksi'));
+        $status = DB::table('status')->get();
+        return view('admin.riwayat_transaksi', compact('user', 'transaksi', 'status'));
     }
 
     /*
@@ -214,10 +220,14 @@ class Admin extends Controller
     */
     public function ubahStatusTransaksi(Request $request)
     {
-        $id_transaksi = $request->input('id_transaksi');
-        DB::table('transaksi')->where('id_transaksi', '=', $id_transaksi)->update([
-            'id_status' => 2,
-            'tgl_selesai' => date('Y-m-d H:i:s')
+        $tgl = null;
+        if ($request->input('val') == 3) {
+            $tgl = date('Y-m-d H:i:s');
+        }
+
+        DB::table('transaksi')->where('id_transaksi', '=', $request->input('id_transaksi'))->update([
+            'id_status' => $request->input('val'),
+            'tgl_selesai' => $tgl
         ]);
     }
 
@@ -289,11 +299,9 @@ class Admin extends Controller
     */
     public function tambahBarang(Request $request)
     {
-        $barang = $request->input('barang');
-        $id = strtolower($barang[0]);
         DB::table('barang')->insert([
-            'id_barang' => $id,
-            'nama_barang' => $barang
+            'id_barang' => NULL,
+            'nama_barang' => $request->input('barang')
         ]);
         return redirect('admin/harga')->with('success', 'Barang baru berhasil ditambah!');
     }
@@ -303,11 +311,9 @@ class Admin extends Controller
     */
     public function tambahServis(Request $request)
     {
-        $servis = $request->input('servis');
-        $id = strtolower($servis[0]);
         DB::table('servis')->insert([
-            'id_servis' => $id,
-            'nama_servis' => $servis
+            'id_servis' => NULL,
+            'nama_servis' => $request->input('servis')
         ]);
         return redirect('admin/harga')->with('success', 'Servis baru berhasil ditambah!');
     }
@@ -319,7 +325,7 @@ class Admin extends Controller
     public function members()
     {
         $user = Admin_model::getUserInfo($this->logged_email);
-        $members = DB::table('users_info')->join('users', 'users.id', '=', 'users_info.id_user')->select('users_info.*')->where('role', '=', 2)->get();
+        $members = DB::table('users')->where('role', '=', 2)->get();
         return view('admin.members', compact('user', 'members'));
     }
 
@@ -372,11 +378,22 @@ class Admin extends Controller
     {
         $bulan_num = $request->input('bulan');
         $tahun = $request->input('tahun');
-        $dateObj   = DateTime::createFromFormat('!m', $bulan_num);
+        $dateObj = DateTime::createFromFormat('!m', $bulan_num);
         $bulan = $dateObj->format('F');
         $pendapatan = DB::table('transaksi')->whereMonth('tgl_masuk', '=', $bulan_num)
             ->whereYear('tgl_masuk', '=', $tahun)->sum('total_harga');
         $pdf = PDF::loadview('admin.laporan_pdf', compact('bulan', 'tahun', 'pendapatan'));
-        return $pdf->download('laporan-keuangan-' . $bulan . '-' . $tahun);
+        return $pdf->download('laporan-keuangan-' . $bulan . '-' . $tahun . '.pdf');
+    }
+
+    public function laporanview(Request $request)
+    {
+        $bulan_num = 8;
+        $tahun = 2020;
+        $dateObj = DateTime::createFromFormat('!m', $bulan_num);
+        $bulan = $dateObj->format('F');
+        $pendapatan = DB::table('transaksi')->whereMonth('tgl_masuk', '=', $bulan_num)
+            ->whereYear('tgl_masuk', '=', $tahun)->sum('total_harga');
+        return view('admin.laporan_pdf', compact('bulan', 'tahun', 'pendapatan'));
     }
 }

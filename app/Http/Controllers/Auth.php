@@ -71,12 +71,10 @@ class Auth extends Controller
 
         // Cek apakah email sudah terdaftar
         if (Auth_model::isEmailExist($request->input('email'))) {
-            return redirect('register')->with('error', 'Email sudah terdaftar, harap memasukkan email yang lain.');
+            return redirect('register')->with('error', 'Email sudah terdaftar, harap mendaftarkan email yang lain.');
         }
 
-        $password = $request->input('password');
-
-        $hash_password = Hash::make($password);
+        $hash_password = Hash::make($request->input('password'));
 
         $data = [
             'email' => $request->input('email'),

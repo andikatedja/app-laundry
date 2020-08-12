@@ -70,7 +70,7 @@
                                     <td>{{$loop->iteration}}</td>
                                     <td>{{date('d F Y', strtotime($item->tgl_masuk))}}</td>
                                     <td>
-                                        @if ($item->id_status == '1')
+                                        @if ($item->id_status != '3')
                                         <span class="text-warning">{{$item->nama_status}}</span>
                                         @else
                                         <span class="text-success">{{$item->nama_status}}</span>

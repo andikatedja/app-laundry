@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Cetak Transaksi</title>
     <link rel="stylesheet" href="{{asset('vendor/adminlte/css/adminlte.min.css')}}">
 </head>
 
@@ -38,6 +38,7 @@
                             <th>Kategori</th>
                             <th>Banyak</th>
                             <th>Harga</th>
+                            <th>Sub Total</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -48,12 +49,13 @@
                             <td>{{$item->nama_servis}}</td>
                             <td>{{$item->nama_kategori}}</td>
                             <td>{{$item->banyak}}</td>
+                            <td>{{$item->harga}}</td>
                             <td>{{$item->sub_total}}</td>
                         </tr>
                         @endforeach
 
                         <tr>
-                            <td colspan="5" class="text-center"><b>Total Harga</b></td>
+                            <td colspan="6" class="text-center"><b>Total Harga</b></td>
                             <td>{{$total[0]}}</td>
                         </tr>
                     </tbody>
@@ -66,7 +68,7 @@
                 <br>
                 <br>
                 <br>
-                <p>Admin Laundry</p>
+                <p>{{$admin[0]}}</p>
             </div>
             <div class="col-4"></div>
             <div class="col-4 text-center">

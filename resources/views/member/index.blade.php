@@ -24,7 +24,7 @@
                                     src="{{asset('img/profile') . '/' . $user->profil}}" alt="Foto Profil">
                                 <div class="member-content">
                                     <h2 class="m-0">{{$user->nama}}</h2>
-                                    <p class="small m-0">ID Member: {{$user->id_user}}</p>
+                                    <p class="small m-0">ID Member: {{$user->id}}</p>
                                     <a href="{{url('member/edit')}}" class="badge badge-primary badge-pill">Edit
                                         Profil</a>
                                 </div>
@@ -63,7 +63,7 @@
                                     <td>{{$loop->iteration}}</td>
                                     <td>{{date('d F Y', strtotime($item->tgl_masuk))}}</td>
                                     <td>
-                                        @if ($item->id_status == '1')
+                                        @if ($item->id_status != '3')
                                         <span class="text-warning">{{$item->nama_status}}</span>
                                         @else
                                         <span class="text-success">{{$item->nama_status}}</span>

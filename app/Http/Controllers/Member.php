@@ -25,7 +25,7 @@ class Member extends Controller
     public function index()
     {
         $user = Member_model::getUserInfo($this->logged_email);
-        $transaksi_terakhir = Member_model::getTransaksi($user->id_user, 5);
+        $transaksi_terakhir = Member_model::getTransaksi($user->id, 5);
         return view('member.index', compact('user', 'transaksi_terakhir'));
     }
 
@@ -46,7 +46,7 @@ class Member extends Controller
     public function riwayatTransaksi()
     {
         $user = Member_model::getUserInfo($this->logged_email);
-        $transaksi = Member_model::getTransaksi($user->id_user);
+        $transaksi = Member_model::getTransaksi($user->id);
         return view('member.riwayat', compact('user', 'transaksi'));
     }
 
@@ -74,7 +74,7 @@ class Member extends Controller
     public function saranKomplain()
     {
         $user = Member_model::getUserInfo($this->logged_email);
-        $saran_komplain = DB::table('saran_komplain')->where('id_user', '=', $user->id_user)->get();
+        $saran_komplain = DB::table('saran_komplain')->where('id_member', '=', $user->id)->get();
         return view('member.saran', compact('user', 'saran_komplain'));
     }
 
@@ -90,17 +90,16 @@ class Member extends Controller
             'telp' => 'required'
         ]);
 
-        $id_user = DB::table('users')->where('email', '=', $this->logged_email)->pluck('id')[0];
-
+        $id_member = DB::table('users')->where('email', '=', $this->logged_email)->pluck('id')[0];
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $extension = $image->getClientOriginalExtension();
-            $filename = $id_user . '.' . $extension;
+            $filename = $id_member . '.' . $extension;
             $path = public_path('img/profile');
             $image->move($path, $filename);
 
-            Member_model::updateProfil($id_user, [
+            Member_model::updateProfil($id_member, [
                 'nama' => $request->input('name'),
                 'jenis_kelamin' => $request->input('jenis_kelamin'),
                 'alamat' => $request->input('alamat'),
@@ -108,7 +107,7 @@ class Member extends Controller
                 'profil' => $filename
             ]);
         } else {
-            Member_model::updateProfil($id_user, [
+            Member_model::updateProfil($id_member, [
                 'nama' => $request->input('name'),
                 'jenis_kelamin' => $request->input('jenis_kelamin'),
                 'alamat' => $request->input('alamat'),
@@ -124,8 +123,7 @@ class Member extends Controller
     */
     public function resetfoto()
     {
-        $user_id = DB::table('users')->where('email', '=', $this->logged_email)->pluck('id');
-        DB::table('users_info')->where('id_user', '=', $user_id)->update([
+        DB::table('users')->where('email', '=', $this->logged_email)->update([
             'profil' => 'default.jpg'
         ]);
         return redirect('member/edit')->with('success', 'Foto profil berhasil direset');
@@ -162,13 +160,14 @@ class Member extends Controller
         $request->validate([
             'isi_sarankomplain' => 'required'
         ]);
-        $id_user = DB::table('users')->where('email', '=', $this->logged_email)->pluck('id');
+
+        $id_member = DB::table('users')->where('email', '=', $this->logged_email)->pluck('id');
         DB::table('saran_komplain')->insert([
-            'id' => null,
+            'id' => NULL,
             'tgl' => date('Y-m-d H:i:s'),
             'isi' => $request->input('isi_sarankomplain'),
             'tipe' => $request->input('tipe'),
-            'id_user' => $id_user[0]
+            'id_member' => $id_member[0]
         ]);
 
         return redirect('member/saran')->with('success', 'Saran/komplain berhasil dikirim!');

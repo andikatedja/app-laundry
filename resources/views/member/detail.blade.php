@@ -32,6 +32,7 @@
                                     <th>Kategori</th>
                                     <th>Servis</th>
                                     <th>Banyak</th>
+                                    <th>Harga</th>
                                     <th>Sub Total</th>
                                 </tr>
                             </thead>
@@ -43,6 +44,7 @@
                                     <td>{{$item->nama_kategori}}</td>
                                     <td>{{$item->nama_servis}}</td>
                                     <td>{{$item->banyak}}</td>
+                                    <td>{{$item->harga}}</td>
                                     <td>{{$item->sub_total}}</td>
                                 </tr>
                                 @endforeach

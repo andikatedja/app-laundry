@@ -133,7 +133,7 @@
             <div class="row flex-row flex-nowrap kategori">
                 <div class="col-4 mb-2">
                     <div class="card">
-                        <img src="{{asset('img/landing/Baju.png')}}" class="card-img-top" alt="">
+                        <img src="{{asset('img/landing/Baju.jpg')}}" class="card-img-top" alt="">
                         <div class="card-body d-none d-lg-block">
                             <p class="card-text">Baju</p>
                         </div>
@@ -157,7 +157,7 @@
                 </div>
                 <div class="col-4 mb-2">
                     <div class="card">
-                        <img src="https://dummyimage.com/400x300/000/fff" class="card-img-top" alt="">
+                        <img src="{{asset('img/landing/Selimut.jpg')}}" class="card-img-top" alt="">
                         <div class="card-body d-none d-lg-block">
                             <p class="card-text">Selimut</p>
                         </div>

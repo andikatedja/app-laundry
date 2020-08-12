@@ -39,13 +39,14 @@
                                 @foreach ($members as $member)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
-                                    <td>{{$member->id_user}}</td>
+                                    <td>{{$member->id}}</td>
                                     <td>{{$member->nama}}</td>
                                     <td>
                                         @if ($member->jenis_kelamin == 'L')
                                         Laki-Laki
-                                        @else
+                                        @elseif ($member->jenis_kelamin == 'P')
                                         Perempuan
+                                        @else
                                         @endif
                                     </td>
                                     <td>{{$member->alamat}}</td>
