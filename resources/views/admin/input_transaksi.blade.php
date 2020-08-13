@@ -144,13 +144,39 @@
                             </tbody>
                         </table>
                         @if (isset($transaksi))
-                        <a href="{{url('admin/simpan-transaksi')}}" class="btn btn-success">Simpan Transaksi</a>
+                        <button id="btn-bayar" class="btn btn-success" data-toggle="modal"
+                            data-target="#bayarModal">Bayar</button>
                         @endif
                     </div>
                 </div>
             </div>
         </div>
     </div><!-- /.container-fluid -->
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="bayarModal" tabindex="-1" aria-labelledby="bayarModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bayarModalLabel">Bayar</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h5>Total Harga : <span id="total-harga">{{isset($total_harga) ? $total_harga : '0'}}</span></h5>
+                <h5>Bayar : <input type="number" id="input-bayar"></h5>
+                <h5>Kembali : <span id="kembalian"></span></h5>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                <a href="{{url('admin/simpan-transaksi')}}" id="btn-simpan" type="button"
+                    class="btn btn-primary">Bayar</a>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
 

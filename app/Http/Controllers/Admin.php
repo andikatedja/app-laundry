@@ -47,7 +47,11 @@ class Admin extends Controller
         if ($request->session()->has('transaksi') && $request->session()->has('id_member_transaksi')) {
             $transaksi = $request->session()->get('transaksi');
             $id_member_transaksi = $request->session()->get('id_member_transaksi');
-            return view('admin.input_transaksi', compact('user', 'barang', 'kategori', 'servis', 'transaksi', 'id_member_transaksi'));
+            $total_harga = 0;
+            foreach ($transaksi as $key => $value) {
+                $total_harga += $transaksi[$key]['harga'];
+            }
+            return view('admin.input_transaksi', compact('user', 'barang', 'kategori', 'servis', 'transaksi', 'id_member_transaksi', 'total_harga'));
         }
         return view('admin.input_transaksi', compact('user', 'barang', 'kategori', 'servis'));
     }
