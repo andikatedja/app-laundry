@@ -45,6 +45,9 @@
                                     <td>{{date('d F Y', strtotime($item->tgl_masuk))}}</td>
                                     <td>{{$item->nama}}</td>
                                     <td>
+                                        @if ($item->id_status == 3)
+                                        <span class="text-success">Selesai</span>
+                                        @else
                                         <select name="" id="status" data-id="{{$item->id_transaksi}}"
                                             data-val="{{$item->id_status}}" class="select-status">
                                             @foreach ($status as $s)
@@ -55,6 +58,7 @@
                                             @endif
                                             @endforeach
                                         </select>
+                                        @endif
                                     </td>
                                     <td>{{$item->total_harga}}</td>
                                     <td>
