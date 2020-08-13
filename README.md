@@ -8,7 +8,7 @@ Daftar/Register admin masih manual dengan mengubah role menjadi 1 pada tabel use
 
 Belum menggunakan migration atau eloquent, masi belajar :D
 
-Demo website: [App Laundry Heroku](https://mpi-applaundry.herokuapp.com)
+Demo website: [App Laundry Heroku](http://mpi-applaundry.herokuapp.com)
 
 Login admin:
 
