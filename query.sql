@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 12, 2020 at 03:54 PM
+-- Generation Time: Aug 16, 2020 at 12:00 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.2
 
@@ -62,7 +62,7 @@ INSERT INTO `daftar_harga` (`id_harga`, `id_barang`, `id_kategori`, `id_servis`,
 (1, 1, 'k', 1, 10000),
 (2, 1, 's', 1, 2000),
 (3, 2, 'k', 1, 8000),
-(4, 2, 's', 1, 1000);
+(4, 2, 's', 1, 1500);
 
 -- --------------------------------------------------------
 
@@ -83,6 +83,10 @@ CREATE TABLE `detail_transaksi` (
 --
 
 INSERT INTO `detail_transaksi` (`id_transaksi`, `id_harga`, `banyak`, `harga`, `sub_total`) VALUES
+(1, 1, 1, 10000, 10000),
+(1, 2, 1, 2000, 2000),
+(1, 3, 1, 8000, 8000),
+(1, 4, 1, 1500, 1500),
 (2, 1, 1, 10000, 10000),
 (2, 3, 1, 8000, 8000);
 
@@ -119,14 +123,6 @@ CREATE TABLE `saran_komplain` (
   `id_member` int(11) DEFAULT NULL,
   `balasan` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `saran_komplain`
---
-
-INSERT INTO `saran_komplain` (`id`, `tgl`, `isi`, `tipe`, `id_member`, `balasan`) VALUES
-(1, '2020-08-12 21:45:09', 'Sebaiknya lorem ipsum', '1', 2, NULL),
-(2, '2020-08-12 21:45:18', 'Kenapa lorem ipsum', '2', 2, NULL);
 
 -- --------------------------------------------------------
 
@@ -180,6 +176,7 @@ CREATE TABLE `transaksi` (
   `id_member` int(11) DEFAULT NULL,
   `id_admin` int(11) DEFAULT NULL,
   `tgl_selesai` datetime DEFAULT NULL,
+  `potongan` int(11) DEFAULT 0,
   `total_harga` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -187,8 +184,9 @@ CREATE TABLE `transaksi` (
 -- Dumping data for table `transaksi`
 --
 
-INSERT INTO `transaksi` (`id_transaksi`, `tgl_masuk`, `id_status`, `id_member`, `id_admin`, `tgl_selesai`, `total_harga`) VALUES
-(2, '2020-08-12 21:52:35', 1, 2, 1, NULL, 18000);
+INSERT INTO `transaksi` (`id_transaksi`, `tgl_masuk`, `id_status`, `id_member`, `id_admin`, `tgl_selesai`, `potongan`, `total_harga`) VALUES
+(1, '2020-08-16 17:53:20', 1, 2, 1, NULL, 0, 21500),
+(2, '2020-08-16 17:58:13', 1, 2, 1, NULL, 10000, 8000);
 
 -- --------------------------------------------------------
 
@@ -214,8 +212,53 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `email`, `password`, `role`, `nama`, `jenis_kelamin`, `alamat`, `no_telp`, `profil`, `poin`) VALUES
-(1, 'admin@laundryxyz.com', '$2y$10$IxYfwWgcK8av8ZA1oFazT.Z9fPFe/k4J4Mkw.zUSyxhnH6hkjm.iW', '1', 'Admin Laundry', 'L', 'Muding', '081999999999', 'default.jpg', 0),
-(2, 'andikatedja@yahoo.com', '$2y$10$0gWBafiCrZi840sD.FT/q.UN4WPEJyFVtgO/y6HJzK8EfVxQ4Fx0u', '2', 'Andika Tedja', 'L', 'Muding', '081999999999', '2.png', 1);
+(1, 'admin@laundryxyz.com', '$2y$10$IxYfwWgcK8av8ZA1oFazT.Z9fPFe/k4J4Mkw.zUSyxhnH6hkjm.iW', '1', 'Admin Laundry', 'L', 'Muding', '081999999999', 'default.jpg', 75),
+(2, 'andikatedja@yahoo.com', '$2y$10$0gWBafiCrZi840sD.FT/q.UN4WPEJyFVtgO/y6HJzK8EfVxQ4Fx0u', '2', 'Andika Tedja', 'L', 'Muding', '081999999999', '2.png', 76);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users_vouchers`
+--
+
+CREATE TABLE `users_vouchers` (
+  `id` int(11) NOT NULL,
+  `id_voucher` int(11) DEFAULT NULL,
+  `id_member` int(11) DEFAULT NULL,
+  `used` tinyint(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `users_vouchers`
+--
+
+INSERT INTO `users_vouchers` (`id`, `id_voucher`, `id_member`, `used`) VALUES
+(1, 2, 2, 1),
+(2, 1, 2, NULL),
+(3, 2, 2, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vouchers`
+--
+
+CREATE TABLE `vouchers` (
+  `id_voucher` int(11) NOT NULL,
+  `nama_voucher` varchar(128) DEFAULT NULL,
+  `potongan` int(11) DEFAULT NULL,
+  `poin_need` int(11) DEFAULT NULL,
+  `aktif` tinyint(1) DEFAULT NULL,
+  `keterangan` varchar(128) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `vouchers`
+--
+
+INSERT INTO `vouchers` (`id_voucher`, `nama_voucher`, `potongan`, `poin_need`, `aktif`, `keterangan`) VALUES
+(1, 'Potongan 5.000', 5000, 5, 1, 'Mendapatkan potongan harga 5.000 dari total transaksi'),
+(2, 'Potongan 10.000', 10000, 10, 1, 'Mendapatkan potongan harga 10.000 dari total transaksi');
 
 --
 -- Indexes for dumped tables
@@ -284,6 +327,21 @@ ALTER TABLE `users`
   ADD UNIQUE KEY `email` (`email`);
 
 --
+-- Indexes for table `users_vouchers`
+--
+ALTER TABLE `users_vouchers`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_voucher` (`id_voucher`),
+  ADD KEY `id_member` (`id_member`);
+
+--
+-- Indexes for table `vouchers`
+--
+ALTER TABLE `vouchers`
+  ADD PRIMARY KEY (`id_voucher`),
+  ADD UNIQUE KEY `potongan` (`potongan`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -303,7 +361,7 @@ ALTER TABLE `daftar_harga`
 -- AUTO_INCREMENT for table `saran_komplain`
 --
 ALTER TABLE `saran_komplain`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `servis`
@@ -322,6 +380,18 @@ ALTER TABLE `transaksi`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `users_vouchers`
+--
+ALTER TABLE `users_vouchers`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `vouchers`
+--
+ALTER TABLE `vouchers`
+  MODIFY `id_voucher` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
@@ -354,6 +424,13 @@ ALTER TABLE `saran_komplain`
 ALTER TABLE `transaksi`
   ADD CONSTRAINT `transaksi_ibfk_1` FOREIGN KEY (`id_status`) REFERENCES `status` (`id_status`),
   ADD CONSTRAINT `transaksi_ibfk_2` FOREIGN KEY (`id_member`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `users_vouchers`
+--
+ALTER TABLE `users_vouchers`
+  ADD CONSTRAINT `users_vouchers_ibfk_1` FOREIGN KEY (`id_voucher`) REFERENCES `vouchers` (`id_voucher`),
+  ADD CONSTRAINT `users_vouchers_ibfk_2` FOREIGN KEY (`id_member`) REFERENCES `users` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
