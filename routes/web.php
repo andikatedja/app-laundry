@@ -36,7 +36,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['language', 'isadmin']], fun
     Route::get('transaksi', 'Admin@riwayatTransaksi');
     Route::get('hapus-sesstransaksi', 'Admin@hapusSessTransaksi');
     Route::get('hapus-transaksi/{row_id}', 'Admin@hapusTransaksi');
-    Route::get('simpan-transaksi', 'Admin@simpanTransaksi');
+    Route::post('simpan-transaksi', 'Admin@simpanTransaksi');
     Route::post('tambah-transaksi', 'Admin@tambahTransaksi');
     Route::post('ambil-detail-transaksi', 'Admin@ambilDetailTransaksi');
     Route::post('ubah-status-transaksi', 'Admin@ubahStatusTransaksi');
@@ -48,6 +48,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['language', 'isadmin']], fun
     Route::post('tambah-barang', 'Admin@tambahBarang');
     Route::post('tambah-servis', 'Admin@tambahServis');
     Route::get('members', 'Admin@members');
+    Route::get('voucher', 'Admin@voucher');
+    Route::post('voucher/tambah', 'Admin@tambahVoucher');
+    Route::post('voucher/ubahaktif', 'Admin@ubahAktifVoucher');
     Route::get('saran', 'Admin@saran');
     Route::post('ambil-sarankomplain', 'Admin@ambilSaranKomplain');
     Route::post('kirim-balasan', 'Admin@kirimBalasan');
@@ -61,6 +64,7 @@ Route::group(['prefix' => 'member', 'middleware' => ['language', 'ismember']], f
     Route::get('/', 'Member@index');
     Route::get('harga', 'Member@harga');
     Route::get('poin', 'Member@poin');
+    Route::get('poin/tukar/{id_voucher}', 'Member@tukarPoin');
     Route::get('edit', 'Member@edit');
     Route::get('edit/resetfoto', 'Member@resetfoto');
     Route::patch('edit', 'Member@editprofil');

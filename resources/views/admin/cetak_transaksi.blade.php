@@ -23,7 +23,7 @@
                 <p>No Transaksi: {{$id}}</p>
             </div>
             <div class="col-6 text-right">
-                <p>{{date('d F Y', strtotime($tanggal[0]))}}</p>
+                <p>{{date('d F Y', strtotime($dataTransaksi[0]->tgl_masuk))}}</p>
                 <p>{{$member[0]}}</p>
             </div>
         </div>
@@ -42,6 +42,10 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @php
+                        $tot = 0;
+                        @endphp
+
                         @foreach ($transaksi as $item)
                         <tr>
                             <td>{{$loop->iteration}}</td>
@@ -52,11 +56,22 @@
                             <td>{{$item->harga}}</td>
                             <td>{{$item->sub_total}}</td>
                         </tr>
+                        @php
+                        $tot += $item->sub_total;
+                        @endphp
                         @endforeach
 
                         <tr>
                             <td colspan="6" class="text-center"><b>Total Harga</b></td>
-                            <td>{{$total[0]}}</td>
+                            <td>{{$tot}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" class="text-center"><b>Potongan</b></td>
+                            <td>{{$dataTransaksi[0]->potongan}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" class="text-center"><b>Dibayar</b></td>
+                            <td>{{$dataTransaksi[0]->total_harga}}</td>
                         </tr>
                     </tbody>
                 </table>

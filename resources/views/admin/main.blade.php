@@ -99,6 +99,13 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{url('admin/voucher')}}"
+                                class="nav-link {{(request()->is('admin/voucher')) ? 'active' : ''}}">
+                                <i class="nav-icon fas fa-star"></i>
+                                <p>Voucher</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{url('admin/saran')}}"
                                 class="nav-link {{(request()->is('admin/saran')) ? 'active' : ''}}">
                                 <i class="nav-icon fas fa-sticky-note"></i>

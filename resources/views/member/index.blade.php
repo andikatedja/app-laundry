@@ -30,10 +30,9 @@
                                 </div>
                             </div>
                             <div class="col-2 text-center">
-                                {{-- <p class="small m-0">Poin</p>
+                                <p class="small m-0">Poin</p>
                                 <h2 class="m-0">{{$user->poin}}</h2>
                                 <a href="{{url('member/poin')}}" class="badge badge-primary badge-pill">Tukar Poin</a>
-                                --}}
                             </div>
                         </div>
                     </div>

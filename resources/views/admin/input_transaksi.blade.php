@@ -164,17 +164,44 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <h5>Total Harga : <span id="total-harga">{{isset($total_harga) ? $total_harga : '0'}}</span></h5>
-                <h5>Bayar : <input type="number" id="input-bayar"></h5>
-                <h5>Kembali : <span id="kembalian"></span></h5>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                <a href="{{url('admin/simpan-transaksi')}}" id="btn-simpan" type="button"
-                    class="btn btn-primary">Bayar</a>
-            </div>
+            <form action="{{url('admin/simpan-transaksi')}}" method="post">
+                @csrf
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="sub-total">Sub Total</label>
+                        <input type="number" class="form-control form-control-lg" id="sub-total"
+                            value="{{isset($total_harga) ? $total_harga : '0'}}" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="voucher">Voucher</label>
+                        <select name="voucher" class="form-control form-control-lg" id="voucher">
+                            @if (isset($vouchers) && $vouchers != [])
+                            <option value="0" data-potong="0">Pilih voucher</option>
+                            @foreach ($vouchers as $voucher)
+                            <option value="{{$voucher->id}}" data-potong="{{$voucher->potongan}}">
+                                {{$voucher->nama_voucher}}</option>
+                            @endforeach
+                            @else
+                            <option value="0" data-potong="0">Tidak ada voucher yang dimiliki</option>
+                            @endif
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="total-harga">Harga Yang Dibayar</label>
+                        <input type="number" class="form-control form-control-lg" id="total-harga"
+                            value="{{isset($total_harga) ? $total_harga : '0'}}" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="input-bayar">Bayar</label>
+                        <input type="number" class="form-control form-control-lg" id="input-bayar">
+                    </div>
+                    <h4>Kembalian : <span id="kembalian"></span></h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="submit" id="btn-simpan" type="button" class="btn btn-primary">Bayar</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

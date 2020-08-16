@@ -1,4 +1,5 @@
-let total = $('#total-harga').html();
+let fixTotal = $('#total-harga').val();
+let total = $('#total-harga').val();
 
 $('#tambah-transaksi').on('click', function () {
     console.log('ok');
@@ -16,5 +17,20 @@ $('#btn-simpan').on('click', function (event) {
     if ($('#input-bayar').val() < total) {
         event.preventDefault();
         alert('Pembayaran kurang!');
+    }
+});
+
+$('#voucher').on('change', function () {
+    let potongan = $('option:selected', this).data('potong');
+    if (potongan != 0) {
+        total = fixTotal;
+        total -= potongan;
+        total < 0 ? total = 0 : total;
+        $('#total-harga').val(total);
+        $('#kembalian').html($('#input-bayar').val() - total);
+    } else {
+        total = fixTotal;
+        $('#total-harga').val(total);
+        $('#kembalian').html($('#input-bayar').val() - total);
     }
 });

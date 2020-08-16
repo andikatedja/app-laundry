@@ -47,11 +47,18 @@ class Admin extends Controller
         if ($request->session()->has('transaksi') && $request->session()->has('id_member_transaksi')) {
             $transaksi = $request->session()->get('transaksi');
             $id_member_transaksi = $request->session()->get('id_member_transaksi');
+            // Mengambil voucher yang dimiliki member
+            $vouchers = DB::table('users_vouchers')->join('vouchers', 'users_vouchers.id_voucher', '=', 'vouchers.id_voucher')
+                ->select('users_vouchers.id', 'vouchers.nama_voucher', 'vouchers.potongan')
+                ->where([
+                    'users_vouchers.id_member' => $id_member_transaksi,
+                    'users_vouchers.used' => NULL
+                ])->get();
             $total_harga = 0;
             foreach ($transaksi as $key => $value) {
                 $total_harga += $transaksi[$key]['harga'];
             }
-            return view('admin.input_transaksi', compact('user', 'barang', 'kategori', 'servis', 'transaksi', 'id_member_transaksi', 'total_harga'));
+            return view('admin.input_transaksi', compact('user', 'barang', 'kategori', 'servis', 'transaksi', 'id_member_transaksi', 'total_harga', 'vouchers'));
         }
         return view('admin.input_transaksi', compact('user', 'barang', 'kategori', 'servis'));
     }
@@ -163,14 +170,33 @@ class Admin extends Controller
         $id_admin = DB::table('users')->where([
             'email' => $this->logged_email,
             'role' => 1
-        ])->pluck('id');
+        ])->pluck('id')[0];
         $transaksi = $request->session()->get('transaksi');
         $total_harga = 0;
         foreach ($transaksi as $key => $value) {
             $total_harga += $transaksi[$key]['harga'];
         }
+        $potongan = 0;
 
-        $id_transaksi = Admin_model::simpanTransaksi($transaksi, $id_member, $total_harga, $id_admin[0]);
+        //Cek apakah ada voucher yang digunakan
+        if ($request->input('voucher') != 0) {
+            // Ambil banyak potongan dari database
+            $potongan = DB::table('users_vouchers')->join('vouchers', 'users_vouchers.id_voucher', '=', 'vouchers.id_voucher')
+                ->where('users_vouchers.id', '=', $request->input('voucher'))->pluck('potongan')[0];
+
+            // Kurangi harga dengan potongan
+            $total_harga -= $potongan;
+            if ($total_harga < 0) {
+                $total_harga = 0;
+            }
+
+            // Ganti status used pada tabel users_vouchers
+            DB::table('users_vouchers')->where('id', '=', $request->input('voucher'))->update([
+                'used' => 1 //True
+            ]);
+        }
+
+        $id_transaksi = Admin_model::simpanTransaksi($transaksi, $id_member, $total_harga, $id_admin, $potongan);
         $request->session()->forget('transaksi');
         $request->session()->forget('id_member_transaksi');
         return redirect('admin/input-transaksi')->with('success', 'Transaksi berhasil disimpan')->with('id_trs', $id_transaksi);
@@ -181,12 +207,12 @@ class Admin extends Controller
     */
     public function cetakTransaksi($id)
     {
+        $dataTransaksi = DB::table('transaksi')->where('transaksi.id_transaksi', '=', $id)
+            ->select('transaksi.tgl_masuk', 'transaksi.total_harga', 'transaksi.potongan')->get();
         $member = DB::table('transaksi')->join('users', 'transaksi.id_member', 'users.id')->where('transaksi.id_transaksi', '=', $id)->pluck('users.nama');
         $admin = DB::table('transaksi')->join('users', 'transaksi.id_admin', 'users.id')->where('transaksi.id_transaksi', '=', $id)->pluck('users.nama');
-        $tanggal = DB::table('transaksi')->where('transaksi.id_transaksi', '=', $id)->pluck('transaksi.tgl_masuk');
-        $total = DB::table('transaksi')->where('transaksi.id_transaksi', '=', $id)->pluck('transaksi.total_harga');
         $transaksi = Admin_model::getDetailTransaksi($id);
-        return view('admin.cetak_transaksi', compact('id', 'member', 'tanggal', 'total', 'transaksi', 'admin'));
+        return view('admin.cetak_transaksi', compact('id', 'member', 'dataTransaksi', 'transaksi', 'admin'));
     }
 
     /*
@@ -331,6 +357,59 @@ class Admin extends Controller
         $user = Admin_model::getUserInfo($this->logged_email);
         $members = DB::table('users')->where('role', '=', 2)->get();
         return view('admin.members', compact('user', 'members'));
+    }
+
+    /*
+    | Fungsi untuk menampilkan halaman voucher
+    */
+    public function voucher()
+    {
+        $user = Admin_model::getUserInfo($this->logged_email);
+        $vouchers = DB::table('vouchers')->get();
+        return view('admin.voucher', compact('user', 'vouchers'));
+    }
+
+    /*
+    | Fungsi untuk menambahkan voucher baru
+    */
+    public function tambahVoucher(Request $request)
+    {
+        // Cek apakah potongan ada yang sama di database
+        if (DB::table('vouchers')->where('potongan', '=', $request->input('potongan'))->exists()) {
+            return redirect('admin/voucher')->with('error', 'Voucher potongan ' . $request->input('potongan') . ' sudah ada');
+        }
+
+        // Masukkan potongan ke dalam tabel vouchers
+        DB::table('vouchers')->insert([
+            'nama_voucher' => 'Potongan ' . number_format($request->input('potongan'), 0, ',', '.'),
+            'potongan' => $request->input('potongan'),
+            'poin_need' => $request->input('poin'),
+            'keterangan' => 'Mendapatkan potongan harga ' . number_format($request->input('potongan'), 0, ',', '.') . ' dari total transaksi',
+            'aktif' => 1
+        ]);
+        return redirect('admin/voucher')->with('success', 'Voucher baru berhasil ditambah!');
+    }
+
+    /*
+    | Fungsi untuk mengubah status aktif voucher
+    */
+    public function ubahAktifVoucher(Request $request)
+    {
+        // Cek apakah status aktif atau tidak aktif
+        // 1 artinya aktif, 0 artinya tidak aktif
+        $vouchersts = DB::table('vouchers')->where('id_voucher', '=', $request->input('id'))->pluck('aktif')[0];
+
+        // Jika 1 maka ubah ke 0
+        if ($vouchersts == 1) {
+            DB::table('vouchers')->where('id_voucher', '=', $request->input('id'))->update([
+                'aktif' => 0
+            ]);
+        } else {
+            // Ubah ke 1
+            DB::table('vouchers')->where('id_voucher', '=', $request->input('id'))->update([
+                'aktif' => 1
+            ]);
+        }
     }
 
     /*

@@ -48,7 +48,7 @@ class Admin_model extends Model
         ])->pluck('harga');
     }
 
-    public static function simpanTransaksi($transaksi, $id_member, $total_harga, $id_admin)
+    public static function simpanTransaksi($transaksi, $id_member, $total_harga, $id_admin, $potongan)
     {
         $id_transaksi = DB::table('transaksi')->insertGetId([
             'tgl_masuk' => date('Y-m-d H:i:s'),
@@ -56,6 +56,7 @@ class Admin_model extends Model
             'id_member' => $id_member,
             'id_admin' => $id_admin,
             'tgl_selesai' => null,
+            'potongan' => $potongan,
             'total_harga' => $total_harga
         ]);
 

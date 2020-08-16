@@ -56,7 +56,43 @@ class Member extends Controller
     public function poin()
     {
         $user = Member_model::getUserInfo($this->logged_email);
-        return view('member.poin', compact('user'));
+        $vouchers = DB::table('vouchers')->where('aktif', '=', 1)->get();
+        $memberVouchers = DB::table('users_vouchers')->join('vouchers', 'users_vouchers.id_voucher', '=', 'vouchers.id_voucher')
+            ->where([
+                'id_member' => $user->id,
+                'used' => NULL
+            ])->select('users_vouchers.id_voucher', 'nama_voucher', 'keterangan')->get();
+        return view('member.poin', compact('user', 'vouchers', 'memberVouchers'));
+    }
+
+    /*
+    | Fungsi untuk menukar poin
+    */
+    public function tukarPoin($id_voucher)
+    {
+        $user = Member_model::getUserInfo($this->logged_email);
+
+        // Ambil data poin yang diperlukan untuk menukar voucher
+        $poin = DB::table('vouchers')->where('id_voucher', '=', $id_voucher)->pluck('poin_need')[0];
+
+        // Cek apakah poin member mencukupi untuk menukar voucher
+        if ($user->poin >= $poin) {
+            //Jika poin mencukupi, tambahkan ke tabel users voucher
+            DB::table('users_vouchers')->insert([
+                'id_voucher' => $id_voucher,
+                'id_member' => $user->id
+            ]);
+
+            //Kurangi poin member
+            DB::table('users')->update([
+                'poin' => $user->poin - $poin
+            ]);
+
+            //Redirect ke poin dan pesan sukses
+            return redirect('member/poin')->with('success', 'Poin berhasil ditukar menjadi voucher!');
+        } else {
+            return redirect('member/poin')->with('error', 'Poin tidak mencukupi untuk menukar voucher!');
+        }
     }
 
     /*
