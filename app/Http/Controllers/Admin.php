@@ -54,6 +54,8 @@ class Admin extends Controller
                     'users_vouchers.id_member' => $id_member_transaksi,
                     'users_vouchers.used' => NULL
                 ])->get();
+
+            // Hitung total harga
             $total_harga = 0;
             foreach ($transaksi as $key => $value) {
                 $total_harga += $transaksi[$key]['harga'];
@@ -85,15 +87,15 @@ class Admin extends Controller
         }
 
         // Ambil harga dari database
-        $dbharga = Admin_model::getHarga($id_barang, $id_kategori, $id_servis);
+        $dbharga = Admin_model::getHarga($id_barang, $id_kategori, $id_servis)[0];
 
         // Hitung subtotal
-        $harga = $dbharga[0] * $banyak;
+        $harga = $dbharga * $banyak;
 
         // Ambil nama barang, servis, kategori berdasarkan id
-        $nama_barang = DB::table('barang')->where('id_barang', '=', $id_barang)->pluck('nama_barang');
-        $nama_servis = DB::table('servis')->where('id_servis', '=', $id_servis)->pluck('nama_servis');
-        $nama_kategori = DB::table('kategori')->where('id_kategori', '=', $id_kategori)->pluck('nama_kategori');
+        $nama_barang = DB::table('barang')->where('id_barang', '=', $id_barang)->pluck('nama_barang')[0];
+        $nama_servis = DB::table('servis')->where('id_servis', '=', $id_servis)->pluck('nama_servis')[0];
+        $nama_kategori = DB::table('kategori')->where('id_kategori', '=', $id_kategori)->pluck('nama_kategori')[0];
 
         // Membuat row baru untuk disimpan dalam session
         $row_id = md5($id_member . serialize($id_barang) . serialize($id_servis) . serialize($id_kategori));
@@ -101,11 +103,11 @@ class Admin extends Controller
         $data = [
             $row_id => [
                 'id_barang' => $id_barang,
-                'nama_barang' => $nama_barang[0],
+                'nama_barang' => $nama_barang,
                 'id_kategori' => $id_kategori,
-                'nama_kategori' => $nama_kategori[0],
+                'nama_kategori' => $nama_kategori,
                 'id_servis' => $id_servis,
-                'nama_servis' => $nama_servis[0],
+                'nama_servis' => $nama_servis,
                 'banyak' => $banyak,
                 'harga' => $harga,
                 'row_id' => $row_id
@@ -167,11 +169,10 @@ class Admin extends Controller
     public function simpanTransaksi(Request $request)
     {
         $id_member = $request->session()->get('id_member_transaksi');
-        $id_admin = DB::table('users')->where([
-            'email' => $this->logged_email,
-            'role' => 1
-        ])->pluck('id')[0];
+        // Ambil id admin yang sedang login
+        $id_admin = Admin_model::getUserInfo($this->logged_email)->id;
         $transaksi = $request->session()->get('transaksi');
+        // Hitung total harga
         $total_harga = 0;
         foreach ($transaksi as $key => $value) {
             $total_harga += $transaksi[$key]['harga'];
@@ -251,6 +252,7 @@ class Admin extends Controller
     public function ubahStatusTransaksi(Request $request)
     {
         $tgl = null;
+        // Jika status 3 maka artinya sudah selesai, set tgl menjadi tgl selesai
         if ($request->input('val') == 3) {
             $tgl = date('Y-m-d H:i:s');
         }
@@ -267,12 +269,8 @@ class Admin extends Controller
     public function harga()
     {
         $user = Admin_model::getUserInfo($this->logged_email);
-        $satuan = DB::table('daftar_harga')->select('daftar_harga.id_harga', 'daftar_harga.harga', 'servis.nama_servis', 'barang.nama_barang')
-            ->join('barang', 'daftar_harga.id_barang', '=', 'barang.id_barang')
-            ->join('servis', 'daftar_harga.id_servis', '=', 'servis.id_servis')->where('daftar_harga.id_kategori', '=', 's')->get();
-        $kiloan = DB::table('daftar_harga')->select('daftar_harga.id_harga', 'daftar_harga.harga', 'servis.nama_servis', 'barang.nama_barang')
-            ->join('barang', 'daftar_harga.id_barang', '=', 'barang.id_barang')
-            ->join('servis', 'daftar_harga.id_servis', '=', 'servis.id_servis')->where('daftar_harga.id_kategori', '=', 'k')->get();
+        $satuan = Admin_model::getDaftarHarga('s');
+        $kiloan = Admin_model::getDaftarHarga('k');
         $barang = DB::table('barang')->get();
         $servis = DB::table('servis')->get();
         $kategori = DB::table('kategori')->get();
@@ -380,13 +378,7 @@ class Admin extends Controller
         }
 
         // Masukkan potongan ke dalam tabel vouchers
-        DB::table('vouchers')->insert([
-            'nama_voucher' => 'Potongan ' . number_format($request->input('potongan'), 0, ',', '.'),
-            'potongan' => $request->input('potongan'),
-            'poin_need' => $request->input('poin'),
-            'keterangan' => 'Mendapatkan potongan harga ' . number_format($request->input('potongan'), 0, ',', '.') . ' dari total transaksi',
-            'aktif' => 1
-        ]);
+        Admin_model::tambahVoucher($request);
         return redirect('admin/voucher')->with('success', 'Voucher baru berhasil ditambah!');
     }
 

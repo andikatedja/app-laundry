@@ -9,7 +9,10 @@ class Admin_model extends Model
 {
     public static function getUserInfo($logged_email)
     {
-        return DB::table('users')->where('email', '=', $logged_email)->first();
+        return DB::table('users')->where([
+            'email' => $logged_email,
+            'role' => 1
+        ])->first();
     }
 
     public static function getTransaksiForCetak($id)
@@ -120,5 +123,23 @@ class Admin_model extends Model
                 'tipe' => $tipe,
                 'balasan' => NULL
             ])->get();
+    }
+
+    public static function getDaftarHarga($kategori)
+    {
+        return DB::table('daftar_harga')->select('daftar_harga.id_harga', 'daftar_harga.harga', 'servis.nama_servis', 'barang.nama_barang')
+            ->join('barang', 'daftar_harga.id_barang', '=', 'barang.id_barang')
+            ->join('servis', 'daftar_harga.id_servis', '=', 'servis.id_servis')->where('daftar_harga.id_kategori', '=', $kategori)->get();
+    }
+
+    public static function tambahVoucher($request)
+    {
+        DB::table('vouchers')->insert([
+            'nama_voucher' => 'Potongan ' . number_format($request->input('potongan'), 0, ',', '.'),
+            'potongan' => $request->input('potongan'),
+            'poin_need' => $request->input('poin'),
+            'keterangan' => 'Mendapatkan potongan harga ' . number_format($request->input('potongan'), 0, ',', '.') . ' dari total transaksi',
+            'aktif' => 1
+        ]);
     }
 }

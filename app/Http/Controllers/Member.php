@@ -57,11 +57,7 @@ class Member extends Controller
     {
         $user = Member_model::getUserInfo($this->logged_email);
         $vouchers = DB::table('vouchers')->where('aktif', '=', 1)->get();
-        $memberVouchers = DB::table('users_vouchers')->join('vouchers', 'users_vouchers.id_voucher', '=', 'vouchers.id_voucher')
-            ->where([
-                'id_member' => $user->id,
-                'used' => NULL
-            ])->select('users_vouchers.id_voucher', 'nama_voucher', 'keterangan')->get();
+        $memberVouchers = Member_model::getMemberVouchers($user->id);
         return view('member.poin', compact('user', 'vouchers', 'memberVouchers'));
     }
 
@@ -76,17 +72,10 @@ class Member extends Controller
         $poin = DB::table('vouchers')->where('id_voucher', '=', $id_voucher)->pluck('poin_need')[0];
 
         // Cek apakah poin member mencukupi untuk menukar voucher
+        // Jika poin mencukupi, tambahkan ke tabel users voucher
         if ($user->poin >= $poin) {
-            //Jika poin mencukupi, tambahkan ke tabel users voucher
-            DB::table('users_vouchers')->insert([
-                'id_voucher' => $id_voucher,
-                'id_member' => $user->id
-            ]);
-
-            //Kurangi poin member
-            DB::table('users')->update([
-                'poin' => $user->poin - $poin
-            ]);
+            // Jalankan fungsi model menukar poin
+            Member_model::tukarPoin($id_voucher, $user, $poin);
 
             //Redirect ke poin dan pesan sukses
             return redirect('member/poin')->with('success', 'Poin berhasil ditukar menjadi voucher!');
@@ -197,13 +186,13 @@ class Member extends Controller
             'isi_sarankomplain' => 'required'
         ]);
 
-        $id_member = DB::table('users')->where('email', '=', $this->logged_email)->pluck('id');
+        $id_member = Member_model::getUserInfo($this->logged_email)->id;
         DB::table('saran_komplain')->insert([
             'id' => NULL,
             'tgl' => date('Y-m-d H:i:s'),
             'isi' => $request->input('isi_sarankomplain'),
             'tipe' => $request->input('tipe'),
-            'id_member' => $id_member[0]
+            'id_member' => $id_member
         ]);
 
         return redirect('member/saran')->with('success', 'Saran/komplain berhasil dikirim!');

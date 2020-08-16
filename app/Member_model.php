@@ -9,7 +9,10 @@ class Member_model extends Model
 {
     public static function getUserInfo($logged_email)
     {
-        return DB::table('users')->where('email', '=', $logged_email)->first();
+        return DB::table('users')->where([
+            'email' => $logged_email,
+            'role' => 2
+        ])->first();
     }
 
     public static function getSatuanKiloan($id_kategori)
@@ -43,5 +46,27 @@ class Member_model extends Model
     public static function updateProfil($id_member, $data)
     {
         DB::table('users')->where('id', '=', $id_member)->update($data);
+    }
+
+    public static function getMemberVouchers($id_member)
+    {
+        return DB::table('users_vouchers')->join('vouchers', 'users_vouchers.id_voucher', '=', 'vouchers.id_voucher')
+            ->where([
+                'id_member' => $id_member,
+                'used' => NULL
+            ])->select('users_vouchers.id_voucher', 'nama_voucher', 'keterangan')->get();
+    }
+
+    public static function tukarPoin($id_voucher, $user, $poin)
+    {
+        DB::table('users_vouchers')->insert([
+            'id_voucher' => $id_voucher,
+            'id_member' => $user->id
+        ]);
+
+        //Kurangi poin member
+        DB::table('users')->update([
+            'poin' => $user->poin - $poin
+        ]);
     }
 }
