@@ -1,8 +1,8 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
+<p align="center"><img src="https://laravel.com/img/logotype.min.svg" width="400"></p>
 
 ## Aplikasi Laundry Sederhana
 
-Aplikasi ini merupakan aplikasi laundry sederhana yang dibuat dengan framework Laravel. Aplikasi ini adalah project untuk menyelesaikan UAS Metodologi Penulisan Ilmiah ITB Stikom Bali.
+Aplikasi ini merupakan aplikasi laundry sederhana yang dibuat dengan framework Laravel 7. Aplikasi ini adalah project untuk menyelesaikan UAS Metodologi Penulisan Ilmiah ITB Stikom Bali.
 
 Daftar/Register admin masih manual dengan mengubah role menjadi 1 pada tabel users database.
 
