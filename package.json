@@ -17,5 +17,9 @@
         "resolve-url-loader": "^3.1.2",
         "sass": "^1.32.8",
         "sass-loader": "^10.1.1"
+    },
+    "dependencies": {
+        "is-svg": "^4.3.1",
+        "ssri": "^8.0.1"
     }
 }
