@@ -11,3 +11,7 @@ Homestead.yaml
 npm-debug.log
 yarn-error.log
 db.sql
+public/img/profile/*
+
+# exception to the rule
+!public/img/profile/.gitkeep 
