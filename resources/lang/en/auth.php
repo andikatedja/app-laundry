@@ -31,5 +31,6 @@ return [
     'error_email_password' => 'Email or password not correct!',
     'register_success' => 'Register success, please login',
     'logout_success' => 'You have logged out successfully',
-    'please_login' => 'Access denied, please login first!'
+    'please_login' => 'Access denied, please login first!',
+    'remember_me' => 'Remember me'
 ];

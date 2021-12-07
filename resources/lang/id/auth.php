@@ -26,5 +26,6 @@ return [
     'error_email_password' => 'Email atau kata sandi salah!',
     'register_success' => 'Daftar berhasil, silahkan masuk',
     'logout_success' => 'Anda telah berhasil keluar',
-    'please_login' => 'Akses ditolak, silahkan masuk terlebih dahulu!'
+    'please_login' => 'Akses ditolak, silahkan masuk terlebih dahulu!',
+    'remember_me' => 'Ingat saya'
 ];

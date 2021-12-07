@@ -53,6 +53,10 @@
                             </div>
                             @enderror
                         </div>
+                        <div class="form-group form-check">
+                            <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                            <label class="form-check-label" for="remember">@lang('auth.remember_me')</label>
+                        </div>
                         <button class="btn btn-primary btn-block" type="submit">@lang('auth.log_title')</button>
                     </form>
                     <hr>

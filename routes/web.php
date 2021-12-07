@@ -30,7 +30,7 @@ Route::group(['middleware' => 'language'], function () {
 
 
 // Admin routes
-Route::group(['prefix' => 'admin', 'middleware' => ['language', 'isadmin']], function () {
+Route::group(['prefix' => 'admin', 'middleware' => ['language', 'islogin']], function () {
     Route::get('/', 'Admin@index');
     Route::get('input-transaksi', 'Admin@inputTransaksi');
     Route::get('transaksi', 'Admin@riwayatTransaksi');
@@ -60,7 +60,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['language', 'isadmin']], fun
 });
 
 //Member routes
-Route::group(['prefix' => 'member', 'middleware' => ['language', 'ismember']], function () {
+Route::group(['prefix' => 'member', 'middleware' => ['language', 'islogin']], function () {
     Route::get('/', 'Member@index');
     Route::get('harga', 'Member@harga');
     Route::get('poin', 'Member@poin');

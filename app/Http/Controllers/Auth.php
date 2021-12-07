@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Hash;
 use App\Auth_model;
+use Illuminate\Support\Facades\Cookie;
 
 class Auth extends Controller
 {
@@ -39,10 +40,27 @@ class Auth extends Controller
 
         if (Hash::check($password, $user->password)) {
             if ($user->role == '1') {
+
                 $request->session()->put('login', $email);
+
+                if ($request->has('remember')) {
+                    return redirect('admin')
+                    ->withCookie('login', $email, 10080)
+                    ->withCookie('login_key', hash('sha256', env('COOKIE_SECRET_KEY', 'DefaultKey')), 10080);
+                }
+
                 return redirect('admin');
+
             } else {
+
                 $request->session()->put('login', $email);
+
+                if ($request->has('remember')) {
+                    return redirect('member')
+                    ->withCookie('login', $email, 10080)
+                    ->withCookie('login_key', hash('sha256', env('COOKIE_SECRET_KEY', 'DefaultKey')), 10080);
+                }
+
                 return redirect('member');
             }
         } else {
@@ -94,6 +112,10 @@ class Auth extends Controller
     {
         $request->session()->forget('login');
         $request->session()->flush();
-        return redirect('login')->with('success', Lang::get('auth.logout_success'));
+        Cookie::forget('login');
+        return redirect('login')
+        ->with('success', Lang::get('auth.logout_success'))
+        ->withCookie(Cookie::forget('login'))
+        ->withCookie(Cookie::forget('login_key'));
     }
 }
