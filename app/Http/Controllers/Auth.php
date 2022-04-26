@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Hash;
-use App\Auth_model;
 use Illuminate\Support\Facades\Cookie;
+use App\User;
 
 class Auth extends Controller
 {
@@ -32,11 +31,15 @@ class Auth extends Controller
         $email = $request->input('email');
         $password = $request->input('password');
 
-        if (!DB::table('users')->where('email', '=', $email)->exists()) {
+        if (!User::where('email', '=', $email)->exists()) {
             return redirect('login')->with('error', Lang::get('auth.error_email_password'));
         }
 
-        $user = DB::table('users')->where('email', '=', $email)->first();
+        // if (!DB::table('users')->where('email', '=', $email)->exists()) {
+        //     return redirect('login')->with('error', Lang::get('auth.error_email_password'));
+        // }
+
+        $user = User::where('email', '=', $email)->first();
 
         if (Hash::check($password, $user->password)) {
             if ($user->role == '1') {
@@ -45,20 +48,19 @@ class Auth extends Controller
 
                 if ($request->has('remember')) {
                     return redirect('admin')
-                    ->withCookie('login', $email, 10080)
-                    ->withCookie('login_key', hash('sha256', env('COOKIE_SECRET_KEY', 'DefaultKey')), 10080);
+                        ->withCookie('login', $email, 10080)
+                        ->withCookie('login_key', hash('sha256', env('COOKIE_SECRET_KEY', 'DefaultKey')), 10080);
                 }
 
                 return redirect('admin');
-
             } else {
 
                 $request->session()->put('login', $email);
 
                 if ($request->has('remember')) {
                     return redirect('member')
-                    ->withCookie('login', $email, 10080)
-                    ->withCookie('login_key', hash('sha256', env('COOKIE_SECRET_KEY', 'DefaultKey')), 10080);
+                        ->withCookie('login', $email, 10080)
+                        ->withCookie('login_key', hash('sha256', env('COOKIE_SECRET_KEY', 'DefaultKey')), 10080);
                 }
 
                 return redirect('member');
@@ -88,19 +90,25 @@ class Auth extends Controller
         ]);
 
         // Cek apakah email sudah terdaftar
-        if (Auth_model::isEmailExist($request->input('email'))) {
+        if (User::where('email', '=', $request->input('email'))->exists()) {
             return redirect('register')->with('error', 'Email sudah terdaftar, harap mendaftarkan email yang lain.');
         }
 
+        // if (Auth_model::isEmailExist($request->input('email'))) {
+        //     return redirect('register')->with('error', 'Email sudah terdaftar, harap mendaftarkan email yang lain.');
+        // }
+
         $hash_password = Hash::make($request->input('password'));
 
-        $data = [
+        $user = new User([
             'email' => $request->input('email'),
             'password' => $hash_password,
-            'nama' => $request->input('name')
-        ];
+            'name' => $request->input('name')
+        ]);
 
-        Auth_model::insertNewMember($data);
+        $user->save();
+
+        // Auth_model::insertNewMember($data);
 
         return redirect('login')->with('success', Lang::get('auth.register_success'));
     }
@@ -114,8 +122,8 @@ class Auth extends Controller
         $request->session()->flush();
         Cookie::forget('login');
         return redirect('login')
-        ->with('success', Lang::get('auth.logout_success'))
-        ->withCookie(Cookie::forget('login'))
-        ->withCookie(Cookie::forget('login_key'));
+            ->with('success', Lang::get('auth.logout_success'))
+            ->withCookie(Cookie::forget('login'))
+            ->withCookie(Cookie::forget('login_key'));
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Member_model;
+use App\User;
 
 class Member extends Controller
 {
@@ -24,8 +25,15 @@ class Member extends Controller
     */
     public function index()
     {
-        $user = Member_model::getUserInfo($this->logged_email);
-        $transaksi_terakhir = Member_model::getTransaksi($user->id, 5);
+        $user = User::where('email', '=', $this->logged_email)->first();
+        $transaksi_terakhir = User::find($user->id)->transactions;
+        // dd($transaksi_terakhir);
+        // dd($user);
+
+
+        // $user = Member_model::getUserInfo($this->logged_email);
+        // $transaksi_terakhir = Member_model::getTransaksi($user->id, 5);
+
         return view('member.index', compact('user', 'transaksi_terakhir'));
     }
 
