@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class ComplaintSuggestion extends Model
 {
     use HasFactory;
+
+    protected $guarded = ['id'];
+
+    public function user()
+    {
+        $this->belongsTo(User::class);
+    }
 }

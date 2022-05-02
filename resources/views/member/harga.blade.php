@@ -47,12 +47,12 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($kiloan as $item)
+                                        @foreach ($kiloan as $k)
                                         <tr>
                                             <td>{{$loop->iteration}}</td>
-                                            <td>{{$item->nama_barang}}</td>
-                                            <td>{{$item->nama_servis}}</td>
-                                            <td>{{$item->harga}}</td>
+                                            <td>{{$k->item->name}}</td>
+                                            <td>{{$k->service->name}}</td>
+                                            <td>{{$k->price}}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -69,12 +69,12 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($satuan as $item)
+                                        @foreach ($satuan as $s)
                                         <tr>
                                             <td>{{$loop->iteration}}</td>
-                                            <td>{{$item->nama_barang}}</td>
-                                            <td>{{$item->nama_servis}}</td>
-                                            <td>{{$item->harga}}</td>
+                                            <td>{{$s->item->name}}</td>
+                                            <td>{{$s->service->name}}</td>
+                                            <td>{{$s->price}}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>

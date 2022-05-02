@@ -40,11 +40,11 @@
                                 @foreach ($transaksi as $item)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
-                                    <td>{{$item->nama_barang}}</td>
-                                    <td>{{$item->nama_kategori}}</td>
-                                    <td>{{$item->nama_servis}}</td>
-                                    <td>{{$item->banyak}}</td>
-                                    <td>{{$item->harga}}</td>
+                                    <td>{{$item->price_list->item->name}}</td>
+                                    <td>{{$item->price_list->category->name}}</td>
+                                    <td>{{$item->price_list->service->name}}</td>
+                                    <td>{{$item->quantity}}</td>
+                                    <td>{{$item->price}}</td>
                                     <td>{{$item->sub_total}}</td>
                                 </tr>
                                 @endforeach

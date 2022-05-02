@@ -40,7 +40,7 @@
                 @endif
                 <div class="card">
                     <div class="card-body">
-                        <h4>Poin Anda : {{$user->poin}}</h4>
+                        <h4>Poin Anda : {{$user->point}}</h4>
                     </div>
                 </div>
             </div>
@@ -62,10 +62,10 @@
                                 @foreach ($vouchers as $voucher)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
-                                    <td>{{$voucher->nama_voucher}}</td>
-                                    <td>{{$voucher->keterangan}}</td>
-                                    <td>{{$voucher->poin_need}}</td>
-                                    <td><a href="{{url('member/poin/tukar') . '/' . $voucher->id_voucher}}"
+                                    <td>{{$voucher->name}}</td>
+                                    <td>{{$voucher->description}}</td>
+                                    <td>{{$voucher->point_need}}</td>
+                                    <td><a href="{{url('member/poin/tukar') . '/' . $voucher->id}}"
                                             class="badge badge-primary"
                                             onclick="return confirm('Apakah anda yakin ingin menukar poin?')">Tukar</a>
                                     </td>
@@ -92,8 +92,8 @@
                                 @foreach ($memberVouchers as $voucher)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
-                                    <td>{{$voucher->nama_voucher}}</td>
-                                    <td>{{$voucher->keterangan}}</td>
+                                    <td>{{$voucher->voucher->name}}</td>
+                                    <td>{{$voucher->voucher->description}}</td>
                                 </tr>
                                 @endforeach
                             </tbody>

@@ -42,4 +42,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Transaction::class, 'member_id');
     }
+
+    public function vouchers()
+    {
+        return $this->hasMany(UserVoucher::class);
+    }
+
+    public function complaint_suggestions()
+    {
+        return $this->hasMany(ComplaintSuggestion::class);
+    }
 }
