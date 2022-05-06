@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->integer('discount_value');
             $table->integer('point_need');
-            $table->boolean('active_status');
+            $table->boolean('active_status')->default(1);
             $table->text('description');
             $table->timestamps();
         });

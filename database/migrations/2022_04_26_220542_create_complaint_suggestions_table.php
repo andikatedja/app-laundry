@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('body');
             $table->char('type');
             $table->foreignId('user_id')->constrained();
-            $table->text('reply');
+            $table->text('reply')->nullable();
             $table->timestamps();
         });
     }

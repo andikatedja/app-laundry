@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('status_id')->constrained();
             $table->unsignedBigInteger('admin_id');
             $table->unsignedBigInteger('member_id');
-            $table->timestamp('finish_date');
+            $table->timestamp('finish_date')->nullable();
             $table->integer('discount');
             $table->integer('total');
             $table->timestamps();
