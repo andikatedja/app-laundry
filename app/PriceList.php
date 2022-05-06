@@ -25,4 +25,9 @@ class PriceList extends Model
     {
         return $this->belongsTo(Service::class);
     }
+
+    public function transaction_detail()
+    {
+        return $this->belongsTo(TransactionDetail::class);
+    }
 }

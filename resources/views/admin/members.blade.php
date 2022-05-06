@@ -40,18 +40,18 @@
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
                                     <td>{{$member->id}}</td>
-                                    <td>{{$member->nama}}</td>
+                                    <td>{{$member->name}}</td>
                                     <td>
-                                        @if ($member->jenis_kelamin == 'L')
+                                        @if ($member->gender == 'L')
                                         Laki-Laki
-                                        @elseif ($member->jenis_kelamin == 'P')
+                                        @elseif ($member->gender == 'P')
                                         Perempuan
                                         @else
                                         @endif
                                     </td>
-                                    <td>{{$member->alamat}}</td>
-                                    <td>{{$member->no_telp}}</td>
-                                    <td>{{$member->poin}}</td>
+                                    <td>{{$member->address}}</td>
+                                    <td>{{$member->phone_number}}</td>
+                                    <td>{{$member->point}}</td>
                                 </tr>
                                 @endforeach
                             </tbody>

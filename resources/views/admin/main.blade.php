@@ -37,7 +37,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
                         <img class="img-circle img-fit mr-1" width="25" height="25"
-                            src="{{asset('img/profile') . '/' . $user->profil}}" alt="Foto Profil"> {{$user->nama}}
+                            src="{{asset('img/profile') . '/' . $user->profile_picture}}" alt="Foto Profil"> {{$user->name}}
                     </a>
                     <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
                         <a href="#" class="dropdown-item" data-toggle="modal" data-target="#logoutModal">

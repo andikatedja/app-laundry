@@ -61,7 +61,7 @@
                                 <div class="col-sm-4">
                                     <select class="form-control" id="barang" name="barang">
                                         @foreach ($barang as $item)
-                                        <option value="{{$item->id_barang}}">{{$item->nama_barang}}</option>
+                                        <option value="{{$item->id}}">{{$item->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -71,7 +71,7 @@
                                 <div class="col-sm-4">
                                     <select class="form-control" id="servis" name="servis">
                                         @foreach ($servis as $item)
-                                        <option value="{{$item->id_servis}}">{{$item->nama_servis}}</option>
+                                        <option value="{{$item->id}}">{{$item->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -81,7 +81,7 @@
                                 <div class="col-sm-4">
                                     <select class="form-control" id="kategori" name="kategori">
                                         @foreach ($kategori as $item)
-                                        <option value="{{$item->id_kategori}}">{{$item->nama_kategori}}</option>
+                                        <option value="{{$item->id}}">{{$item->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -178,8 +178,8 @@
                             @if (isset($vouchers) && $vouchers != [])
                             <option value="0" data-potong="0">Pilih voucher</option>
                             @foreach ($vouchers as $voucher)
-                            <option value="{{$voucher->id}}" data-potong="{{$voucher->potongan}}">
-                                {{$voucher->nama_voucher}}</option>
+                            <option value="{{$voucher->id}}" data-potong="{{$voucher->voucher->discount_value}}">
+                                {{$voucher->voucher->name}}</option>
                             @endforeach
                             @else
                             <option value="0" data-potong="0">Tidak ada voucher yang dimiliki</option>
