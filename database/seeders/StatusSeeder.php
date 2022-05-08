@@ -17,9 +17,9 @@ class StatusSeeder extends Seeder
     public function run()
     {
         Status::insert([
-            ['name' => 'Belum Dikerjakan', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Sedang Dikerjakan', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Selesai', 'created_at' => now(), 'updated_at' => now()]
+            ['id' => 1, 'name' => 'Belum Dikerjakan', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 2, 'name' => 'Sedang Dikerjakan', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 3, 'name' => 'Selesai', 'created_at' => now(), 'updated_at' => now()]
         ]);
     }
 }

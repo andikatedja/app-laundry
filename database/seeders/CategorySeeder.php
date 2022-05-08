@@ -17,8 +17,8 @@ class CategorySeeder extends Seeder
     public function run()
     {
         Category::insert([
-            ['name' => 'Satuan', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Kiloan', 'created_at' => now(), 'updated_at' => now()]
+            ['id' => 1, 'name' => 'Satuan', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 2, 'name' => 'Kiloan', 'created_at' => now(), 'updated_at' => now()]
         ]);
     }
 }
