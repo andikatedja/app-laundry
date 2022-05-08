@@ -20,7 +20,8 @@ class UserSeeder extends Seeder
         $user = new User([
             'email' => 'admin@laundryxyz.com',
             'password' => Hash::make('admin123'),
-            'name' => 'Admin Laundry'
+            'name' => 'Admin Laundry',
+            'role' => 1
         ]);
         $user->save();
     }
