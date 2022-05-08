@@ -64,7 +64,10 @@ class Member extends Controller
     {
         $user = User::where('email', '=', $this->logged_email)->first();
         $vouchers = Voucher::where('active_status', 1)->get();
-        $memberVouchers = UserVoucher::where('user_id', $user->id)->get();
+        $memberVouchers = UserVoucher::where([
+            'user_id' => $user->id,
+            'used' => 0
+        ])->get();
         return view('member.poin', compact('user', 'vouchers', 'memberVouchers'));
     }
 
