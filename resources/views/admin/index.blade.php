@@ -68,12 +68,12 @@
                                 @foreach ($transaksi_terbaru as $item)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
-                                    <td>{{date('d F Y', strtotime($item->tgl_masuk))}}</td>
+                                    <td>{{date('d F Y', strtotime($item->created_at))}}</td>
                                     <td>
-                                        @if ($item->id_status != '3')
-                                        <span class="text-warning">{{$item->nama_status}}</span>
+                                        @if ($item->status_id != '3')
+                                        <span class="text-warning">{{$item->status->name}}</span>
                                         @else
-                                        <span class="text-success">{{$item->nama_status}}</span>
+                                        <span class="text-success">{{$item->status->name}}</span>
                                         @endif
                                     </td>
                                 </tr>

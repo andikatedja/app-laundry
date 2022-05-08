@@ -37,7 +37,7 @@
                                     <tbody>
                                         @foreach ($komplain as $item)
                                         <tr class="bg-warning">
-                                            <td>{{$item->nama}}</td>
+                                            <td>{{$item->user->name}}</td>
                                             <td><button href="#" class="badge badge-info lihat-isi"
                                                     data-id="{{$item->id}}">Lihat isi
                                                     komplain</button></td>
@@ -45,7 +45,7 @@
                                         @endforeach
                                         @foreach ($saran as $item)
                                         <tr>
-                                            <td>{{$item->nama}}</td>
+                                            <td>{{$item->user->name}}</td>
                                             <td><button href="#" class="badge badge-info lihat-isi"
                                                     data-id="{{$item->id}}">Lihat isi
                                                     saran</button></td>

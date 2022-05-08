@@ -42,7 +42,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
                         <img class="img-circle img-fit mr-1" width="25" height="25"
-                            src="{{asset('img/profile') . '/' . $user->profil}}" alt="Foto Profil"> {{$user->nama}}
+                            src="{{asset('img/profile') . '/' . $user->profile_picture}}" alt="Foto Profil"> {{$user->name}}
                     </a>
                     <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
                         <a href="{{url('member/edit')}}" class="dropdown-item">
@@ -137,7 +137,7 @@
 
         <!-- Main Footer -->
         <footer class="main-footer">
-            Copyright &copy; 2020 {{config('app.name')}} All rights reserved.
+            Copyright &copy; 2022 {{config('app.name')}} All rights reserved.
         </footer>
     </div>
     <!-- ./wrapper -->

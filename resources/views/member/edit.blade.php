@@ -46,7 +46,7 @@
                             <div class="row">
                                 <div class="col-md-4 text-center">
                                     <img id="profil_preview" class="img-fit img-circle" width="200" height="200"
-                                        src="{{asset('img/profile') . '/' . $user->profil}}" alt="Foto Profil">
+                                        src="{{asset('img/profile') . '/' . $user->profile_picture}}" alt="Foto Profil">
                                     <div class="form-group mt-3">
                                         <label for="foto_profil">Pilih Foto Profil</label>
                                         <div class="custom-file">
@@ -71,7 +71,7 @@
                                         <label for="name">@lang('auth.name_label')</label>
                                         <input type="text" class="form-control @error('name') is-invalid @enderror"
                                             id="name" name="name" placeholder="@lang('auth.name_placeholder')"
-                                            value="{{$user->nama}}" required>
+                                            value="{{$user->name}}" required>
                                         @error('name')
                                         <div class="invalid-feedback">
                                             {{$message}}
@@ -81,10 +81,10 @@
                                     <div class="form-group">
                                         <label for="jenis_kelamin">Jenis Kelamin</label>
                                         <select class="form-control" id="jenis_kelamin" name="jenis_kelamin" required>
-                                            @if ($user->jenis_kelamin == 'L')
+                                            @if ($user->gender == 'L')
                                             <option value="L" selected>Laki - Laki</>
                                             <option value="P">Perempuan</option>
-                                            @elseif ($user->jenis_kelamin == 'P')
+                                            @elseif ($user->gender == 'P')
                                             <option value="P" selected>Perempuan</option>
                                             <option value="L">Laki - Laki</>
                                                 @else
@@ -98,7 +98,7 @@
                                         <label for="alamat">Alamat</label>
                                         <input type="text" class="form-control @error('alamat') is-invalid @enderror"
                                             id="alamat" name="alamat" placeholder="Masukkan alamat anda"
-                                            value="{{$user->alamat}}" required>
+                                            value="{{$user->address}}" required>
                                         @error('alamat')
                                         <div class="invalid-feedback">
                                             {{$message}}
@@ -109,7 +109,7 @@
                                         <label for="telp">No Telp</label>
                                         <input type="text" class="form-control @error('telp') is-invalid @enderror"
                                             id="telp" name="telp" placeholder="Masukkan no telp"
-                                            value="{{$user->no_telp}}" required>
+                                            value="{{$user->phone_number}}" required>
                                         @error('telp')
                                         <div class="invalid-feedback">
                                             {{$message}}

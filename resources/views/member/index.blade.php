@@ -21,9 +21,9 @@
                         <div class="row">
                             <div class="col-10">
                                 <img class="img-circle img-fit float-left" width="100" height="100"
-                                    src="{{asset('img/profile') . '/' . $user->profil}}" alt="Foto Profil">
+                                    src="{{asset('img/profile') . '/' . $user->profile_picture}}" alt="Foto Profil">
                                 <div class="member-content">
-                                    <h2 class="m-0">{{$user->nama}}</h2>
+                                    <h2 class="m-0">{{$user->name}}</h2>
                                     <p class="small m-0">ID Member: {{$user->id}}</p>
                                     <a href="{{url('member/edit')}}" class="badge badge-primary badge-pill">Edit
                                         Profil</a>
@@ -31,7 +31,7 @@
                             </div>
                             <div class="col-2 text-center">
                                 <p class="small m-0">Poin</p>
-                                <h2 class="m-0">{{$user->poin}}</h2>
+                                <h2 class="m-0">{{$user->point}}</h2>
                                 <a href="{{url('member/poin')}}" class="badge badge-primary badge-pill">Tukar Poin</a>
                             </div>
                         </div>
@@ -60,16 +60,16 @@
                                 @foreach ($transaksi_terakhir as $item)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
-                                    <td>{{date('d F Y', strtotime($item->tgl_masuk))}}</td>
+                                    <td>{{date('d F Y', strtotime($item->created_at))}}</td>
                                     <td>
                                         @if ($item->id_status != '3')
-                                        <span class="text-warning">{{$item->nama_status}}</span>
+                                        <span class="text-warning">{{$item->status->name}}</span>
                                         @else
-                                        <span class="text-success">{{$item->nama_status}}</span>
+                                        <span class="text-success">{{$item->status->name}}</span>
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{url('member/transaksi') . '/' . $item->id_transaksi}}"
+                                        <a href="{{url('member/transaksi') . '/' . $item->id}}"
                                             class="badge badge-primary">Lihat Detail ></a>
                                     </td>
                                 </tr>

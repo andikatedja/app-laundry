@@ -36,16 +36,16 @@
                                 @foreach ($transaksi as $item)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
-                                    <td>{{date('d F Y', strtotime($item->tgl_masuk))}}</td>
+                                    <td>{{date('d F Y', strtotime($item->created_at))}}</td>
                                     <td>
-                                        @if ($item->id_status == '1')
-                                        <span class="text-warning">{{$item->nama_status}}</span>
+                                        @if ($item->status->id == '1')
+                                        <span class="text-warning">{{$item->status->name}}</span>
                                         @else
-                                        <span class="text-success">{{$item->nama_status}}</span>
+                                        <span class="text-success">{{$item->status->name}}</span>
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{url('member/transaksi') . '/' . $item->id_transaksi}}"
+                                        <a href="{{url('member/transaksi') . '/' . $item->id}}"
                                             class="badge badge-primary">Lihat Detail ></a>
                                     </td>
                                 </tr>

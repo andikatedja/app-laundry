@@ -58,7 +58,7 @@
                                             <div class="col-8">
                                                 <select class="form-control" id="barang" name="barang">
                                                     @foreach ($barang as $item)
-                                                    <option value="{{$item->id_barang}}">{{$item->nama_barang}}</option>
+                                                    <option value="{{$item->id}}">{{$item->name}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -76,7 +76,7 @@
                                             <div class="col-8">
                                                 <select class="form-control" id="servis" name="servis">
                                                     @foreach ($servis as $item)
-                                                    <option value="{{$item->id_servis}}">{{$item->nama_servis}}</option>
+                                                    <option value="{{$item->id}}">{{$item->name}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -94,7 +94,7 @@
                                         <label for="kategori">Kategori</label>
                                         <select class="form-control" id="kategori" name="kategori">
                                             @foreach ($kategori as $item)
-                                            <option value="{{$item->id_kategori}}">{{$item->nama_kategori}}</option>
+                                            <option value="{{$item->id}}">{{$item->name}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -135,12 +135,12 @@
                                         @foreach ($kiloan as $item)
                                         <tr>
                                             <td>{{$loop->iteration}}</td>
-                                            <td>{{$item->nama_barang}}</td>
-                                            <td>{{$item->nama_servis}}</td>
-                                            <td>{{$item->harga}} /kilo</td>
+                                            <td>{{$item->item->name}}</td>
+                                            <td>{{$item->service->name}}</td>
+                                            <td>{{$item->price}} /kilo</td>
                                             <td>
                                                 <a href="#" class="badge badge-warning btn-ubah-harga"
-                                                    data-id="{{$item->id_harga}}" data-toggle="modal"
+                                                    data-id="{{$item->id}}" data-toggle="modal"
                                                     data-target="#ubahHargaModal">Ubah Harga</a>
                                             </td>
                                         </tr>
@@ -163,12 +163,12 @@
                                         @foreach ($satuan as $item)
                                         <tr>
                                             <td>{{$loop->iteration}}</td>
-                                            <td>{{$item->nama_barang}}</td>
-                                            <td>{{$item->nama_servis}}</td>
-                                            <td>{{$item->harga}} /pcs</td>
+                                            <td>{{$item->item->name}}</td>
+                                            <td>{{$item->service->name}}</td>
+                                            <td>{{$item->price}} /pcs</td>
                                             <td>
                                                 <a href="#" class="badge badge-warning btn-ubah-harga"
-                                                    data-id="{{$item->id_harga}}" data-toggle="modal"
+                                                    data-id="{{$item->id}}" data-toggle="modal"
                                                     data-target="#ubahHargaModal">Ubah Harga</a>
                                             </td>
                                         </tr>

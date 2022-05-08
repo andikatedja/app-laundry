@@ -41,31 +41,31 @@
                                 @foreach ($transaksi as $item)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
-                                    <td>{{$item->id_transaksi}}</td>
-                                    <td>{{date('d F Y', strtotime($item->tgl_masuk))}}</td>
-                                    <td>{{$item->nama}}</td>
+                                    <td>{{$item->id}}</td>
+                                    <td>{{date('d F Y', strtotime($item->created_at))}}</td>
+                                    <td>{{$item->member->name}}</td>
                                     <td>
-                                        @if ($item->id_status == 3)
+                                        @if ($item->status_id == 3)
                                         <span class="text-success">Selesai</span>
                                         @else
-                                        <select name="" id="status" data-id="{{$item->id_transaksi}}"
-                                            data-val="{{$item->id_status}}" class="select-status">
+                                        <select name="" id="status" data-id="{{$item->id}}"
+                                            data-val="{{$item->status_id}}" class="select-status">
                                             @foreach ($status as $s)
-                                            @if ($item->id_status == $s->id_status)
-                                            <option selected value="{{$s->id_status}}">{{$s->nama_status}}</option>
+                                            @if ($item->status_id == $s->id)
+                                            <option selected value="{{$s->id}}">{{$s->name}}</option>
                                             @else
-                                            <option value="{{$s->id_status}}">{{$s->nama_status}}</option>
+                                            <option value="{{$s->id}}">{{$s->name}}</option>
                                             @endif
                                             @endforeach
                                         </select>
                                         @endif
                                     </td>
-                                    <td>{{$item->total_harga}}</td>
+                                    <td>{{$item->total}}</td>
                                     <td>
                                         <a href="#" class="badge badge-info btn-detail" data-toggle="modal"
                                             data-target="#detailTransaksiModal"
-                                            data-id="{{$item->id_transaksi}}">Detail</a>
-                                        <a href="{{url('admin/cetak-transaksi') . '/' . $item->id_transaksi}}"
+                                            data-id="{{$item->id}}">Detail</a>
+                                        <a href="{{url('admin/cetak-transaksi') . '/' . $item->id}}"
                                             class="badge badge-primary" target="_blank">Cetak</a>
                                     </td>
                                 </tr>

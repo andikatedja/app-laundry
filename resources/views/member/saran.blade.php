@@ -103,22 +103,22 @@
                                 @foreach ($saran_komplain as $item)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
-                                    <td>{{date('d F Y', strtotime($item->tgl))}}</td>
+                                    <td>{{date('d F Y', strtotime($item->created_at))}}</td>
                                     <td>
-                                        @if ($item->tipe == 1)
+                                        @if ($item->type == 1)
                                         Saran
                                         @else
                                         Komplain
                                         @endif
                                     </td>
-                                    <td>{{$item->isi}}</td>
-                                    @if ($item->balasan == null)
+                                    <td>{{$item->body}}</td>
+                                    @if ($item->reply == null)
                                     <td class="text-danger">
                                         Belum ada balasan
                                     </td>
                                     @else
                                     <td>
-                                        {{$item->balasan}}
+                                        {{$item->reply}}
                                     </td>
                                     @endif
                                 </tr>

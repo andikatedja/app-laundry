@@ -63,20 +63,20 @@
                                 @foreach ($vouchers as $voucher)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
-                                    <td>{{$voucher->nama_voucher}}</td>
-                                    <td>{{$voucher->poin_need}}</td>
-                                    <td>{{$voucher->keterangan}}</td>
+                                    <td>{{$voucher->name}}</td>
+                                    <td>{{$voucher->point_need}}</td>
+                                    <td>{{$voucher->description}}</td>
                                     <td>
-                                        @if ($voucher->aktif != 0)
+                                        @if ($voucher->active_status != 0)
                                         <div class="form-check">
                                             <input type="checkbox" class="form-check-input aktif-check" checked
-                                                value="{{$voucher->id_voucher}}">
+                                                value="{{$voucher->id}}">
                                             <label class="form-check-label">Aktif</label>
                                         </div>
                                         @else
                                         <div class="form-check">
                                             <input type="checkbox" class="form-check-input aktif-check"
-                                                value="{{$voucher->id_voucher}}">
+                                                value="{{$voucher->id}}">
                                             <label class="form-check-label">Aktif</label>
                                         </div>
                                         @endif
