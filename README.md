@@ -2,11 +2,9 @@
 
 ## Aplikasi Laundry Sederhana
 
-Aplikasi ini merupakan aplikasi laundry sederhana yang dibuat dengan framework Laravel 7 (sudah diupgrade ke Laravel 9). Aplikasi ini adalah project untuk menyelesaikan UAS Metodologi Penulisan Ilmiah ITB Stikom Bali.
+Aplikasi ini merupakan aplikasi laundry sederhana yang dibuat dengan framework Laravel 7 (sudah diupgrade ke Laravel 9). Aplikasi ini adalah project untuk menyelesaikan UAS Metodologi Penulisan Ilmiah ITB STIKOM Bali.
 
 Daftar/Register admin masih manual dengan mengubah role menjadi 1 pada tabel users database.
-
-Belum menggunakan migration atau eloquent, masi belajar :D
 
 Demo website: [App Laundry Heroku](http://mpi-applaundry.herokuapp.com)
 
@@ -16,7 +14,12 @@ Email : admin@laundryxyz.com
 
 Pass : admin123
 
-Database dapat dilihat pada file query.sql
+## Instalasi
+
+1. Copy dan rename .env.example menjadi .env
+2. Konfigurasi .env sesuai kebutuhan
+3. Buat app key: `php artisan key:generate`
+4. Jalankan migrasi dan seed: `php artisan migrate:fresh --seed`
 
 ## About Laravel
 
