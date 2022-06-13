@@ -4,7 +4,9 @@
 
 Aplikasi ini merupakan aplikasi laundry sederhana yang dibuat dengan framework Laravel 7 (sudah diupgrade ke Laravel 9). Aplikasi ini adalah project untuk menyelesaikan UAS Metodologi Penulisan Ilmiah ITB STIKOM Bali.
 
-Daftar/Register admin masih manual dengan mengubah role menjadi 1 pada tabel users database.
+Daftar/Register admin dengan url /register-admin. Secret key dapat diubah di env atau default "Secret123".
+
+Secret key cookie dapat diubah di env.
 
 Demo website: [App Laundry Heroku](http://mpi-applaundry.herokuapp.com)
 
