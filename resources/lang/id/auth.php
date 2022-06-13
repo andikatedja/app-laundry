@@ -6,12 +6,13 @@
     |--------------------------------------------------------------------------
     |
     | Untuk halaman auth (login dan register) bahasa indonesia
-    | 
+    |
     */
 
 return [
     'langtext' => 'Bahasa',
     'reg_title' => 'Daftar',
+    'reg_admin_title' => 'Daftar Admin',
     'name_label' => 'Nama',
     'name_placeholder' => 'Masukkan nama anda',
     'email_label' => 'Email',
@@ -20,6 +21,7 @@ return [
     'password_placeholder' => 'Masukkan kata sandi anda',
     'confirm_password_label' => 'Konfirmasi Kata Sandi',
     'confirm_password_placeholder' => 'Masukkan ulang kata sandi anda',
+    'secret_placeholder' => 'Masukkan secret key',
     'login_link' => 'Sudah memiliki akun? Masuk!',
     'log_title' => 'Masuk',
     'register_link' => 'Belum memiliki akun? Daftar!',

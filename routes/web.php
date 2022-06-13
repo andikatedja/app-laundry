@@ -25,6 +25,8 @@ Route::group(['middleware' => 'language'], function () {
     Route::post('login', 'Auth@auth');
     Route::get('register', 'Auth@registerView');
     Route::post('register', 'Auth@register');
+    Route::get('register-admin', 'Auth@registerAdminView');
+    Route::post('register-admin', 'Auth@registerAdmin');
     Route::get('logout', 'Auth@logout');
 });
 

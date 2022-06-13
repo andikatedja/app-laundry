@@ -103,6 +103,51 @@ class Auth extends Controller
         return redirect('login')->with('success', Lang::get('auth.register_success'));
     }
 
+
+    /**
+     * Fungsi untuk menampilkan view register admin
+     */
+    public function registerAdminView()
+    {
+        return view('auth.registerAdmin');
+    }
+
+    /**
+     * Fungsi untuk register admin
+     */
+    public function registerAdmin(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|confirmed|min:6',
+            'secret' => 'required'
+        ]);
+
+        // Cek apakah email sudah terdaftar
+        if (User::where('email', '=', $request->input('email'))->exists()) {
+            return redirect('register-admin')->with('error', 'Email sudah terdaftar, harap mendaftarkan email yang lain.');
+        }
+
+        // Cek apakah secret key sama
+        if ($request->input('secret') != env('REGISTER_ADMIN_SECRET_KEY', 'Secret123')) {
+            return redirect('register-admin')->with('error', 'Secret key salah.');
+        }
+
+        $hash_password = Hash::make($request->input('password'));
+
+        $user = new User([
+            'email' => $request->input('email'),
+            'password' => $hash_password,
+            'role' => 1,
+            'name' => $request->input('name')
+        ]);
+
+        $user->save();
+
+        return redirect('login')->with('success', Lang::get('auth.register_success'));
+    }
+
     /**
      * Fungsi untuk melakukan proses logout
      */
