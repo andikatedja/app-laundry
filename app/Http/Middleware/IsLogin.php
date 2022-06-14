@@ -17,7 +17,7 @@ class IsLogin
      */
     public function handle($request, Closure $next)
     {
-        if ( $request->hasCookie('login') && $request->hasCookie('login_key')) {
+        if ($request->hasCookie('login') && $request->hasCookie('login_key')) {
             $email = $request->cookie('login'); //Email
             $secretKey = $request->cookie('login_key');
 
@@ -46,10 +46,10 @@ class IsLogin
                 if (!$request->session()->has('login')) {
                     return redirect('login')->with('error', Lang::get('auth.please_login'));
                 }
-        
+
                 $userSession = $request->session()->get('login');
                 $user = DB::table('users')->where('email', '=', $userSession)->first();
-        
+
                 if ($user->role == '1') {
                     return $next($request);
                 } else {

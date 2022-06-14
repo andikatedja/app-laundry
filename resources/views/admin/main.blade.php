@@ -40,6 +40,10 @@
                             src="{{asset('img/profile') . '/' . $user->profile_picture}}" alt="Foto Profil"> {{$user->name}}
                     </a>
                     <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
+                        <a href="{{url('profile')}}" class="dropdown-item">
+                            <i class="fas fa-user-edit mr-2"></i> Edit Profil
+                        </a>
+                        <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item" data-toggle="modal" data-target="#logoutModal">
                             <i class="fas fa-sign-out-alt mr-2"></i> Logout
                         </a>
@@ -117,6 +121,13 @@
                                 class="nav-link {{(request()->is('admin/laporan')) ? 'active' : ''}}">
                                 <i class="nav-icon fas fa-file-alt"></i>
                                 <p>Laporan Keuangan</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{url('profile')}}"
+                                class="nav-link {{(request()->is('profile')) ? 'active' : ''}}">
+                                <i class="nav-icon fas fa-user-edit"></i>
+                                <p>Edit Profil</p>
                             </a>
                         </li>
                         <li class="nav-item">

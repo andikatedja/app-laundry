@@ -25,7 +25,7 @@
                                 <div class="member-content">
                                     <h2 class="m-0">{{$user->name}}</h2>
                                     <p class="small m-0">ID Member: {{$user->id}}</p>
-                                    <a href="{{url('member/edit')}}" class="badge badge-primary badge-pill">Edit
+                                    <a href="{{url('profile')}}" class="badge badge-primary badge-pill">Edit
                                         Profil</a>
                                 </div>
                             </div>
