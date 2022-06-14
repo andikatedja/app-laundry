@@ -3,7 +3,6 @@
 /public/storage
 /storage/*.key
 /vendor
-/public/img/profile/*
 .env
 .env.backup
 .phpunit.result.cache
@@ -11,6 +10,7 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+/public/img/profile/*
 
 # exception to the rule
 !/public/img/profile/.gitkeep
