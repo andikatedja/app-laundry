@@ -62,7 +62,7 @@
                                     <td>{{$loop->iteration}}</td>
                                     <td>{{date('d F Y', strtotime($item->created_at))}}</td>
                                     <td>
-                                        @if ($item->id_status != '3')
+                                        @if ($item->status_id != '3')
                                         <span class="text-warning">{{$item->status->name}}</span>
                                         @else
                                         <span class="text-success">{{$item->status->name}}</span>
