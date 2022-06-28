@@ -11,25 +11,27 @@ use App\TransactionDetail;
 use App\User;
 use App\UserVoucher;
 use App\Voucher;
+use Illuminate\Support\Facades\Auth;
 
 class Member extends Controller
 {
-    protected $logged_email;
+    // protected $logged_email;
 
-    public function __construct()
-    {
-        $this->middleware(function ($request, $next) {
-            $this->logged_email = session()->get('login');
-            return $next($request);
-        });
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware(function ($request, $next) {
+    //         $this->logged_email = session()->get('login');
+    //         return $next($request);
+    //     });
+    // }
 
     /**
      * Fungsi untuk menampilkan halaman dashboard member (Beranda)
      */
     public function index()
     {
-        $user = User::where('email', '=', $this->logged_email)->first();
+        // $user = User::where('email', '=', $this->logged_email)->first();
+        $user = Auth::user();
         $transaksi_terakhir = Transaction::where('member_id', $user->id)->get();
 
         return view('member.index', compact('user', 'transaksi_terakhir'));
@@ -40,7 +42,8 @@ class Member extends Controller
      */
     public function harga()
     {
-        $user = User::where('email', '=', $this->logged_email)->first();
+        // $user = User::where('email', '=', $this->logged_email)->first();
+        $user = Auth::user();
         $satuan = PriceList::where('category_id', 1)->get();
         $kiloan = PriceList::where('category_id', 2)->get();
 
@@ -52,7 +55,8 @@ class Member extends Controller
      */
     public function riwayatTransaksi()
     {
-        $user = User::where('email', '=', $this->logged_email)->first();
+        // $user = User::where('email', '=', $this->logged_email)->first();
+        $user = Auth::user();
         $transaksi = Transaction::where('member_id', $user->id)->get();
         return view('member.riwayat', compact('user', 'transaksi'));
     }
@@ -62,7 +66,8 @@ class Member extends Controller
      */
     public function poin()
     {
-        $user = User::where('email', '=', $this->logged_email)->first();
+        // $user = User::where('email', '=', $this->logged_email)->first();
+        $user = Auth::user();
         $vouchers = Voucher::where('active_status', 1)->get();
         $memberVouchers = UserVoucher::where([
             'user_id' => $user->id,
@@ -76,7 +81,7 @@ class Member extends Controller
      */
     public function tukarPoin($id_voucher)
     {
-        $user = User::where('email', '=', $this->logged_email)->first();
+        $user = User::where('email', '=', Auth::user()->email)->first();
 
         // Ambil data poin yang diperlukan untuk menukar voucher
         $voucher = Voucher::where('id', $id_voucher)->first();
@@ -107,7 +112,8 @@ class Member extends Controller
      */
     public function saranKomplain()
     {
-        $user = User::where('email', '=', $this->logged_email)->first();
+        // $user = User::where('email', '=', $this->logged_email)->first();
+        $user = Auth::user();
         $saran_komplain = ComplaintSuggestion::where('user_id', $user->id)->get();
         return view('member.saran', compact('user', 'saran_komplain'));
     }
@@ -121,7 +127,8 @@ class Member extends Controller
             'isi_sarankomplain' => 'required'
         ]);
 
-        $user = User::where('email', '=', $this->logged_email)->first();
+        // $user = User::where('email', '=', $this->logged_email)->first();
+        $user = Auth::user();
 
         $complaint_suggestion = new ComplaintSuggestion([
             'body' => $request->input('isi_sarankomplain'),
@@ -140,7 +147,8 @@ class Member extends Controller
      */
     public function detailTransaksi($id_transaksi)
     {
-        $user = User::where('email', '=', $this->logged_email)->first();
+        // $user = User::where('email', '=', $this->logged_email)->first();
+        $user = Auth::user();
         $transaksi = TransactionDetail::where('transaction_id', $id_transaksi)->get();
         return view('member.detail', compact('user', 'transaksi', 'id_transaksi'));
     }
