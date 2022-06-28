@@ -16,25 +16,27 @@ use App\UserVoucher;
 use App\Voucher;
 use PDF;
 use DateTime;
+use Illuminate\Support\Facades\Auth;
 
 class Admin extends Controller
 {
-    protected $logged_email;
+    // protected $logged_email;
 
-    public function __construct()
-    {
-        $this->middleware(function ($request, $next) {
-            $this->logged_email = session()->get('login');
-            return $next($request);
-        });
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware(function ($request, $next) {
+    //         $this->logged_email = session()->get('login');
+    //         return $next($request);
+    //     });
+    // }
 
     /**
      * Fungsi index untuk menampilkan halaman dashboard admin
      */
     public function index()
     {
-        $user = User::where('email', '=', $this->logged_email)->first();
+        // $user = User::where('email', '=', $this->logged_email)->first();
+        $user = Auth::user();
         $transaksi_terbaru = Transaction::orderByDesc('created_at')->limit(10)->get();
         $banyak_member = User::where('role', 2)->count();
         $banyak_transaksi = Transaction::count();
@@ -46,7 +48,8 @@ class Admin extends Controller
      */
     public function inputTransaksi(Request $request)
     {
-        $user = User::where('email', '=', $this->logged_email)->first();
+        // $user = User::where('email', '=', $this->logged_email)->first();
+        $user = Auth::user();
         $barang = Item::all();
         $kategori = Category::all();
         $servis = Service::all();
@@ -184,7 +187,7 @@ class Admin extends Controller
     {
         $id_member = $request->session()->get('id_member_transaksi');
         // Ambil id admin yang sedang login
-        $id_admin = User::where('email', $this->logged_email)->first()->id;
+        $id_admin = Auth::user()->id;
         $transaksi = $request->session()->get('transaksi');
         // Hitung total harga
         $total_harga = 0;
@@ -270,7 +273,8 @@ class Admin extends Controller
      */
     public function riwayatTransaksi()
     {
-        $user = User::where('email', '=', $this->logged_email)->first();
+        // $user = User::where('email', '=', $this->logged_email)->first();
+        $user = Auth::user();
         $transaksi = Transaction::all();
         $status = Status::all();
         return view('admin.riwayat_transaksi', compact('user', 'transaksi', 'status'));
@@ -307,7 +311,8 @@ class Admin extends Controller
      */
     public function harga()
     {
-        $user = User::where('email', '=', $this->logged_email)->first();
+        // $user = User::where('email', '=', $this->logged_email)->first();
+        $user = Auth::user();
         $satuan = PriceList::where('category_id', 1)->get();
         $kiloan = PriceList::where('category_id', 2)->get();
         $barang = Item::all();
@@ -396,7 +401,8 @@ class Admin extends Controller
      */
     public function members()
     {
-        $user = User::where('email', '=', $this->logged_email)->first();
+        // $user = User::where('email', '=', $this->logged_email)->first();
+        $user = Auth::user();
         $members = User::where('role', 2)->get();
         return view('admin.members', compact('user', 'members'));
     }
@@ -406,7 +412,8 @@ class Admin extends Controller
      */
     public function voucher()
     {
-        $user = User::where('email', '=', $this->logged_email)->first();
+        // $user = User::where('email', '=', $this->logged_email)->first();
+        $user = Auth::user();
         $vouchers = Voucher::all();
         return view('admin.voucher', compact('user', 'vouchers'));
     }
@@ -459,7 +466,8 @@ class Admin extends Controller
      */
     public function saran()
     {
-        $user = User::where('email', '=', $this->logged_email)->first();
+        // $user = User::where('email', '=', $this->logged_email)->first();
+        $user = Auth::user();
         $saran = ComplaintSuggestion::where([
             'type' => 1,
             'reply' => ''
@@ -496,7 +504,8 @@ class Admin extends Controller
      */
     public function laporan()
     {
-        $user = User::where('email', '=', $this->logged_email)->first();
+        // $user = User::where('email', '=', $this->logged_email)->first();
+        $user = Auth::user();
         $tahun = Transaction::selectRaw('YEAR(created_at) as Tahun')->distinct()->get();
         $bulan = Transaction::selectRaw('MONTH(created_at) as Bulan')->distinct()->get();
         return view('admin.laporan', compact('user', 'bulan', 'tahun'));
