@@ -5,25 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    protected $logged_email;
-
-    public function __construct()
-    {
-        $this->middleware(function ($request, $next) {
-            $this->logged_email = session()->get('login');
-            return $next($request);
-        });
-    }
-
     /**
      * Fungsi untuk menampilkan halaman edit profil
      */
     public function index()
     {
-        $user = User::where('email', '=', $this->logged_email)->first();
+        $user = Auth::user();
         return view('user.profile', compact('user'));
     }
 
@@ -39,7 +30,7 @@ class UserController extends Controller
             'telp' => 'required'
         ]);
 
-        $user = User::where('email', '=', $this->logged_email)->first();
+        $user = User::where('email', '=', Auth::user()->email)->first();
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
@@ -64,7 +55,7 @@ class UserController extends Controller
      */
     public function resetfoto()
     {
-        $user = User::where('email', '=', $this->logged_email)->first();
+        $user = User::where('email', '=', Auth::user()->email)->first();
         $user->profile_picture = 'default.jpg';
         $user->save();
         return redirect('profile')->with('success', 'Foto profil berhasil direset');
@@ -79,7 +70,7 @@ class UserController extends Controller
             'current-password' => 'required',
             'password' => 'required|min:6|confirmed',
         ]);
-        $user = User::where('email', '=', $this->logged_email)->first();
+        $user = User::where('email', '=', Auth::user()->email)->first();
 
         //Cek apakah password lama sama
         if (!Hash::check($request->input('current-password'), $user->password)) {

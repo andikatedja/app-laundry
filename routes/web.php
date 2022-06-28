@@ -21,13 +21,13 @@ Route::get('/', function () {
 
 // Auth routes
 Route::group(['middleware' => 'language'], function () {
-    Route::get('login', 'Auth@index')->middleware('islogin');
-    Route::post('login', 'Auth@auth');
-    Route::get('register', 'Auth@registerView');
-    Route::post('register', 'Auth@register');
-    Route::get('register-admin', 'Auth@registerAdminView');
-    Route::post('register-admin', 'Auth@registerAdmin');
-    Route::get('logout', 'Auth@logout');
+    Route::get('login', 'LoginController@index')->middleware('islogin');
+    Route::post('login', 'LoginController@auth');
+    Route::get('register', 'LoginController@registerView');
+    Route::post('register', 'LoginController@register');
+    Route::get('register-admin', 'LoginController@registerAdminView');
+    Route::post('register-admin', 'LoginController@registerAdmin');
+    Route::get('logout', 'LoginController@logout');
 });
 
 
@@ -67,10 +67,6 @@ Route::group(['prefix' => 'member', 'middleware' => ['language', 'islogin']], fu
     Route::get('harga', 'Member@harga');
     Route::get('poin', 'Member@poin');
     Route::get('poin/tukar/{id_voucher}', 'Member@tukarPoin');
-    // Route::get('edit', 'Member@edit');
-    // Route::get('edit/resetfoto', 'Member@resetfoto');
-    // Route::patch('edit', 'Member@editprofil');
-    // Route::patch('edit/password', 'Member@editpassword');
     Route::get('transaksi', 'Member@riwayatTransaksi');
     Route::get('transaksi/{id_transaksi}', 'Member@detailTransaksi');
     Route::get('saran', 'Member@saranKomplain');
