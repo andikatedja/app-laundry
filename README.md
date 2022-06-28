@@ -6,8 +6,6 @@ Aplikasi ini merupakan aplikasi laundry sederhana yang dibuat dengan framework L
 
 Daftar/Register admin dengan url /register-admin. Secret key dapat diubah di env atau default "Secret123".
 
-Secret key cookie dapat diubah di env.
-
 Demo website: [App Laundry Heroku](http://mpi-applaundry.herokuapp.com)
 
 Login admin:
@@ -20,8 +18,17 @@ Pass : admin123
 
 1. Copy dan rename .env.example menjadi .env
 2. Konfigurasi .env sesuai kebutuhan
-3. Buat app key: `php artisan key:generate`
-4. Jalankan migrasi dan seed: `php artisan migrate:fresh --seed`
+3. Buat app key:
+
+```
+php artisan key:generate
+```
+
+4. Jalankan migrasi dan seed:
+
+```
+php artisan migrate:fresh --seed
+```
 
 ## About Laravel
 
