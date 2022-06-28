@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\ComplaintSuggestion;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use App\PriceList;
 use App\Transaction;
 use App\TransactionDetail;
@@ -15,22 +14,11 @@ use Illuminate\Support\Facades\Auth;
 
 class Member extends Controller
 {
-    // protected $logged_email;
-
-    // public function __construct()
-    // {
-    //     $this->middleware(function ($request, $next) {
-    //         $this->logged_email = session()->get('login');
-    //         return $next($request);
-    //     });
-    // }
-
     /**
      * Fungsi untuk menampilkan halaman dashboard member (Beranda)
      */
     public function index()
     {
-        // $user = User::where('email', '=', $this->logged_email)->first();
         $user = Auth::user();
         $transaksi_terakhir = Transaction::where('member_id', $user->id)->get();
 
@@ -42,7 +30,6 @@ class Member extends Controller
      */
     public function harga()
     {
-        // $user = User::where('email', '=', $this->logged_email)->first();
         $user = Auth::user();
         $satuan = PriceList::where('category_id', 1)->get();
         $kiloan = PriceList::where('category_id', 2)->get();
@@ -55,7 +42,6 @@ class Member extends Controller
      */
     public function riwayatTransaksi()
     {
-        // $user = User::where('email', '=', $this->logged_email)->first();
         $user = Auth::user();
         $transaksi = Transaction::where('member_id', $user->id)->get();
         return view('member.riwayat', compact('user', 'transaksi'));
@@ -66,7 +52,6 @@ class Member extends Controller
      */
     public function poin()
     {
-        // $user = User::where('email', '=', $this->logged_email)->first();
         $user = Auth::user();
         $vouchers = Voucher::where('active_status', 1)->get();
         $memberVouchers = UserVoucher::where([
@@ -112,7 +97,6 @@ class Member extends Controller
      */
     public function saranKomplain()
     {
-        // $user = User::where('email', '=', $this->logged_email)->first();
         $user = Auth::user();
         $saran_komplain = ComplaintSuggestion::where('user_id', $user->id)->get();
         return view('member.saran', compact('user', 'saran_komplain'));
@@ -127,7 +111,6 @@ class Member extends Controller
             'isi_sarankomplain' => 'required'
         ]);
 
-        // $user = User::where('email', '=', $this->logged_email)->first();
         $user = Auth::user();
 
         $complaint_suggestion = new ComplaintSuggestion([
@@ -147,7 +130,6 @@ class Member extends Controller
      */
     public function detailTransaksi($id_transaksi)
     {
-        // $user = User::where('email', '=', $this->logged_email)->first();
         $user = Auth::user();
         $transaksi = TransactionDetail::where('transaction_id', $id_transaksi)->get();
         return view('member.detail', compact('user', 'transaksi', 'id_transaksi'));

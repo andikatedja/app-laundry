@@ -67,10 +67,6 @@ Route::group(['prefix' => 'member', 'middleware' => ['language', 'islogin']], fu
     Route::get('harga', 'Member@harga');
     Route::get('poin', 'Member@poin');
     Route::get('poin/tukar/{id_voucher}', 'Member@tukarPoin');
-    // Route::get('edit', 'Member@edit');
-    // Route::get('edit/resetfoto', 'Member@resetfoto');
-    // Route::patch('edit', 'Member@editprofil');
-    // Route::patch('edit/password', 'Member@editpassword');
     Route::get('transaksi', 'Member@riwayatTransaksi');
     Route::get('transaksi/{id_transaksi}', 'Member@detailTransaksi');
     Route::get('saran', 'Member@saranKomplain');

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 
@@ -36,50 +35,15 @@ class LoginController extends Controller
         }
 
         if (Auth::attempt($credentials, $remember)) {
+            $request->session()->regenerate();
             if (Auth::user()->role == 1) {
                 return redirect('admin');
             } else {
                 return redirect('member');
             }
         }
-        // $email = $request->input('email');
-        // $password = $request->input('password');
 
-        // if (!User::where('email', '=', $email)->exists()) {
-        //     return redirect('login')->with('error', Lang::get('auth.error_email_password'));
-        // }
-
-        // $user = User::where('email', '=', $email)->first();
-
-        // if (Hash::check($password, $user->password)) {
-        //     if ($user->role == '1') {
-
-        //         $request->session()->regenerate();
-
-        //         // $request->session()->put('login', $email);
-
-        //         if ($request->has('remember')) {
-        //             return redirect('admin')
-        //                 ->withCookie('login', $email, 10080)
-        //                 ->withCookie('login_key', hash('sha256', env('COOKIE_SECRET_KEY', 'DefaultKey')), 10080);
-        //         }
-
-        //         return redirect('admin');
-        //     } else {
-
-        //         $request->session()->put('login', $email);
-
-        //         if ($request->has('remember')) {
-        //             return redirect('member')
-        //                 ->withCookie('login', $email, 10080)
-        //                 ->withCookie('login_key', hash('sha256', env('COOKIE_SECRET_KEY', 'DefaultKey')), 10080);
-        //         }
-
-        //         return redirect('member');
-        //     }
-        // } else {
-        //     return redirect('login')->with('error', Lang::get('auth.error_email_password'));
-        // }
+        return redirect('login')->with('error', Lang::get('auth.error_email_password'));
     }
 
     /**
@@ -169,15 +133,10 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
-        // $request->session()->forget('login');
-        // $request->session()->flush();
-        // Cookie::forget('login');
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('login')
             ->with('success', Lang::get('auth.logout_success'));
-        // ->withCookie(Cookie::forget('login'))
-        // ->withCookie(Cookie::forget('login_key'));
     }
 }

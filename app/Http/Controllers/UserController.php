@@ -9,22 +9,11 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    // protected $logged_email;
-
-    // public function __construct()
-    // {
-    //     $this->middleware(function ($request, $next) {
-    //         $this->logged_email = session()->get('login');
-    //         return $next($request);
-    //     });
-    // }
-
     /**
      * Fungsi untuk menampilkan halaman edit profil
      */
     public function index()
     {
-        // $user = User::where('email', '=', $this->logged_email)->first();
         $user = Auth::user();
         return view('user.profile', compact('user'));
     }

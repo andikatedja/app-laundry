@@ -20,22 +20,11 @@ use Illuminate\Support\Facades\Auth;
 
 class Admin extends Controller
 {
-    // protected $logged_email;
-
-    // public function __construct()
-    // {
-    //     $this->middleware(function ($request, $next) {
-    //         $this->logged_email = session()->get('login');
-    //         return $next($request);
-    //     });
-    // }
-
     /**
      * Fungsi index untuk menampilkan halaman dashboard admin
      */
     public function index()
     {
-        // $user = User::where('email', '=', $this->logged_email)->first();
         $user = Auth::user();
         $transaksi_terbaru = Transaction::orderByDesc('created_at')->limit(10)->get();
         $banyak_member = User::where('role', 2)->count();
@@ -48,7 +37,6 @@ class Admin extends Controller
      */
     public function inputTransaksi(Request $request)
     {
-        // $user = User::where('email', '=', $this->logged_email)->first();
         $user = Auth::user();
         $barang = Item::all();
         $kategori = Category::all();
@@ -273,7 +261,6 @@ class Admin extends Controller
      */
     public function riwayatTransaksi()
     {
-        // $user = User::where('email', '=', $this->logged_email)->first();
         $user = Auth::user();
         $transaksi = Transaction::all();
         $status = Status::all();
@@ -311,7 +298,6 @@ class Admin extends Controller
      */
     public function harga()
     {
-        // $user = User::where('email', '=', $this->logged_email)->first();
         $user = Auth::user();
         $satuan = PriceList::where('category_id', 1)->get();
         $kiloan = PriceList::where('category_id', 2)->get();
@@ -401,7 +387,6 @@ class Admin extends Controller
      */
     public function members()
     {
-        // $user = User::where('email', '=', $this->logged_email)->first();
         $user = Auth::user();
         $members = User::where('role', 2)->get();
         return view('admin.members', compact('user', 'members'));
@@ -412,7 +397,6 @@ class Admin extends Controller
      */
     public function voucher()
     {
-        // $user = User::where('email', '=', $this->logged_email)->first();
         $user = Auth::user();
         $vouchers = Voucher::all();
         return view('admin.voucher', compact('user', 'vouchers'));
@@ -466,7 +450,6 @@ class Admin extends Controller
      */
     public function saran()
     {
-        // $user = User::where('email', '=', $this->logged_email)->first();
         $user = Auth::user();
         $saran = ComplaintSuggestion::where([
             'type' => 1,
@@ -504,7 +487,6 @@ class Admin extends Controller
      */
     public function laporan()
     {
-        // $user = User::where('email', '=', $this->logged_email)->first();
         $user = Auth::user();
         $tahun = Transaction::selectRaw('YEAR(created_at) as Tahun')->distinct()->get();
         $bulan = Transaction::selectRaw('MONTH(created_at) as Bulan')->distinct()->get();
