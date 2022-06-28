@@ -21,13 +21,13 @@ Route::get('/', function () {
 
 // Auth routes
 Route::group(['middleware' => 'language'], function () {
-    Route::get('login', 'Auth@index')->middleware('islogin');
-    Route::post('login', 'Auth@auth');
-    Route::get('register', 'Auth@registerView');
-    Route::post('register', 'Auth@register');
-    Route::get('register-admin', 'Auth@registerAdminView');
-    Route::post('register-admin', 'Auth@registerAdmin');
-    Route::get('logout', 'Auth@logout');
+    Route::get('login', 'LoginController@index')->middleware('islogin');
+    Route::post('login', 'LoginController@auth');
+    Route::get('register', 'LoginController@registerView');
+    Route::post('register', 'LoginController@register');
+    Route::get('register-admin', 'LoginController@registerAdminView');
+    Route::post('register-admin', 'LoginController@registerAdmin');
+    Route::get('logout', 'LoginController@logout');
 });
 
 
