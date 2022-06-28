@@ -65,7 +65,7 @@
                                 <div class="col-md-7">
                                     <div class="form-group">
                                         <label for="email">Email</label>
-                                        <input type="email" class="form-control" id="email" value="{{session('login')}}"
+                                        <input type="email" class="form-control" id="email" value="{{$user->email}}"
                                             disabled>
                                     </div>
                                     <div class="form-group">
