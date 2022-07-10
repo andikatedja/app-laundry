@@ -494,6 +494,16 @@ class Admin extends Controller
     }
 
     /**
+     * Fungsi untuk mendapatkan bulan berdasarkan tahun transaksi
+     */
+    public function getMonth(Request $request)
+    {
+        $tahun = $request->input('tahun');
+        $bulan = Transaction::whereYear('created_at', $tahun)->selectRaw('MONTH(created_at) as Bulan')->distinct()->get();
+        echo json_encode($bulan);
+    }
+
+    /**
      * Fungsi untuk mencetak laporan dengan konversi ke pdf
      */
     public function cetakLaporan(Request $request)

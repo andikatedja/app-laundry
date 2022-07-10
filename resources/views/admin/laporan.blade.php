@@ -1,4 +1,8 @@
 @extends('admin.main')
+@section('css')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<meta name="base_url" content="{{url('admin')}}">
+@endsection
 
 @section('main-content')
 <!-- Content Header (Page header) -->
@@ -26,6 +30,7 @@
                                         <label for="tahun" class="col-sm-4 col-form-label">Tahun</label>
                                         <div class="col-sm-6">
                                             <select class="form-control" id="tahun" name="tahun">
+                                                <option value="0" selected="selected" disabled="true">-- Please Select --</option>
                                                 @foreach ($tahun as $item)
                                                 <option value="{{$item->Tahun}}">{{$item->Tahun}}</option>
                                                 @endforeach
@@ -36,13 +41,11 @@
                                         <label for="bulan" class="col-sm-4 col-form-label">Bulan</label>
                                         <div class="col-sm-6">
                                             <select class="form-control" id="bulan" name="bulan">
-                                                @foreach ($bulan as $item)
-                                                <option value="{{$item->Bulan}}">{{$item->Bulan}}</option>
-                                                @endforeach
+                                                <option value="0" selected="selected" disabled="true">-- Select Year First --</option>
                                             </select>
                                         </div>
                                     </div>
-                                    <button type="submit" class="mt-3 btn btn-primary">Cetak</button>
+                                    <button type="submit" id="btn-cetak" class="mt-3 btn btn-primary d-none">Cetak</button>
                                 </form>
                             </div>
                         </div>
@@ -52,4 +55,7 @@
         </div>
     </div><!-- /.container-fluid -->
 </div>
+@endsection
+@section('scripts')
+<script src="{{asset('js/ajax.js')}}"></script>
 @endsection

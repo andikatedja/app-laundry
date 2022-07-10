@@ -70,3 +70,28 @@ $(document).on("change", ".select-status", function () {
         return;
     }
 });
+
+$(document).on("change", "#tahun", function () {
+    let tahun = $(this).val();
+    let option = "";
+    $.ajax({
+        url: base_url + "/get-month",
+        data: {
+            tahun: tahun,
+        },
+        method: "POST",
+        dataType: "json",
+        success: function (data) {
+            $.each(data, function (i, val) {
+                option +=
+                    '<option value="' +
+                    val.Bulan +
+                    '">' +
+                    val.Bulan +
+                    "</option>";
+            });
+            $("#bulan").html(option);
+            $("#btn-cetak").removeClass("d-none");
+        },
+    });
+});
