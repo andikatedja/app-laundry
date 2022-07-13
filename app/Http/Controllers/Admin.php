@@ -83,7 +83,7 @@ class Admin extends Controller
         }
 
         //Cek member
-        if ($id_member != null && !User::where('id', $id_member)->exists()) {
+        if ($id_member != null && !User::where('id', $id_member)->where('role', 2)->exists()) {
             return redirect('admin/input-transaksi')->with('error', 'Member tidak ditemukan!');
         }
 
