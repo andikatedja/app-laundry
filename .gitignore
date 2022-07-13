@@ -14,4 +14,4 @@ yarn-error.log
 
 # exception to the rule
 !/public/img/profile/.gitkeep
-!/public/img/profile/.default.jpg
+!/public/img/profile/default.jpg
