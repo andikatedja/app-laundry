@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 
 class UserController extends Controller
 {
@@ -33,6 +34,11 @@ class UserController extends Controller
         $user = User::where('email', '=', Auth::user()->email)->first();
 
         if ($request->hasFile('image')) {
+            // cek jika foto sebelumnya tidak default.jpg
+            if ($user->profile_picture != 'default.jpg') {
+                // Delete file lama
+                File::delete(public_path('img/profile/' . $user->profile_picture));
+            }
             $image = $request->file('image');
             $extension = $image->getClientOriginalExtension();
             $filename = $user->id . '.' . $extension;
