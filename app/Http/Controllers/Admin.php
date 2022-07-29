@@ -54,8 +54,8 @@ class Admin extends Controller
 
             // Hitung total harga
             $total_harga = 0;
-            foreach ($transaksi as $key => $value) {
-                $total_harga += $transaksi[$key]['harga'];
+            foreach ($transaksi as &$t) {
+                $total_harga += $t['harga'];
             }
             return view('admin.input_transaksi', compact('user', 'barang', 'kategori', 'servis', 'transaksi', 'id_member_transaksi', 'total_harga', 'vouchers'));
         }
@@ -128,10 +128,10 @@ class Admin extends Controller
             $transaksi = $request->session()->get('transaksi');
 
             // Mengecek apakah ada input transaksi yang sama, jika ada maka tambahkan banyak dan harga dari sesi transaksi
-            foreach ($transaksi as $k => $v) {
-                if ($transaksi[$k]['id_barang'] == $id_barang && $transaksi[$k]['id_kategori'] == $id_kategori && $transaksi[$k]['id_servis'] == $id_servis) {
-                    $transaksi[$k]['banyak'] += $banyak;
-                    $transaksi[$k]['harga'] += $harga;
+            foreach ($transaksi as &$t) {
+                if ($t['id_barang'] == $id_barang && $t['id_kategori'] == $id_kategori && $t['id_servis'] == $id_servis) {
+                    $t['banyak'] += $banyak;
+                    $t['harga'] += $harga;
                     $exist++;
                 }
             }
@@ -179,8 +179,8 @@ class Admin extends Controller
         $transaksi = $request->session()->get('transaksi');
         // Hitung total harga
         $total_harga = 0;
-        foreach ($transaksi as $key => $value) {
-            $total_harga += $transaksi[$key]['harga'];
+        foreach ($transaksi as &$t) {
+            $total_harga += $t['harga'];
         }
         $potongan = 0;
 
@@ -211,19 +211,19 @@ class Admin extends Controller
         ]);
         $transaction->save();
 
-        foreach ($transaksi as $key => $value) {
+        foreach ($transaksi as &$t) {
             $harga = PriceList::where([
-                'item_id' => $transaksi[$key]['id_barang'],
-                'category_id' => $transaksi[$key]['id_kategori'],
-                'service_id' => $transaksi[$key]['id_servis']
+                'item_id' => $t['id_barang'],
+                'category_id' => $t['id_kategori'],
+                'service_id' => $t['id_servis']
             ])->first();
 
             $transaction_detail = new TransactionDetail([
                 'transaction_id' => $transaction->id,
                 'price_list_id' => $harga->id,
-                'quantity' => $transaksi[$key]['banyak'],
+                'quantity' => $t['banyak'],
                 'price' => $harga->price,
-                'sub_total' => $transaksi[$key]['harga']
+                'sub_total' => $t['harga']
             ]);
             $transaction_detail->save();
         }
