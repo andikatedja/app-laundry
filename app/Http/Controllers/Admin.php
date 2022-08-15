@@ -514,8 +514,11 @@ class Admin extends Controller
         $bulan = $dateObj->format('F');
         $pendapatan = Transaction::whereMonth('created_at', $bulan_num)
             ->whereYear('created_at', $tahun)->sum('total');
-        $pdf = PDF::loadview('admin.laporan_pdf', compact('bulan', 'tahun', 'pendapatan'));
-        return $pdf->download('laporan-keuangan-' . $bulan . '-' . $tahun . '.pdf');
+        $totalTransaksi = Transaction::whereMonth('created_at', $bulan_num)
+            ->whereYear('created_at', $tahun)->count();
+        $pdf = PDF::loadview('admin.laporan_pdf', compact('bulan', 'tahun', 'pendapatan', 'totalTransaksi'));
+        // return $pdf->download('laporan-keuangan-' . $bulan . '-' . $tahun . '.pdf');
+        return $pdf->stream();
     }
 
     public function laporanview(Request $request)
@@ -526,6 +529,8 @@ class Admin extends Controller
         $bulan = $dateObj->format('F');
         $pendapatan = Transaction::whereMonth('created_at', $bulan_num)
             ->whereYear('created_at', $tahun)->sum('total');
-        return view('admin.laporan_pdf', compact('bulan', 'tahun', 'pendapatan'));
+        $totalTransaksi = Transaction::whereMonth('created_at', $bulan_num)
+            ->whereYear('created_at', $tahun)->count();
+        return view('admin.laporan_pdf', compact('bulan', 'tahun', 'pendapatan', 'totalTransaksi'));
     }
 }
