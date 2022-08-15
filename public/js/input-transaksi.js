@@ -1,10 +1,6 @@
 let fixTotal = $("#total-harga").val();
 let total = $("#total-harga").val();
 
-$("#tambah-transaksi").on("click", function () {
-    console.log("ok");
-});
-
 $("#bayarModal").on("shown.bs.modal", function () {
     $(this).find("#input-bayar").focus();
 });
@@ -14,7 +10,10 @@ $("#input-bayar").on("keyup", function () {
 });
 
 $("#btn-simpan").on("click", function (event) {
-    if (parseInt($("#input-bayar").val()) < parseInt(total)) {
+    if (
+        parseInt($("#input-bayar").val()) < parseInt(total) ||
+        $("#input-bayar").val() == ""
+    ) {
         event.preventDefault();
         alert("Pembayaran kurang!");
     }
