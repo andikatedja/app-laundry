@@ -25,7 +25,46 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <table id="tbl-riwayat-transaksi" class="table dt-responsive nowrap" style="width: 100%">
+                        <form action="" method="get">
+                            <div class="form-group row">
+                                <label for="tahun" class="col-auto col-form-label">Tahun</label>
+                                <div class="col-auto">
+                                    <select class="form-control" id="tahun" name="year">
+                                        @foreach ($tahun as $item)
+                                        @if ($item->tahun == $year)
+                                        <option value="{{$item->Tahun}}" selected>{{$item->Tahun}}</option>
+                                        @else
+                                        <option value="{{$item->Tahun}}">{{$item->Tahun}}</option>
+                                        @endif
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <label for="bulan" class="col-auto col-form-label">Bulan</label>
+                                <div class="col-auto">
+                                    <select class="form-control" id="bulan" name="month">
+                                        @for ($i = 1; $i <= 12; $i++) @if ($i==$month) <option value="{{$i}}" selected>
+                                            {{$i}}</option>
+                                            @else
+                                            <option value="{{$i}}">{{$i}}</option>
+                                            @endif
+                                            @endfor
+                                    </select>
+                                </div>
+                                <div class="col-auto">
+                                    <button type="submit" id="btn-filter" class="btn btn-primary">Filter</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="mb-3">Transaksi Belum Selesai</h4>
+                        <table id="tbl-transaksi-belum" class="table dt-responsive nowrap" style="width: 100%">
                             <thead class="thead-light">
                                 <tr>
                                     <th>No</th>
@@ -38,9 +77,13 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @php
+                                $i = 1
+                                @endphp
                                 @foreach ($transaksi as $item)
+                                @if ($item->finish_date == null)
                                 <tr>
-                                    <td>{{$loop->iteration}}</td>
+                                    <td>{{$i++}}</td>
                                     <td>{{$item->id}}</td>
                                     <td>{{date('d F Y', strtotime($item->created_at))}}</td>
                                     <td>{{$item->member->name}}</td>
@@ -63,12 +106,72 @@
                                     <td>{{$item->total}}</td>
                                     <td>
                                         <a href="#" class="badge badge-info btn-detail" data-toggle="modal"
-                                            data-target="#detailTransaksiModal"
-                                            data-id="{{$item->id}}">Detail</a>
+                                            data-target="#detailTransaksiModal" data-id="{{$item->id}}">Detail</a>
                                         <a href="{{url('admin/cetak-transaksi') . '/' . $item->id}}"
                                             class="badge badge-primary" target="_blank">Cetak</a>
                                     </td>
                                 </tr>
+                                @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="mb-3">Transaksi Selesai</h4>
+                        <table id="tbl-transaksi-selesai" class="table dt-responsive nowrap" style="width: 100%">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>No</th>
+                                    <th>ID Transaksi</th>
+                                    <th>Tanggal</th>
+                                    <th>Nama Member</th>
+                                    <th>Status</th>
+                                    <th>Total Harga</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php
+                                $i = 1
+                                @endphp
+                                @foreach ($transaksi as $item)
+                                @if ($item->finish_date != null)
+                                <tr>
+                                    <td>{{$i++}}</td>
+                                    <td>{{$item->id}}</td>
+                                    <td>{{date('d F Y', strtotime($item->created_at))}}</td>
+                                    <td>{{$item->member->name}}</td>
+                                    <td>
+                                        @if ($item->status_id == 3)
+                                        <span class="text-success">Selesai</span>
+                                        @else
+                                        <select name="" id="status" data-id="{{$item->id}}"
+                                            data-val="{{$item->status_id}}" class="select-status">
+                                            @foreach ($status as $s)
+                                            @if ($item->status_id == $s->id)
+                                            <option selected value="{{$s->id}}">{{$s->name}}</option>
+                                            @else
+                                            <option value="{{$s->id}}">{{$s->name}}</option>
+                                            @endif
+                                            @endforeach
+                                        </select>
+                                        @endif
+                                    </td>
+                                    <td>{{$item->total}}</td>
+                                    <td>
+                                        <a href="#" class="badge badge-info btn-detail" data-toggle="modal"
+                                            data-target="#detailTransaksiModal" data-id="{{$item->id}}">Detail</a>
+                                        <a href="{{url('admin/cetak-transaksi') . '/' . $item->id}}"
+                                            class="badge badge-primary" target="_blank">Cetak</a>
+                                    </td>
+                                </tr>
+                                @endif
                                 @endforeach
                             </tbody>
                         </table>
@@ -124,7 +227,8 @@
 <script src="{{asset('js/ajax.js')}}"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#tbl-riwayat-transaksi').DataTable();
+        $('#tbl-transaksi-selesai').DataTable();
+        $('#tbl-transaksi-belum').DataTable();
     });
 </script>
 @endsection

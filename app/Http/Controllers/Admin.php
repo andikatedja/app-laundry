@@ -26,7 +26,7 @@ class Admin extends Controller
     public function index()
     {
         $user = Auth::user();
-        $transaksi_terbaru = Transaction::orderByDesc('created_at')->limit(10)->get();
+        $transaksi_terbaru = Transaction::where('finish_date', null)->orderByDesc('created_at')->limit(10)->get();
         $banyak_member = User::where('role', 2)->count();
         $banyak_transaksi = Transaction::count();
         return view('admin.index', compact('user', 'transaksi_terbaru', 'banyak_member', 'banyak_transaksi'));
@@ -259,12 +259,24 @@ class Admin extends Controller
     /**
      * Fungsi untuk menampilkan halaman riwayat transaksi
      */
-    public function riwayatTransaksi()
+    public function riwayatTransaksi(Request $request)
     {
+        $month = date('m');
+        $year = date('Y');
+        $monthQuery = $request->query('month');
+        $yearQuery = $request->query('year');
+        if ($monthQuery && $yearQuery) {
+            $month = $monthQuery;
+            $year = $yearQuery;
+        }
         $user = Auth::user();
-        $transaksi = Transaction::all();
+        $transaksi = Transaction::whereYear('created_at', $year)
+            ->whereMonth('created_at', $month)
+            ->orderBy('created_at', 'DESC')
+            ->get();
         $status = Status::all();
-        return view('admin.riwayat_transaksi', compact('user', 'transaksi', 'status'));
+        $tahun = Transaction::selectRaw('YEAR(created_at) as Tahun')->distinct()->get();
+        return view('admin.riwayat_transaksi', compact('user', 'transaksi', 'status', 'tahun', 'year', 'month'));
     }
 
     /**

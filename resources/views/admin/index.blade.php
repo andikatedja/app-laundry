@@ -55,7 +55,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <h3 class="mb-3">10 Transaksi Terbaru:</h3>
+                        <h3 class="mb-3">Transaksi Berjalan: </h3>
                         <table class="table">
                             <thead class="thead-light">
                                 <tr>
