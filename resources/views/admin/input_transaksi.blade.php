@@ -202,7 +202,8 @@
                     </div>
                     <div class="form-group">
                         <label for="input-bayar">Bayar</label>
-                        <input type="number" class="form-control form-control-lg" id="input-bayar">
+                        <input type="number" class="form-control form-control-lg" id="input-bayar"
+                            name="payment-amount">
                     </div>
                     <h4>Kembalian : <span id="kembalian"></span></h4>
                 </div>
