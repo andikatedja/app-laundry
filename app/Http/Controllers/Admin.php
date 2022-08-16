@@ -331,7 +331,8 @@ class Admin extends Controller
         $barang = Item::all();
         $servis = Service::all();
         $kategori = Category::all();
-        return view('admin.harga', compact('user', 'satuan', 'kiloan', 'barang', 'servis', 'kategori'));
+        $serviceType = ServiceType::all();
+        return view('admin.harga', compact('user', 'satuan', 'kiloan', 'barang', 'servis', 'kategori', 'serviceType'));
     }
 
     /**
@@ -408,6 +409,27 @@ class Admin extends Controller
         return redirect('admin/harga')->with('success', 'Servis baru berhasil ditambah!');
     }
 
+    /**
+     * Fungsi untuk mengambil biaya service type
+     */
+    public function getServiceType(Request $request)
+    {
+        $serviceTypeId = $request->input('id_cost');
+        $serviceType = ServiceType::where('id', $serviceTypeId)->first();
+        return response()->json($serviceType);
+    }
+
+    /**
+     * Fungsi untuk mengubah service type
+     */
+    public function updateServiceType(Request $request)
+    {
+        $serviceTypeId = $request->input('id_cost');
+        $serviceType = ServiceType::where('id', $serviceTypeId)->first();
+        $serviceType->cost = $request->input('cost');
+        $serviceType->save();
+        return redirect('admin/harga')->with('success', 'Biaya service berhasil diubah!');
+    }
 
     /**
      * Fungsi untuk menampilkan halaman daftar member

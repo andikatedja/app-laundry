@@ -62,16 +62,20 @@
                         @endforeach
 
                         <tr>
-                            <td colspan="6" class="text-center"><b>Total Harga</b></td>
+                            <td colspan="6" class="text-center"><b>Sub Total Harga</b></td>
                             <td>{{$tot}}</td>
                         </tr>
                         <tr>
-                            <td colspan="6" class="text-center"><b>Potongan</b></td>
-                            <td>{{$dataTransaksi->discount}}</td>
+                            <td colspan="6" class="text-center"><b>{{$dataTransaksi->service_type->name}}</b></td>
+                            <td>{{$dataTransaksi->service_type->cost}}</td>
                         </tr>
                         <tr>
-                            <td colspan="6" class="text-center"><b>Dibayar</b></td>
-                            <td>{{$dataTransaksi->total}}</td>
+                            <td colspan="6" class="text-center"><b>Potongan</b></td>
+                            <td>- {{$dataTransaksi->discount}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" class="text-center"><b>Total</b></td>
+                            <td><b>{{$dataTransaksi->total}}</b></td>
                         </tr>
                     </tbody>
                 </table>

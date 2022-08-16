@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -60,6 +61,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['language', 'islogin']], fun
     Route::post('get-month', 'Admin@getMonth');
     Route::post('cetak-laporan', 'Admin@cetakLaporan');
     Route::get('laporanview', 'Admin@laporanview');
+    Route::get('get-service-type', [Admin::class, 'getServiceType']);
+    Route::patch('update-service-type', [Admin::class, 'updateServiceType']);
 });
 
 //Member routes
