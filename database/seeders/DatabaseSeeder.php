@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Database\Seeders\CategorySeeder;
 use Database\Seeders\StatusSeeder;
 use Database\Seeders\UserSeeder;
+use Database\Seeders\ServiceTypeSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -21,7 +22,8 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             StatusSeeder::class,
             ServiceSeeder::class,
-            ItemSeeder::class
+            ItemSeeder::class,
+            ServiceTypeSeeder::class
         ]);
     }
 }
