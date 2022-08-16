@@ -187,6 +187,15 @@
                         </select>
                     </div>
                     <div class="form-group">
+                        <label for="service-type">Tipe Servis</label>
+                        <select name="service-type" class="form-control form-control-lg" id="service-type">
+                            @foreach ($serviceType as $type)
+                            <option value="{{$type->id}}" data-type-cost="{{$type->cost}}">
+                                {{$type->name}} ({{$type->cost}})</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="total-harga">Harga Yang Dibayar</label>
                         <input type="number" class="form-control form-control-lg" id="total-harga"
                             value="{{isset($total_harga) ? $total_harga : '0'}}" disabled>

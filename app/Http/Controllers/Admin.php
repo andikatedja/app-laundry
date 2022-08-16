@@ -8,6 +8,7 @@ use App\ComplaintSuggestion;
 use App\Item;
 use App\PriceList;
 use App\Service;
+use App\ServiceType;
 use App\Status;
 use App\Transaction;
 use App\TransactionDetail;
@@ -17,6 +18,7 @@ use App\Voucher;
 use PDF;
 use DateTime;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class Admin extends Controller
 {
@@ -41,6 +43,7 @@ class Admin extends Controller
         $barang = Item::all();
         $kategori = Category::all();
         $servis = Service::all();
+        $serviceType = ServiceType::all();
 
         // Mengecek apakah ada sesi transaksi atau tidak
         if ($request->session()->has('transaksi') && $request->session()->has('id_member_transaksi')) {
@@ -57,9 +60,9 @@ class Admin extends Controller
             foreach ($transaksi as &$t) {
                 $total_harga += $t['harga'];
             }
-            return view('admin.input_transaksi', compact('user', 'barang', 'kategori', 'servis', 'transaksi', 'id_member_transaksi', 'total_harga', 'vouchers'));
+            return view('admin.input_transaksi', compact('user', 'barang', 'kategori', 'servis', 'serviceType', 'transaksi', 'id_member_transaksi', 'total_harga', 'vouchers'));
         }
-        return view('admin.input_transaksi', compact('user', 'barang', 'kategori', 'servis'));
+        return view('admin.input_transaksi', compact('user', 'barang', 'kategori', 'servis', 'serviceType'));
     }
 
     /**
@@ -173,6 +176,7 @@ class Admin extends Controller
      */
     public function simpanTransaksi(Request $request)
     {
+        DB::beginTransaction();
         $id_member = $request->session()->get('id_member_transaksi');
         // Ambil id admin yang sedang login
         $id_admin = Auth::user()->id;
@@ -201,13 +205,22 @@ class Admin extends Controller
             $user_voucher->save();
         }
 
+        // Cek apakah menggunakan service type non reguler
+        if ($request->input('service-type') != 1) {
+            $serviceTypeCost = ServiceType::where('id', $request->input('service-type'))->first();
+            $cost = $serviceTypeCost->cost;
+            // Tambahkan harga dengan cost
+            $total_harga += $cost;
+        }
+
         $transaction = new Transaction([
             'status_id' => 1,
             'member_id' => $id_member,
             'admin_id' => $id_admin,
             'finish_date' => null,
             'discount' => $potongan,
-            'total' => $total_harga
+            'total' => $total_harga,
+            'service_type_id' => $request->input('service-type')
         ]);
         $transaction->save();
 
@@ -234,6 +247,8 @@ class Admin extends Controller
 
         $request->session()->forget('transaksi');
         $request->session()->forget('id_member_transaksi');
+
+        DB::commit();
         return redirect('admin/input-transaksi')->with('success', 'Transaksi berhasil disimpan')->with('id_trs', $transaction->id);
     }
 
