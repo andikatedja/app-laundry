@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('transactions', function (Blueprint $table) {
-            $table->foreignId('service_type_id')->after('status_id')->default(0)->constrained();
+            $table->foreignId('service_type_id')->after('status_id')->default(1)->constrained();
         });
     }
 
