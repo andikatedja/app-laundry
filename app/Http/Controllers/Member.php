@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\ComplaintSuggestion;
 use Illuminate\Http\Request;
 use App\PriceList;
+use App\ServiceType;
 use App\Transaction;
 use App\TransactionDetail;
 use App\User;
@@ -33,8 +34,9 @@ class Member extends Controller
         $user = Auth::user();
         $satuan = PriceList::where('category_id', 1)->get();
         $kiloan = PriceList::where('category_id', 2)->get();
+        $serviceType = ServiceType::all();
 
-        return view('member.harga', compact('user', 'satuan', 'kiloan'));
+        return view('member.harga', compact('user', 'satuan', 'kiloan', 'serviceType'));
     }
 
     /**
