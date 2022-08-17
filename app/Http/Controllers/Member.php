@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\ComplaintSuggestion;
 use Illuminate\Http\Request;
 use App\PriceList;
+use App\ServiceType;
 use App\Transaction;
 use App\TransactionDetail;
 use App\User;
@@ -20,7 +21,11 @@ class Member extends Controller
     public function index()
     {
         $user = Auth::user();
-        $transaksi_terakhir = Transaction::where('member_id', $user->id)->get();
+        $transaksi_terakhir = Transaction::where('member_id', $user->id)
+            ->orderBy('created_at', 'DESC')
+            ->orderBy('status_id', 'ASC')
+            ->limit(10)
+            ->get();
 
         return view('member.index', compact('user', 'transaksi_terakhir'));
     }
@@ -33,8 +38,9 @@ class Member extends Controller
         $user = Auth::user();
         $satuan = PriceList::where('category_id', 1)->get();
         $kiloan = PriceList::where('category_id', 2)->get();
+        $serviceType = ServiceType::all();
 
-        return view('member.harga', compact('user', 'satuan', 'kiloan'));
+        return view('member.harga', compact('user', 'satuan', 'kiloan', 'serviceType'));
     }
 
     /**
@@ -43,7 +49,10 @@ class Member extends Controller
     public function riwayatTransaksi()
     {
         $user = Auth::user();
-        $transaksi = Transaction::where('member_id', $user->id)->get();
+        $transaksi = Transaction::where('member_id', $user->id)
+            ->orderBy('created_at', 'DESC')
+            ->orderBy('status_id', 'ASC')
+            ->get();
         return view('member.riwayat', compact('user', 'transaksi'));
     }
 

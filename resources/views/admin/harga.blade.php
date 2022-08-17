@@ -177,6 +177,34 @@
                                 </table>
                             </div>
                         </div>
+                        <hr>
+                        <h5 class="mt-3">Daftar Tipe Service</h5>
+                        <div class="tab-content mt-3" id="myTabContent">
+                            <table id="tbl-kiloan" class="table dataTable dt-responsive nowrap" style="width:100%">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Nama Tipe Service</th>
+                                        <th>Biaya</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($serviceType as $item)
+                                    <tr>
+                                        <td>{{$loop->iteration}}</td>
+                                        <td>{{$item->name}}</td>
+                                        <td>{{$item->cost}}</td>
+                                        <td>
+                                            <a href="#" class="badge badge-warning btn-update-cost"
+                                                data-id="{{$item->id}}" data-toggle="modal"
+                                                data-target="#updateCostModal">Ubah Harga</a>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -206,6 +234,35 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="submit" class="btn btn-primary">Ubah Harga</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="updateCostModal" tabindex="-1" role="dialog" aria-labelledby="updateCostModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateCostModalLabel">Ubah Biaya Service</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{{url('admin/update-service-type')}}" method="POST">
+                    @method('PATCH')
+                    @csrf
+                    <input id="id-cost-modal" type="hidden" name="id_cost">
+                    <div class="form-group">
+                        <label for="cost-modal">Biaya</label>
+                        <input type="number" class="form-control" id="cost-modal" name="cost">
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Ubah Biaya</button>
                 </form>
             </div>
         </div>

@@ -20,3 +20,19 @@ $(document).on("click", ".btn-ubah-harga", function () {
         },
     });
 });
+
+$(document).on("click", ".btn-update-cost", function () {
+    const id_cost = $(this).data("id");
+    $("#id-cost-modal").val(id_cost);
+    $.ajax({
+        url: base_url + "/get-service-type",
+        data: {
+            id_cost: id_cost,
+        },
+        method: "GET",
+        dataType: "json",
+        success: function (data) {
+            $("#cost-modal").val(data.cost);
+        },
+    });
+});

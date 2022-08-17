@@ -30,4 +30,9 @@ class Transaction extends Model
     {
         return $this->hasMany(TransactionDetail::class);
     }
+
+    public function service_type()
+    {
+        return $this->belongsTo(ServiceType::class);
+    }
 }

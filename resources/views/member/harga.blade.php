@@ -83,6 +83,31 @@
                         </div>
                     </div>
                 </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="mt-3">Daftar Tipe Service</h5>
+                        <div class="tab-content mt-3" id="myTabContent">
+                            <table id="tbl-kiloan" class="table dataTable dt-responsive nowrap" style="width:100%">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Nama Tipe Service</th>
+                                        <th>Biaya</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($serviceType as $item)
+                                    <tr>
+                                        <td>{{$loop->iteration}}</td>
+                                        <td>{{$item->name}}</td>
+                                        <td>{{$item->cost}}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
