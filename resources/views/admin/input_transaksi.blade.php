@@ -173,6 +173,16 @@
                             value="{{isset($total_harga) ? $total_harga : '0'}}" disabled>
                     </div>
                     <div class="form-group">
+                        <label for="service-type">Tipe Servis</label>
+                        <select name="service-type" class="form-control form-control-lg" id="service-type" required>
+                            <option value="" selected hidden disabled>Pilih tipe service</option>
+                            @foreach ($serviceType as $type)
+                            <option value="{{$type->id}}" data-type-cost="{{$type->cost}}">
+                                {{$type->name}} ({{$type->cost}})</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="voucher">Voucher</label>
                         <select name="voucher" class="form-control form-control-lg" id="voucher">
                             @if (isset($vouchers) && $vouchers != [])
@@ -184,15 +194,6 @@
                             @else
                             <option value="0" data-potong="0">Tidak ada voucher yang dimiliki</option>
                             @endif
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="service-type">Tipe Servis</label>
-                        <select name="service-type" class="form-control form-control-lg" id="service-type">
-                            @foreach ($serviceType as $type)
-                            <option value="{{$type->id}}" data-type-cost="{{$type->cost}}">
-                                {{$type->name}} ({{$type->cost}})</option>
-                            @endforeach
                         </select>
                     </div>
                     <div class="form-group">

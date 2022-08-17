@@ -206,7 +206,7 @@ class Admin extends Controller
         }
 
         // Cek apakah menggunakan service type non reguler
-        if ($request->input('service-type') != 1) {
+        if ($request->input('service-type') != 0) {
             $serviceTypeCost = ServiceType::where('id', $request->input('service-type'))->first();
             $cost = $serviceTypeCost->cost;
             // Tambahkan harga dengan cost

@@ -24,23 +24,18 @@ $("#btn-simpan").on("click", function (event) {
 
 $("#voucher").on("change", function () {
     let potongan = $("option:selected", this).data("potong");
-    fixTotal += tempPotongan;
     tempPotongan = potongan;
-    let total = fixTotal;
-    total -= potongan;
-    total < 0 ? (total = 0) : total;
-    fixTotal = total;
+    fixTotal = subTotal - tempPotongan + tempCost;
+    fixTotal < 0 ? (fixTotal = 0) : fixTotal;
     $("#total-harga").val(fixTotal);
     $("#kembalian").html($("#input-bayar").val() - fixTotal);
 });
 
 $("#service-type").on("change", function () {
     let cost = $("option:selected", this).data("type-cost");
-    fixTotal -= tempCost;
     tempCost = cost;
-    let total = fixTotal;
-    total += cost;
-    fixTotal = total;
+    fixTotal = subTotal + tempCost - tempPotongan;
+    fixTotal < 0 ? (fixTotal = 0) : fixTotal;
     $("#total-harga").val(fixTotal);
     $("#kembalian").html($("#input-bayar").val() - fixTotal);
 });
