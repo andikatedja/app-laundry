@@ -23,7 +23,8 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5>ID Transaksi: {{$id_transaksi}}</h5>
+                        <h3>ID Transaksi: {{$id_transaksi}}</h3>
+                        <hr>
                         <table id="tbl-detail" class="table dataTable dt-responsive nowrap" style="width:100%">
                             <thead class="thead-light">
                                 <tr>
@@ -50,6 +51,12 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        <hr>
+                        <h5>Tipe Servis: {{$transaksi[0]->transaction->service_type->name}}</h5>
+                        <h5>Biaya Servis: {{$transaksi[0]->transaction->service_cost}}</h5>
+                        <h5>Potongan: {{$transaksi[0]->transaction->discount}}</h5>
+                        <hr>
+                        <h4>Total Biaya: {{$transaksi[0]->transaction->total}}</h4>
                     </div>
                 </div>
             </div>
@@ -66,7 +73,13 @@
 <script src="{{asset('vendor/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#tbl-detail').DataTable();
+        $('#tbl-detail').DataTable({
+            "searching": false,
+            "bPaginate": false,
+            "bLengthChange": false,
+            "bFilter": false,
+            "bInfo": false
+        });
     });
 </script>
 @endsection

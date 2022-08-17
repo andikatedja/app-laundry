@@ -322,7 +322,7 @@ class Admin extends Controller
      */
     public function ambilDetailTransaksi(Request $request)
     {
-        $detail_transaksi = TransactionDetail::with(['price_list', 'price_list.item', 'price_list.service', 'price_list.category'])->where('transaction_id', $request->input('id_transaksi'))->get();
+        $detail_transaksi = TransactionDetail::with(['transaction', 'transaction.service_type', 'price_list', 'price_list.item', 'price_list.service', 'price_list.category'])->where('transaction_id', $request->input('id_transaksi'))->get();
         echo json_encode($detail_transaksi);
     }
 
