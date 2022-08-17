@@ -220,7 +220,8 @@ class Admin extends Controller
             'finish_date' => null,
             'discount' => $potongan,
             'total' => $total_harga,
-            'service_type_id' => $request->input('service-type')
+            'service_type_id' => $request->input('service-type'),
+            'service_cost' => $cost
         ]);
         $transaction->save();
 

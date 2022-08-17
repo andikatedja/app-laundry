@@ -67,7 +67,7 @@
                         </tr>
                         <tr>
                             <td colspan="6" class="text-center"><b>{{$dataTransaksi->service_type->name}}</b></td>
-                            <td>{{$dataTransaksi->service_type->cost}}</td>
+                            <td>{{$dataTransaksi->service_cost}}</td>
                         </tr>
                         <tr>
                             <td colspan="6" class="text-center"><b>Potongan</b></td>

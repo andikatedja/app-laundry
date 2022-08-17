@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name', 128);
             $table->text('description');
-            $table->unsignedSmallInteger('cost');
+            $table->unsignedInteger('cost');
             $table->timestamps();
         });
     }
