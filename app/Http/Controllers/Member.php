@@ -21,7 +21,11 @@ class Member extends Controller
     public function index()
     {
         $user = Auth::user();
-        $transaksi_terakhir = Transaction::where('member_id', $user->id)->get();
+        $transaksi_terakhir = Transaction::where('member_id', $user->id)
+            ->orderBy('created_at', 'DESC')
+            ->orderBy('status_id', 'ASC')
+            ->limit(10)
+            ->get();
 
         return view('member.index', compact('user', 'transaksi_terakhir'));
     }
@@ -45,7 +49,10 @@ class Member extends Controller
     public function riwayatTransaksi()
     {
         $user = Auth::user();
-        $transaksi = Transaction::where('member_id', $user->id)->get();
+        $transaksi = Transaction::where('member_id', $user->id)
+            ->orderBy('created_at', 'DESC')
+            ->orderBy('status_id', 'ASC')
+            ->get();
         return view('member.riwayat', compact('user', 'transaksi'));
     }
 
