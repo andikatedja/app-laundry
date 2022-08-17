@@ -28,10 +28,19 @@ class Admin extends Controller
     public function index()
     {
         $user = Auth::user();
-        $transaksi_terbaru = Transaction::where('finish_date', null)->orderByDesc('created_at')->limit(10)->get();
+        $transaksi_terbaru = Transaction::where('finish_date', null)
+            ->where('service_type_id', 1)
+            ->orderByDesc('created_at')
+            ->limit(10)
+            ->get();
         $banyak_member = User::where('role', 2)->count();
         $banyak_transaksi = Transaction::count();
-        return view('admin.index', compact('user', 'transaksi_terbaru', 'banyak_member', 'banyak_transaksi'));
+        $priority_service = Transaction::where('finish_date', null)
+            ->where('service_type_id', 2)
+            ->orderByDesc('created_at')
+            ->limit(10)
+            ->get();
+        return view('admin.index', compact('user', 'transaksi_terbaru', 'banyak_member', 'banyak_transaksi', 'priority_service'));
     }
 
     /**
@@ -286,13 +295,26 @@ class Admin extends Controller
             $year = $yearQuery;
         }
         $user = Auth::user();
-        $transaksi = Transaction::whereYear('created_at', $year)
+        $ongoing_transaction = Transaction::whereYear('created_at', $year)
             ->whereMonth('created_at', $month)
+            ->where('service_type_id', 1)
+            ->where('finish_date', null)
+            ->orderBy('created_at', 'DESC')
+            ->get();
+        $ongoing_priority_transaction = Transaction::whereYear('created_at', $year)
+            ->whereMonth('created_at', $month)
+            ->where('service_type_id', 2)
+            ->where('finish_date', null)
+            ->orderBy('created_at', 'DESC')
+            ->get();
+        $finished_transaction = Transaction::whereYear('created_at', $year)
+            ->whereMonth('created_at', $month)
+            ->where('finish_date', '!=', null)
             ->orderBy('created_at', 'DESC')
             ->get();
         $status = Status::all();
         $tahun = Transaction::selectRaw('YEAR(created_at) as Tahun')->distinct()->get();
-        return view('admin.riwayat_transaksi', compact('user', 'transaksi', 'status', 'tahun', 'year', 'month'));
+        return view('admin.riwayat_transaksi', compact('user', 'status', 'tahun', 'year', 'month', 'ongoing_transaction', 'ongoing_priority_transaction', 'finished_transaction'));
     }
 
     /**

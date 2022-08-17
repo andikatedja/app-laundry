@@ -55,6 +55,35 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
+                        <h3 class="mb-3">Transaksi Berjalan (Priority Service): </h3>
+                        <table class="table">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($priority_service as $item)
+                                <tr>
+                                    <td>{{$loop->iteration}}</td>
+                                    <td>{{date('d F Y', strtotime($item->created_at))}}</td>
+                                    <td>
+                                        @if ($item->status_id != '3')
+                                        <span class="text-warning">{{$item->status->name}}</span>
+                                        @else
+                                        <span class="text-success">{{$item->status->name}}</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
                         <h3 class="mb-3">Transaksi Berjalan: </h3>
                         <table class="table">
                             <thead class="thead-light">
