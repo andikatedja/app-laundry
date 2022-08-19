@@ -77,6 +77,10 @@
                             <td colspan="6" class="text-center"><b>Total</b></td>
                             <td><b>{{$dataTransaksi->total}}</b></td>
                         </tr>
+                        <tr>
+                            <td colspan="6" class="text-center"><b>Dibayar</b></td>
+                            <td><b>{{$dataTransaksi->payment_amount}}</b></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

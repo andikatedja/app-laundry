@@ -256,6 +256,7 @@
                     </tbody>
                 </table>
                 <h5>Tipe Servis: <span id="service-type"></span></h5>
+                <h5>Dibayar: <span id="payment-amount"></span></h5>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

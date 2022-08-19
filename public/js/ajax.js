@@ -47,6 +47,7 @@ $(document).on("click", ".btn-detail", function () {
             });
             $("#tbl-ajax").html(table);
             $("#service-type").html(data[0].transaction.service_type.name);
+            $("#payment-amount").html(data[0].transaction.payment_amount);
         },
     });
 });

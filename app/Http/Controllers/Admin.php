@@ -222,6 +222,11 @@ class Admin extends Controller
             $total_harga += $cost;
         }
 
+        // Check if payment < total
+        if ($request->input('payment-amount') < $total_harga) {
+            return redirect('admin/input-transaksi')->with('error', 'Pembayaran kurang');
+        }
+
         $transaction = new Transaction([
             'status_id' => 1,
             'member_id' => $id_member,
@@ -230,7 +235,8 @@ class Admin extends Controller
             'discount' => $potongan,
             'total' => $total_harga,
             'service_type_id' => $request->input('service-type'),
-            'service_cost' => $cost
+            'service_cost' => $cost,
+            'payment_amount' => $request->input('payment-amount'),
         ]);
         $transaction->save();
 
