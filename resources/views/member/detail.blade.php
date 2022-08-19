@@ -57,6 +57,7 @@
                         <h5>Potongan: {{$transaksi[0]->transaction->discount}}</h5>
                         <hr>
                         <h4>Total Biaya: {{$transaksi[0]->transaction->total}}</h4>
+                        <h4>Dibayar: {{$transaksi[0]->transaction->payment_amount}}</h4>
                     </div>
                 </div>
             </div>
