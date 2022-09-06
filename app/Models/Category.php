@@ -1,18 +1,18 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Status extends Model
+class Category extends Model
 {
     use HasFactory;
 
     protected $guarded = ['id'];
 
-    public function transactions()
+    public function price_lists()
     {
-        return $this->hasMany(Transaction::class);
+        return $this->hasMany(PriceList::class);
     }
 }

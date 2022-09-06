@@ -1,18 +1,18 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Voucher extends Model
+class Item extends Model
 {
     use HasFactory;
 
     protected $guarded = ['id'];
 
-    public function user_vouchers()
+    public function price_lists()
     {
-        return $this->hasMany(UserVoucher::class);
+        return $this->hasMany(PriceList::class);
     }
 }

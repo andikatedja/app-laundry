@@ -1,18 +1,18 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ServiceType extends Model
+class Service extends Model
 {
     use HasFactory;
 
     protected $guarded = ['id'];
 
-    public function transaction()
+    public function price_lists()
     {
-        return $this->hasMany(Transaction::class);
+        return $this->hasMany(PriceList::class);
     }
 }

@@ -1,11 +1,11 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TransactionDetail extends Model
+class ServiceType extends Model
 {
     use HasFactory;
 
@@ -13,11 +13,6 @@ class TransactionDetail extends Model
 
     public function transaction()
     {
-        return $this->belongsTo(Transaction::class);
-    }
-
-    public function price_list()
-    {
-        return $this->belongsTo(PriceList::class);
+        return $this->hasMany(Transaction::class);
     }
 }

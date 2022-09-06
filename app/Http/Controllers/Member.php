@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\ComplaintSuggestion;
+use App\Models\ComplaintSuggestion;
 use Illuminate\Http\Request;
-use App\PriceList;
-use App\ServiceType;
-use App\Transaction;
-use App\TransactionDetail;
-use App\User;
-use App\UserVoucher;
-use App\Voucher;
+use App\Models\PriceList;
+use App\Models\ServiceType;
+use App\Models\Transaction;
+use App\Models\TransactionDetail;
+use App\Models\User;
+use App\Models\UserVoucher;
+use App\Models\Voucher;
 use Illuminate\Support\Facades\Auth;
 
 class Member extends Controller
