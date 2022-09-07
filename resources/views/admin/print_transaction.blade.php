@@ -23,8 +23,8 @@
                 <p>No Transaksi: {{$id}}</p>
             </div>
             <div class="col-6 text-right">
-                <p>{{date('d F Y', strtotime($dataTransaksi->created_at))}}</p>
-                <p>{{$dataTransaksi->member->name}}</p>
+                <p>{{date('d F Y', strtotime($transaction->created_at))}}</p>
+                <p>{{$transaction->member->name}}</p>
             </div>
         </div>
         <div class="row">
@@ -46,7 +46,7 @@
                         $tot = 0;
                         @endphp
 
-                        @foreach ($dataTransaksi->transaction_details as $item)
+                        @foreach ($transaction->transaction_details as $item)
                         <tr>
                             <td>{{$loop->iteration}}</td>
                             <td>{{$item->price_list->item->name}}</td>
@@ -66,20 +66,20 @@
                             <td>{{$tot}}</td>
                         </tr>
                         <tr>
-                            <td colspan="6" class="text-center"><b>{{$dataTransaksi->service_type->name}}</b></td>
-                            <td>{{$dataTransaksi->service_cost}}</td>
+                            <td colspan="6" class="text-center"><b>{{$transaction->service_type->name}}</b></td>
+                            <td>{{$transaction->service_cost}}</td>
                         </tr>
                         <tr>
                             <td colspan="6" class="text-center"><b>Potongan</b></td>
-                            <td>- {{$dataTransaksi->discount}}</td>
+                            <td>- {{$transaction->discount}}</td>
                         </tr>
                         <tr>
                             <td colspan="6" class="text-center"><b>Total</b></td>
-                            <td><b>{{$dataTransaksi->total}}</b></td>
+                            <td><b>{{$transaction->total}}</b></td>
                         </tr>
                         <tr>
                             <td colspan="6" class="text-center"><b>Dibayar</b></td>
-                            <td><b>{{$dataTransaksi->payment_amount}}</b></td>
+                            <td><b>{{$transaction->payment_amount}}</b></td>
                         </tr>
                     </tbody>
                 </table>
@@ -91,7 +91,7 @@
                 <br>
                 <br>
                 <br>
-                <p>{{$dataTransaksi->admin->name}}</p>
+                <p>{{$transaction->admin->name}}</p>
             </div>
             <div class="col-4"></div>
             <div class="col-4 text-center">
@@ -99,7 +99,7 @@
                 <br>
                 <br>
                 <br>
-                <p>{{$dataTransaksi->member->name}}</p>
+                <p>{{$transaction->member->name}}</p>
             </div>
         </div>
     </div>

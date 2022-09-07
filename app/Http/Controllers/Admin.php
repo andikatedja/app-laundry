@@ -23,137 +23,153 @@ use Illuminate\Support\Facades\DB;
 class Admin extends Controller
 {
     /**
-     * Fungsi index untuk menampilkan halaman dashboard admin
+     * Function to show admin dashboard view
+     *
+     * @return void
      */
     public function index()
     {
         $user = Auth::user();
-        $transaksi_terbaru = Transaction::where('finish_date', null)
+
+        $recentTransactions = Transaction::where('finish_date', null)
             ->where('service_type_id', 1)
             ->orderByDesc('created_at')
             ->limit(10)
             ->get();
-        $banyak_member = User::where('role', 2)->count();
-        $banyak_transaksi = Transaction::count();
-        $priority_service = Transaction::where('finish_date', null)
+
+        $membersCount = User::where('role', 2)->count();
+
+        $transactionsCount = Transaction::count();
+
+        $priorityTransactions = Transaction::where('finish_date', null)
             ->where('service_type_id', 2)
             ->orderByDesc('created_at')
             ->limit(10)
             ->get();
-        return view('admin.index', compact('user', 'transaksi_terbaru', 'banyak_member', 'banyak_transaksi', 'priority_service'));
+
+        return view('admin.index', compact('user', 'recentTransactions', 'membersCount', 'transactionsCount', 'priorityTransactions'));
     }
 
     /**
-     * Fungsi untuk menampilkan halaman input transaksi
+     * Function to show admin input transaction view
+     *
+     * @param Request $request
+     * @return void
      */
     public function inputTransaksi(Request $request)
     {
         $user = Auth::user();
-        $barang = Item::all();
-        $kategori = Category::all();
-        $servis = Service::all();
-        $serviceType = ServiceType::all();
+        $items = Item::all();
+        $categories = Category::all();
+        $services = Service::all();
+        $serviceTypes = ServiceType::all();
 
-        // Mengecek apakah ada sesi transaksi atau tidak
-        if ($request->session()->has('transaksi') && $request->session()->has('id_member_transaksi')) {
-            $transaksi = $request->session()->get('transaksi');
-            $id_member_transaksi = $request->session()->get('id_member_transaksi');
-            // Mengambil voucher yang dimiliki member
+        // Check if there is an active transaction in session
+        if ($request->session()->has('transaction') && $request->session()->has('memberIdTransaction')) {
+            $sessionTransaction = $request->session()->get('transaction');
+
+            $memberIdSessionTransaction = $request->session()->get('memberIdTransaction');
+
+            // Get user's voucher
             $vouchers = UserVoucher::where([
-                'user_id' => $id_member_transaksi,
+                'user_id' => $memberIdSessionTransaction,
                 'used' => 0
             ])->get();
 
-            // Hitung total harga
-            $total_harga = 0;
-            foreach ($transaksi as &$t) {
-                $total_harga += $t['harga'];
+            // Sum total price
+            $totalPrice = 0;
+            foreach ($sessionTransaction as &$transaction) {
+                $totalPrice += $transaction['subTotal'];
             }
-            return view('admin.input_transaksi', compact('user', 'barang', 'kategori', 'servis', 'serviceType', 'transaksi', 'id_member_transaksi', 'total_harga', 'vouchers'));
+
+            return view('admin.transaction_input', compact('user', 'items', 'categories', 'services', 'serviceTypes', 'sessionTransaction', 'memberIdSessionTransaction', 'totalPrice', 'vouchers'));
         }
-        return view('admin.input_transaksi', compact('user', 'barang', 'kategori', 'servis', 'serviceType'));
+
+        return view('admin.transaction_input', compact('user', 'items', 'categories', 'services', 'serviceTypes'));
     }
 
     /**
-     * Fungsi untuk menambahkan transaksi baru ke dalam sesi (session) transaksi
+     * Method to add new transaction to session
+     *
+     * @param Request $request
+     * @return void
      */
     public function tambahTransaksi(Request $request)
     {
-        $id_barang = $request->input('barang');
-        $id_servis = $request->input('servis');
-        $id_kategori = $request->input('kategori');
-        $id_member = $request->input('id_member');
-        $banyak = $request->input('banyak');
+        $itemId = $request->input('item');
+        $serviceId = $request->input('service');
+        $categoryId = $request->input('category');
+        $memberId = $request->input('member-id');
+        $quantity = $request->input('quantity');
 
-        // Cek apakah harga tertera pada database
+        // Check if price list exist in database
         if (!PriceList::where([
-            'item_id' => $id_barang,
-            'category_id' => $id_kategori,
-            'service_id' => $id_servis
+            'item_id' => $itemId,
+            'category_id' => $categoryId,
+            'service_id' => $serviceId
         ])->exists()) {
             return redirect('admin/input-transaksi')->with('error', 'Harga tidak ditemukan!');
         }
 
-        //Cek member
-        if ($id_member != null && !User::where('id', $id_member)->where('role', 2)->exists()) {
+        // Check if member exist
+        if ($memberId != null && !User::where('id', $memberId)->where('role', 2)->exists()) {
             return redirect('admin/input-transaksi')->with('error', 'Member tidak ditemukan!');
         }
 
-        // Ambil harga dari database
-        $dbharga = PriceList::where([
-            'item_id' => $id_barang,
-            'category_id' => $id_kategori,
-            'service_id' => $id_servis
-        ])->pluck('price')[0];
+        // Get price list's price from database
+        $price = PriceList::where([
+            'item_id' => $itemId,
+            'category_id' => $categoryId,
+            'service_id' => $serviceId
+        ])->first()->price;
 
-        // Hitung subtotal
-        $harga = $dbharga * $banyak;
+        // Calculate sub total
+        $subTotal = $price * $quantity;
 
-        // Ambil nama barang, servis, kategori berdasarkan id
-        $nama_barang = Item::where('id', $id_barang)->pluck('name')[0];
-        $nama_servis = Service::where('id', $id_servis)->pluck('name')[0];
-        $nama_kategori = Category::where('id', $id_kategori)->pluck('name')[0];
+        // Get item name, service name, and category name based on id
+        $itemName = Item::where('id', $itemId)->first()->name;
+        $serviceName = Service::where('id', $serviceId)->first()->name;
+        $categoryName = Category::where('id', $categoryId)->first()->name;
 
-        // Membuat row baru untuk disimpan dalam session
-        $row_id = md5($id_member . serialize($id_barang) . serialize($id_servis) . serialize($id_kategori));
-
+        // make new transaction row to store in session
+        $rowId = md5($memberId . serialize($itemId) . serialize($serviceId) . serialize($categoryId));
         $data = [
-            $row_id => [
-                'id_barang' => $id_barang,
-                'nama_barang' => $nama_barang,
-                'id_kategori' => $id_kategori,
-                'nama_kategori' => $nama_kategori,
-                'id_servis' => $id_servis,
-                'nama_servis' => $nama_servis,
-                'banyak' => $banyak,
-                'harga' => $harga,
-                'row_id' => $row_id
+            $rowId => [
+                'itemId' => $itemId,
+                'itemName' => $itemName,
+                'categoryId' => $categoryId,
+                'categoryName' => $categoryName,
+                'serviceId' => $serviceId,
+                'serviceName' => $serviceName,
+                'quantity' => $quantity,
+                'subTotal' => $subTotal,
+                'rowId' => $rowId
             ]
         ];
 
-        // Jika tidak ada sesi transaksi, buat baru transaksi
-        if (!$request->session()->has('transaksi') && !$request->session()->has('id_member_transaksi')) {
-            $request->session()->put('transaksi', $data);
-            $request->session()->put('id_member_transaksi', $id_member);
+        // Check if there is no transaction session, create new session
+        if (!$request->session()->has('transaction') && !$request->session()->has('memberIdTransaction')) {
+            $request->session()->put('transaction', $data);
+            $request->session()->put('memberIdTransaction', $memberId);
         } else {
             $exist = 0;
-            $transaksi = $request->session()->get('transaksi');
+            $sessionTransaction = $request->session()->get('transaction');
 
-            // Mengecek apakah ada input transaksi yang sama, jika ada maka tambahkan banyak dan harga dari sesi transaksi
-            foreach ($transaksi as &$t) {
-                if ($t['id_barang'] == $id_barang && $t['id_kategori'] == $id_kategori && $t['id_servis'] == $id_servis) {
-                    $t['banyak'] += $banyak;
-                    $t['harga'] += $harga;
+            // Check if there is a same transaction. If exist, just increment the quantity and subtotal
+            foreach ($sessionTransaction as &$transaction) {
+                if ($transaction['itemId'] == $itemId && $transaction['categoryId'] == $categoryId && $transaction['serviceId'] == $serviceId) {
+                    $transaction['quantity'] += $quantity;
+                    $transaction['subTotal'] += $subTotal;
                     $exist++;
                 }
             }
 
-            // Cek jika tidak ada input transaksi yang sama, jika tidak ada maka tambahkan data baru ke sesi transaksi
+            // check if there is no same transaction, then insert new transaction to current transaction session
             if ($exist == 0) {
-                $newtransaksi = array_merge_recursive($transaksi, $data);
-                $request->session()->put('transaksi', $newtransaksi);
+                $newSessionTransaction = array_merge_recursive($sessionTransaction, $data);
+                $request->session()->put('transaction', $newSessionTransaction);
             } else {
-                $request->session()->put('transaksi', $transaksi);
+                $request->session()->put('transaction', $sessionTransaction);
             }
         }
 
@@ -161,20 +177,24 @@ class Admin extends Controller
     }
 
     /**
-     * Fungsi untuk menghapus transaksi dari sesi transaksi, diakses dari menekan tombol hapus
+     * Method for delete current transaction in session
+     *
+     * @param mixed $row_id
+     * @param Request $request
+     * @return void
      */
-    public function hapusTransaksi($row_id, Request $request)
+    public function hapusTransaksi(mixed $row_id, Request $request)
     {
-        $newtransaksi = $request->session()->get('transaksi');
-        unset($newtransaksi[$row_id]);
+        $sessionTransaction = $request->session()->get('transaction');
+        unset($sessionTransaction[$row_id]);
 
-        // Cek jika setelah unset transaksi menjadi kosong [] maka hapus semua sesi yang berhubungan dengan transaksi
-        if ($newtransaksi == []) {
-            $request->session()->forget('transaksi');
-            $request->session()->forget('id_member_transaksi');
+        // Check if after unset, the transaction session is empty ([]), then destroy all transaction session
+        if ($sessionTransaction == []) {
+            $request->session()->forget('transaction');
+            $request->session()->forget('memberIdTransaction');
             return redirect('admin/input-transaksi');
         } else {
-            $request->session()->put('transaksi', $newtransaksi);
+            $request->session()->put('transaction', $sessionTransaction);
         }
 
         return redirect('admin/input-transaksi');
@@ -186,32 +206,34 @@ class Admin extends Controller
     public function simpanTransaksi(Request $request)
     {
         DB::beginTransaction();
-        $id_member = $request->session()->get('id_member_transaksi');
-        // Ambil id admin yang sedang login
-        $id_admin = Auth::user()->id;
-        $transaksi = $request->session()->get('transaksi');
+
+        $memberId = $request->session()->get('memberIdTransaction');
+        $adminId = Auth::user()->id;
+        $sessionTransaction = $request->session()->get('transaction');
+
         // Hitung total harga
-        $total_harga = 0;
-        foreach ($transaksi as &$t) {
-            $total_harga += $t['harga'];
+        $totalPrice = 0;
+        foreach ($sessionTransaction as &$trs) {
+            $totalPrice += $trs['subTotal'];
         }
-        $potongan = 0;
+        $discount = 0;
 
         //Cek apakah ada voucher yang digunakan
         if ($request->input('voucher') != 0) {
             // Ambil banyak potongan dari database
 
-            $user_voucher = UserVoucher::where('id', $request->input('voucher'))->first();
-            $potongan = $user_voucher->voucher->discount_value;
+            $userVoucher = UserVoucher::where('id', $request->input('voucher'))->first();
+            $discount = $userVoucher->voucher->discount_value;
+
             // Kurangi harga dengan potongan
-            $total_harga -= $potongan;
-            if ($total_harga < 0) {
-                $total_harga = 0;
+            $totalPrice -= $discount;
+            if ($totalPrice < 0) {
+                $totalPrice = 0;
             }
 
             // Ganti status used pada tabel users_vouchers
-            $user_voucher->used = 1;
-            $user_voucher->save();
+            $userVoucher->used = 1;
+            $userVoucher->save();
         }
 
         // Cek apakah menggunakan service type non reguler
@@ -219,62 +241,65 @@ class Admin extends Controller
             $serviceTypeCost = ServiceType::where('id', $request->input('service-type'))->first();
             $cost = $serviceTypeCost->cost;
             // Tambahkan harga dengan cost
-            $total_harga += $cost;
+            $totalPrice += $cost;
         }
 
         // Check if payment < total
-        if ($request->input('payment-amount') < $total_harga) {
+        if ($request->input('payment-amount') < $totalPrice) {
             return redirect('admin/input-transaksi')->with('error', 'Pembayaran kurang');
         }
 
         $transaction = new Transaction([
             'status_id' => 1,
-            'member_id' => $id_member,
-            'admin_id' => $id_admin,
+            'member_id' => $memberId,
+            'admin_id' => $adminId,
             'finish_date' => null,
-            'discount' => $potongan,
-            'total' => $total_harga,
+            'discount' => $discount,
+            'total' => $totalPrice,
             'service_type_id' => $request->input('service-type'),
             'service_cost' => $cost,
             'payment_amount' => $request->input('payment-amount'),
         ]);
         $transaction->save();
 
-        foreach ($transaksi as &$t) {
-            $harga = PriceList::where([
-                'item_id' => $t['id_barang'],
-                'category_id' => $t['id_kategori'],
-                'service_id' => $t['id_servis']
+        foreach ($sessionTransaction as &$trs) {
+            // dd($trs);
+            $price = PriceList::where([
+                'item_id' => $trs['itemId'],
+                'category_id' => $trs['categoryId'],
+                'service_id' => $trs['serviceId']
             ])->first();
 
             $transaction_detail = new TransactionDetail([
                 'transaction_id' => $transaction->id,
-                'price_list_id' => $harga->id,
-                'quantity' => $t['banyak'],
-                'price' => $harga->price,
-                'sub_total' => $t['harga']
+                'price_list_id' => $price->id,
+                'quantity' => $trs['quantity'],
+                'price' => $price->price,
+                'sub_total' => $trs['subTotal']
             ]);
             $transaction_detail->save();
         }
 
-        $user = User::where('id', $id_member)->first();
+        $user = User::where('id', $memberId)->first();
         $user->point = $user->point + 1;
         $user->save();
 
-        $request->session()->forget('transaksi');
-        $request->session()->forget('id_member_transaksi');
+        $request->session()->forget('transaction');
+        $request->session()->forget('memberIdTransaction');
 
         DB::commit();
+
         return redirect('admin/input-transaksi')->with('success', 'Transaksi berhasil disimpan')->with('id_trs', $transaction->id);
     }
 
     /**
      * Fungsi untuk mencetak transaksi
      */
-    public function cetakTransaksi($id)
+    public function cetakTransaksi(mixed $id)
     {
-        $dataTransaksi = Transaction::where('id', $id)->first();
-        return view('admin.cetak_transaksi', compact('id', 'dataTransaksi'));
+        $transaction = Transaction::where('id', $id)->first();
+
+        return view('admin.print_transaction', compact('id', 'transaction'));
     }
 
     /**
@@ -282,8 +307,9 @@ class Admin extends Controller
      */
     public function hapusSessTransaksi(Request $request)
     {
-        $request->session()->forget('transaksi');
-        $request->session()->forget('id_member_transaksi');
+        $request->session()->forget('transaction');
+        $request->session()->forget('memberIdTransaction');
+
         return redirect('admin/input-transaksi');
     }
 
@@ -292,35 +318,38 @@ class Admin extends Controller
      */
     public function riwayatTransaksi(Request $request)
     {
-        $month = date('m');
-        $year = date('Y');
+        $currentMonth = date('m');
+        $currentYear = date('Y');
         $monthQuery = $request->query('month');
         $yearQuery = $request->query('year');
         if ($monthQuery && $yearQuery) {
-            $month = $monthQuery;
-            $year = $yearQuery;
+            $currentMonth = $monthQuery;
+            $currentYear = $yearQuery;
         }
+
         $user = Auth::user();
-        $ongoing_transaction = Transaction::whereYear('created_at', $year)
-            ->whereMonth('created_at', $month)
+
+        $ongoingTransactions = Transaction::whereYear('created_at', $currentYear)
+            ->whereMonth('created_at', $currentMonth)
             ->where('service_type_id', 1)
             ->where('finish_date', null)
             ->orderBy('created_at', 'DESC')
             ->get();
-        $ongoing_priority_transaction = Transaction::whereYear('created_at', $year)
-            ->whereMonth('created_at', $month)
+        $ongoingPriorityTransactions = Transaction::whereYear('created_at', $currentYear)
+            ->whereMonth('created_at', $currentMonth)
             ->where('service_type_id', 2)
             ->where('finish_date', null)
             ->orderBy('created_at', 'DESC')
             ->get();
-        $finished_transaction = Transaction::whereYear('created_at', $year)
-            ->whereMonth('created_at', $month)
+        $finishedTransactions = Transaction::whereYear('created_at', $currentYear)
+            ->whereMonth('created_at', $currentMonth)
             ->where('finish_date', '!=', null)
             ->orderBy('created_at', 'DESC')
             ->get();
         $status = Status::all();
-        $tahun = Transaction::selectRaw('YEAR(created_at) as Tahun')->distinct()->get();
-        return view('admin.riwayat_transaksi', compact('user', 'status', 'tahun', 'year', 'month', 'ongoing_transaction', 'ongoing_priority_transaction', 'finished_transaction'));
+        $years = Transaction::selectRaw('YEAR(created_at) as Tahun')->distinct()->get();
+
+        return view('admin.transactions_history', compact('user', 'status', 'years', 'currentYear', 'currentMonth', 'ongoingTransactions', 'ongoingPriorityTransactions', 'finishedTransactions'));
     }
 
     /**
@@ -328,8 +357,9 @@ class Admin extends Controller
      */
     public function ambilDetailTransaksi(Request $request)
     {
-        $detail_transaksi = TransactionDetail::with(['transaction', 'transaction.service_type', 'price_list', 'price_list.item', 'price_list.service', 'price_list.category'])->where('transaction_id', $request->input('id_transaksi'))->get();
-        echo json_encode($detail_transaksi);
+        $transactionDetails = TransactionDetail::with(['transaction', 'transaction.service_type', 'price_list', 'price_list.item', 'price_list.service', 'price_list.category'])->where('transaction_id', $request->input('id_transaksi'))->get();
+
+        return response()->json($transactionDetails);
     }
 
     /**
@@ -337,15 +367,15 @@ class Admin extends Controller
      */
     public function ubahStatusTransaksi(Request $request)
     {
-        $tgl = null;
+        $currentDate = null;
         // Jika status 3 maka artinya sudah selesai, set tgl menjadi tgl selesai
         if ($request->input('val') == 3) {
-            $tgl = date('Y-m-d H:i:s');
+            $currentDate = date('Y-m-d H:i:s');
         }
 
         $transaction = Transaction::where('id', $request->input('id_transaksi'))->first();
         $transaction->status_id = $request->input('val');
-        $transaction->finish_date = $tgl;
+        $transaction->finish_date = $currentDate;
         $transaction->save();
     }
 
@@ -357,11 +387,12 @@ class Admin extends Controller
         $user = Auth::user();
         $satuan = PriceList::where('category_id', 1)->get();
         $kiloan = PriceList::where('category_id', 2)->get();
-        $barang = Item::all();
-        $servis = Service::all();
-        $kategori = Category::all();
-        $serviceType = ServiceType::all();
-        return view('admin.harga', compact('user', 'satuan', 'kiloan', 'barang', 'servis', 'kategori', 'serviceType'));
+        $items = Item::all();
+        $services = Service::all();
+        $categories = Category::all();
+        $serviceTypes = ServiceType::all();
+
+        return view('admin.price_lists', compact('user', 'satuan', 'kiloan', 'items', 'services', 'categories', 'serviceTypes'));
     }
 
     /**
@@ -381,13 +412,13 @@ class Admin extends Controller
             return redirect('admin/harga')->with('error', 'Harga tidak dapat ditambah karena sudah tersedia!');
         }
 
-        $price_list = new PriceList([
+        $priceList = new PriceList([
             'item_id' => $request->input('barang'),
             'category_id' => $request->input('kategori'),
             'service_id' => $request->input('servis'),
             'price' => $request->input('harga')
         ]);
-        $price_list->save();
+        $priceList->save();
 
         return redirect('admin/harga')->with('success', 'Harga berhasil ditambahkan!');
     }
@@ -397,9 +428,10 @@ class Admin extends Controller
      */
     public function ambilHarga(Request $request)
     {
-        $id_harga = $request->input('id_harga');
-        $harga = PriceList::where('id', $id_harga)->first();
-        echo json_encode($harga);
+        $priceId = $request->input('id_harga');
+        $price = PriceList::where('id', $priceId)->first();
+
+        return response()->json($price);
     }
 
     /**
@@ -407,10 +439,11 @@ class Admin extends Controller
      */
     public function ubahHarga(Request $request)
     {
-        $id_harga = $request->input('id_harga');
-        $price_list = PriceList::where('id', $id_harga)->first();
-        $price_list->price = $request->input('harga');
-        $price_list->save();
+        $priceId = $request->input('id_harga');
+        $priceList = PriceList::where('id', $priceId)->first();
+        $priceList->price = $request->input('harga');
+        $priceList->save();
+
         return redirect('admin/harga')->with('success', 'Harga berhasil diubah!');
     }
 
@@ -423,6 +456,7 @@ class Admin extends Controller
             'name' => ucfirst($request->input('barang'))
         ]);
         $item->save();
+
         return redirect('admin/harga')->with('success', 'Barang baru berhasil ditambah!');
     }
 
@@ -435,6 +469,7 @@ class Admin extends Controller
             'name' => ucfirst($request->input('servis'))
         ]);
         $service->save();
+
         return redirect('admin/harga')->with('success', 'Servis baru berhasil ditambah!');
     }
 
@@ -445,6 +480,7 @@ class Admin extends Controller
     {
         $serviceTypeId = $request->input('id_cost');
         $serviceType = ServiceType::where('id', $serviceTypeId)->first();
+
         return response()->json($serviceType);
     }
 
@@ -457,6 +493,7 @@ class Admin extends Controller
         $serviceType = ServiceType::where('id', $serviceTypeId)->first();
         $serviceType->cost = $request->input('cost');
         $serviceType->save();
+
         return redirect('admin/harga')->with('success', 'Biaya service berhasil diubah!');
     }
 
@@ -467,6 +504,7 @@ class Admin extends Controller
     {
         $user = Auth::user();
         $members = User::where('role', 2)->get();
+
         return view('admin.members', compact('user', 'members'));
     }
 
@@ -477,6 +515,7 @@ class Admin extends Controller
     {
         $user = Auth::user();
         $vouchers = Voucher::all();
+
         return view('admin.voucher', compact('user', 'vouchers'));
     }
 
@@ -529,16 +568,16 @@ class Admin extends Controller
     public function saran()
     {
         $user = Auth::user();
-        $saran = ComplaintSuggestion::where([
+        $suggestions = ComplaintSuggestion::where([
             'type' => 1,
             'reply' => ''
         ])->get();
-        $komplain = ComplaintSuggestion::where([
+        $complaints = ComplaintSuggestion::where([
             'type' => 2,
             'reply' => ''
         ])->get();
-        $jumlah = ComplaintSuggestion::where('reply', '')->count();
-        return view('admin.saran', compact('user', 'saran', 'komplain', 'jumlah'));
+        $count = ComplaintSuggestion::where('reply', '')->count();
+        return view('admin.complaint_suggestion', compact('user', 'suggestions', 'complaints', 'count'));
     }
 
     /**
@@ -546,8 +585,9 @@ class Admin extends Controller
      */
     public function ambilSaranKomplain(Request $request)
     {
-        $isi = ComplaintSuggestion::where('id', $request->input('id'))->first();
-        echo json_encode($isi);
+        $complaintSuggestion = ComplaintSuggestion::where('id', $request->input('id'))->first();
+
+        return response()->json($complaintSuggestion);
     }
 
     /**
@@ -555,9 +595,9 @@ class Admin extends Controller
      */
     public function kirimBalasan(Request $request)
     {
-        $complaint_suggestion = ComplaintSuggestion::where('id', $request->input('id'))->first();
-        $complaint_suggestion->reply = $request->input('balasan');
-        $complaint_suggestion->save();
+        $complaintSuggestion = ComplaintSuggestion::where('id', $request->input('id'))->first();
+        $complaintSuggestion->reply = $request->input('balasan');
+        $complaintSuggestion->save();
     }
 
     /**
@@ -566,9 +606,10 @@ class Admin extends Controller
     public function laporan()
     {
         $user = Auth::user();
-        $tahun = Transaction::selectRaw('YEAR(created_at) as Tahun')->distinct()->get();
-        $bulan = Transaction::selectRaw('MONTH(created_at) as Bulan')->distinct()->get();
-        return view('admin.laporan', compact('user', 'bulan', 'tahun'));
+        $years = Transaction::selectRaw('YEAR(created_at) as Tahun')->distinct()->get();
+        // $months = Transaction::selectRaw('MONTH(created_at) as Bulan')->distinct()->get();
+
+        return view('admin.report', compact('user', 'years'));
     }
 
     /**
@@ -576,9 +617,10 @@ class Admin extends Controller
      */
     public function getMonth(Request $request)
     {
-        $tahun = $request->input('tahun');
-        $bulan = Transaction::whereYear('created_at', $tahun)->selectRaw('MONTH(created_at) as Bulan')->distinct()->get();
-        echo json_encode($bulan);
+        $year = $request->input('tahun');
+        $month = Transaction::whereYear('created_at', $year)->selectRaw('MONTH(created_at) as Bulan')->distinct()->get();
+
+        return response()->json($month);
     }
 
     /**
@@ -586,29 +628,30 @@ class Admin extends Controller
      */
     public function cetakLaporan(Request $request)
     {
-        $bulan_num = $request->input('bulan');
-        $tahun = $request->input('tahun');
-        $dateObj = DateTime::createFromFormat('!m', $bulan_num);
-        $bulan = $dateObj->format('F');
-        $pendapatan = Transaction::whereMonth('created_at', $bulan_num)
-            ->whereYear('created_at', $tahun)->sum('total');
-        $totalTransaksi = Transaction::whereMonth('created_at', $bulan_num)
-            ->whereYear('created_at', $tahun)->count();
-        $pdf = PDF::loadview('admin.laporan_pdf', compact('bulan', 'tahun', 'pendapatan', 'totalTransaksi'));
+        $monthInput = $request->input('bulan');
+        $yearInput = $request->input('tahun');
+        $dateObj = DateTime::createFromFormat('!m', $monthInput);
+        $month = $dateObj->format('F');
+        $revenue = Transaction::whereMonth('created_at', $monthInput)
+            ->whereYear('created_at', $yearInput)->sum('total');
+        $transactionsCount = Transaction::whereMonth('created_at', $monthInput)
+            ->whereYear('created_at', $yearInput)->count();
+        $pdf = PDF::loadview('admin.report_pdf', compact('monthInput', 'yearInput', 'revenue', 'transactionsCount'));
         // return $pdf->download('laporan-keuangan-' . $bulan . '-' . $tahun . '.pdf');
+
         return $pdf->stream();
     }
 
     public function laporanview(Request $request)
     {
-        $bulan_num = 8;
-        $tahun = 2020;
-        $dateObj = DateTime::createFromFormat('!m', $bulan_num);
-        $bulan = $dateObj->format('F');
-        $pendapatan = Transaction::whereMonth('created_at', $bulan_num)
-            ->whereYear('created_at', $tahun)->sum('total');
-        $totalTransaksi = Transaction::whereMonth('created_at', $bulan_num)
-            ->whereYear('created_at', $tahun)->count();
-        return view('admin.laporan_pdf', compact('bulan', 'tahun', 'pendapatan', 'totalTransaksi'));
+        $monthInput = 8;
+        $year = 2020;
+        $dateObj = DateTime::createFromFormat('!m', $monthInput);
+        $month = $dateObj->format('F');
+        $revenue = Transaction::whereMonth('created_at', $monthInput)
+            ->whereYear('created_at', $year)->sum('total');
+        $transactionsCount = Transaction::whereMonth('created_at', $monthInput)
+            ->whereYear('created_at', $year)->count();
+        return view('admin.laporan_pdf', compact('month', 'year', 'revenue', 'transactionsCount'));
     }
 }

@@ -26,7 +26,7 @@
                     <div class="inner">
                         <p>Jumlah Member</p>
 
-                        <h3>{{$banyak_member}}</h3>
+                        <h3>{{$membersCount}}</h3>
                     </div>
                     <div class="icon">
                         <i class="ion ion-ios-people"></i>
@@ -41,7 +41,7 @@
                     <div class="inner">
                         <p>Jumlah Transaksi</p>
 
-                        <h3>{{$banyak_transaksi}}</h3>
+                        <h3>{{$transactionsCount}}</h3>
                     </div>
                     <div class="icon">
                         <i class="ion ion-bag"></i>
@@ -65,15 +65,15 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($priority_service as $item)
+                                @foreach ($priorityTransactions as $transaction)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
-                                    <td>{{date('d F Y', strtotime($item->created_at))}}</td>
+                                    <td>{{date('d F Y', strtotime($transaction->created_at))}}</td>
                                     <td>
-                                        @if ($item->status_id != '3')
-                                        <span class="text-warning">{{$item->status->name}}</span>
+                                        @if ($transaction->status_id != '3')
+                                        <span class="text-warning">{{$transaction->status->name}}</span>
                                         @else
-                                        <span class="text-success">{{$item->status->name}}</span>
+                                        <span class="text-success">{{$transaction->status->name}}</span>
                                         @endif
                                     </td>
                                 </tr>
@@ -94,15 +94,15 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($transaksi_terbaru as $item)
+                                @foreach ($recentTransactions as $transaction)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
-                                    <td>{{date('d F Y', strtotime($item->created_at))}}</td>
+                                    <td>{{date('d F Y', strtotime($transaction->created_at))}}</td>
                                     <td>
-                                        @if ($item->status_id != '3')
-                                        <span class="text-warning">{{$item->status->name}}</span>
+                                        @if ($transaction->status_id != '3')
+                                        <span class="text-warning">{{$transaction->status->name}}</span>
                                         @else
-                                        <span class="text-success">{{$item->status->name}}</span>
+                                        <span class="text-success">{{$transaction->status->name}}</span>
                                         @endif
                                     </td>
                                 </tr>

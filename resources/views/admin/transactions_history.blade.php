@@ -30,11 +30,11 @@
                                 <label for="tahun" class="col-auto col-form-label">Tahun</label>
                                 <div class="col-auto">
                                     <select class="form-control" id="tahun" name="year">
-                                        @foreach ($tahun as $item)
-                                        @if ($item->tahun == $year)
-                                        <option value="{{$item->Tahun}}" selected>{{$item->Tahun}}</option>
+                                        @foreach ($years as $year)
+                                        @if ($year->tahun == $currentYear)
+                                        <option value="{{$year->Tahun}}" selected>{{$year->Tahun}}</option>
                                         @else
-                                        <option value="{{$item->Tahun}}">{{$item->Tahun}}</option>
+                                        <option value="{{$year->Tahun}}">{{$year->Tahun}}</option>
                                         @endif
                                         @endforeach
                                     </select>
@@ -42,7 +42,8 @@
                                 <label for="bulan" class="col-auto col-form-label">Bulan</label>
                                 <div class="col-auto">
                                     <select class="form-control" id="bulan" name="month">
-                                        @for ($i = 1; $i <= 12; $i++) @if ($i==$month) <option value="{{$i}}" selected>
+                                        @for ($i = 1; $i <= 12; $i++) @if ($i==$currentMonth) <option value="{{$i}}"
+                                            selected>
                                             {{$i}}</option>
                                             @else
                                             <option value="{{$i}}">{{$i}}</option>
@@ -77,7 +78,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($ongoing_priority_transaction as $item)
+                                @foreach ($ongoingPriorityTransactions as $item)
                                 <tr>
                                     <td>{{$item->id}}</td>
                                     <td>{{date('d F Y', strtotime($item->created_at))}}</td>
@@ -132,7 +133,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($ongoing_transaction as $item)
+                                @foreach ($ongoingTransactions as $item)
                                 <tr>
                                     <td>{{$item->id}}</td>
                                     <td>{{date('d F Y', strtotime($item->created_at))}}</td>
@@ -187,7 +188,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($finished_transaction as $item)
+                                @foreach ($finishedTransactions as $item)
                                 <tr>
                                     <td>{{$item->id}}</td>
                                     <td>{{date('d F Y', strtotime($item->created_at))}}</td>

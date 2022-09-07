@@ -57,7 +57,7 @@
                                         <div class="row">
                                             <div class="col-8">
                                                 <select class="form-control" id="barang" name="barang">
-                                                    @foreach ($barang as $item)
+                                                    @foreach ($items as $item)
                                                     <option value="{{$item->id}}">{{$item->name}}</option>
                                                     @endforeach
                                                 </select>
@@ -75,8 +75,8 @@
                                         <div class="row">
                                             <div class="col-8">
                                                 <select class="form-control" id="servis" name="servis">
-                                                    @foreach ($servis as $item)
-                                                    <option value="{{$item->id}}">{{$item->name}}</option>
+                                                    @foreach ($services as $service)
+                                                    <option value="{{$service->id}}">{{$service->name}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -93,8 +93,8 @@
                                     <div class="form-group">
                                         <label for="kategori">Kategori</label>
                                         <select class="form-control" id="kategori" name="kategori">
-                                            @foreach ($kategori as $item)
-                                            <option value="{{$item->id}}">{{$item->name}}</option>
+                                            @foreach ($categories as $category)
+                                            <option value="{{$category->id}}">{{$category->name}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -190,14 +190,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($serviceType as $item)
+                                    @foreach ($serviceTypes as $serviceType)
                                     <tr>
                                         <td>{{$loop->iteration}}</td>
-                                        <td>{{$item->name}}</td>
-                                        <td>{{$item->cost}}</td>
+                                        <td>{{$serviceType->name}}</td>
+                                        <td>{{$serviceType->cost}}</td>
                                         <td>
                                             <a href="#" class="badge badge-warning btn-update-cost"
-                                                data-id="{{$item->id}}" data-toggle="modal"
+                                                data-id="{{$serviceType->id}}" data-toggle="modal"
                                                 data-target="#updateCostModal">Ubah Harga</a>
                                         </td>
                                     </tr>

@@ -35,26 +35,26 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($komplain as $item)
+                                        @foreach ($complaints as $complaint)
                                         <tr class="bg-warning">
-                                            <td>{{$item->user->name}}</td>
+                                            <td>{{$complaint->user->name}}</td>
                                             <td><button href="#" class="badge badge-info lihat-isi"
-                                                    data-id="{{$item->id}}">Lihat isi
+                                                    data-id="{{$complaint->id}}">Lihat isi
                                                     komplain</button></td>
                                         </tr>
                                         @endforeach
-                                        @foreach ($saran as $item)
+                                        @foreach ($suggestions as $suggestion)
                                         <tr>
-                                            <td>{{$item->user->name}}</td>
+                                            <td>{{$suggestion->user->name}}</td>
                                             <td><button href="#" class="badge badge-info lihat-isi"
-                                                    data-id="{{$item->id}}">Lihat isi
+                                                    data-id="{{$suggestion->id}}">Lihat isi
                                                     saran</button></td>
                                         </tr>
                                         @endforeach
                                         <hr>
                                         <tr class="text-center">
                                             <td>Jumlah</td>
-                                            <td>{{$jumlah}}</td>
+                                            <td>{{$count}}</td>
                                         </tr>
                                     </tbody>
                                 </table>

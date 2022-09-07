@@ -18,7 +18,7 @@
                 <h1>{{config('app.name')}}</h1>
             </div>
             <div class="col-4">
-                <h3>Laporan Transaksi Bulan {{$bulan}} Tahun {{$tahun}}</h3>
+                <h3>Laporan Transaksi Bulan {{$monthInput}} Tahun {{$yearInput}}</h3>
             </div>
             <div class="col-4">
             </div>
@@ -26,8 +26,8 @@
     </header>
     <hr>
     <main>
-        <p>Banyak transaksi: {{$totalTransaksi}} transaksi</p>
-        <p>Total pendapatan: Rp {{ number_format($pendapatan, 0, ',', '.') }}</p>
+        <p>Banyak transaksi: {{$transactionsCount}} transaksi</p>
+        <p>Total pendapatan: Rp {{ number_format($revenue, 0, ',', '.') }}</p>
     </main>
     <hr>
     <footer class="text-end">

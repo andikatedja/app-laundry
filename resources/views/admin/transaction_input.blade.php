@@ -50,17 +50,17 @@
                             <div class="form-group row">
                                 <label for="id-member" class="col-sm-2 col-form-label">ID Member</label>
                                 <div class="col-sm-2">
-                                    <input type="number" min="1" class="form-control" id="id-member" name="id_member"
-                                        @if (isset($id_member_transaksi)) value="{{$id_member_transaksi}}" disabled
-                                        title="Harap selesaikan transaksi yang ada untuk mengganti id member" @endif
-                                        required>
+                                    <input type="number" min="1" class="form-control" id="id-member" name="member-id"
+                                        @if (isset($memberIdSessionTransaction)) value="{{$memberIdSessionTransaction}}"
+                                        disabled title="Harap selesaikan transaksi yang ada untuk mengganti id member"
+                                        @endif required>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="barang" class="col-sm-2 col-form-label">Barang</label>
                                 <div class="col-sm-4">
-                                    <select class="form-control" id="barang" name="barang">
-                                        @foreach ($barang as $item)
+                                    <select class="form-control" id="barang" name="item">
+                                        @foreach ($items as $item)
                                         <option value="{{$item->id}}">{{$item->name}}</option>
                                         @endforeach
                                     </select>
@@ -69,9 +69,9 @@
                             <div class="form-group row">
                                 <label for="servis" class="col-sm-2 col-form-label">Servis</label>
                                 <div class="col-sm-4">
-                                    <select class="form-control" id="servis" name="servis">
-                                        @foreach ($servis as $item)
-                                        <option value="{{$item->id}}">{{$item->name}}</option>
+                                    <select class="form-control" id="servis" name="service">
+                                        @foreach ($services as $service)
+                                        <option value="{{$service->id}}">{{$service->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -79,9 +79,9 @@
                             <div class="form-group row">
                                 <label for="kategori" class="col-sm-2 col-form-label">Kategori</label>
                                 <div class="col-sm-4">
-                                    <select class="form-control" id="kategori" name="kategori">
-                                        @foreach ($kategori as $item)
-                                        <option value="{{$item->id}}">{{$item->name}}</option>
+                                    <select class="form-control" id="kategori" name="category">
+                                        @foreach ($categories as $category)
+                                        <option value="{{$category->id}}">{{$category->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -96,8 +96,8 @@
                                                 <i class="fas fa-minus"></i>
                                             </button>
                                         </span>
-                                        <input type="text" id="quantity" name="banyak" class="form-control input-number"
-                                            value="1" min="1" max="100">
+                                        <input type="text" id="quantity" name="quantity"
+                                            class="form-control input-number" value="1" min="1" max="100">
                                         <span class="input-group-btn">
                                             <button type="button" class="quantity-right-plus btn btn-success btn-number"
                                                 data-type="plus" data-field="">
@@ -125,17 +125,17 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @if (isset($transaksi))
-                                @foreach ($transaksi as $item)
+                                @if (isset($sessionTransaction))
+                                @foreach ($sessionTransaction as $transaction)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
-                                    <td>{{$item['nama_barang']}}</td>
-                                    <td>{{$item['nama_servis']}}</td>
-                                    <td>{{$item['nama_kategori']}}</td>
-                                    <td>{{$item['banyak']}}</td>
-                                    <td>{{$item['harga']}}</td>
+                                    <td>{{$transaction['itemName']}}</td>
+                                    <td>{{$transaction['serviceName']}}</td>
+                                    <td>{{$transaction['categoryName']}}</td>
+                                    <td>{{$transaction['quantity']}}</td>
+                                    <td>{{$transaction['subTotal']}}</td>
                                     <td>
-                                        <a href="{{url('admin/hapus-transaksi') . '/' . $item['row_id']}}"
+                                        <a href="{{url('admin/hapus-transaksi') . '/' . $transaction['rowId']}}"
                                             class="btn btn-danger">Hapus</a>
                                     </td>
                                 </tr>
@@ -143,7 +143,7 @@
                                 @endif
                             </tbody>
                         </table>
-                        @if (isset($transaksi))
+                        @if (isset($sessionTransaction))
                         <button id="btn-bayar" class="btn btn-success" data-toggle="modal"
                             data-target="#bayarModal">Bayar</button>
                         @endif
@@ -170,13 +170,13 @@
                     <div class="form-group">
                         <label for="sub-total">Sub Total</label>
                         <input type="number" class="form-control form-control-lg" id="sub-total"
-                            value="{{isset($total_harga) ? $total_harga : '0'}}" disabled>
+                            value="{{isset($totalPrice) ? $totalPrice : '0'}}" disabled>
                     </div>
                     <div class="form-group">
                         <label for="service-type">Tipe Servis</label>
                         <select name="service-type" class="form-control form-control-lg" id="service-type" required>
                             <option value="" selected hidden disabled>Pilih tipe service</option>
-                            @foreach ($serviceType as $type)
+                            @foreach ($serviceTypes as $type)
                             <option value="{{$type->id}}" data-type-cost="{{$type->cost}}">
                                 {{$type->name}} ({{$type->cost}})</option>
                             @endforeach
@@ -199,7 +199,7 @@
                     <div class="form-group">
                         <label for="total-harga">Harga Yang Dibayar</label>
                         <input type="number" class="form-control form-control-lg" id="total-harga"
-                            value="{{isset($total_harga) ? $total_harga : '0'}}" disabled>
+                            value="{{isset($totalPrice) ? $totalPrice : '0'}}" disabled>
                     </div>
                     <div class="form-group">
                         <label for="input-bayar">Bayar</label>

@@ -30,9 +30,10 @@
                                         <label for="tahun" class="col-sm-4 col-form-label">Tahun</label>
                                         <div class="col-sm-6">
                                             <select class="form-control" id="tahun" name="tahun">
-                                                <option value="0" selected="selected" disabled="true">-- Please Select --</option>
-                                                @foreach ($tahun as $item)
-                                                <option value="{{$item->Tahun}}">{{$item->Tahun}}</option>
+                                                <option value="0" selected="selected" disabled="true">-- Please Select
+                                                    --</option>
+                                                @foreach ($years as $year)
+                                                <option value="{{$year->Tahun}}">{{$year->Tahun}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -41,11 +42,13 @@
                                         <label for="bulan" class="col-sm-4 col-form-label">Bulan</label>
                                         <div class="col-sm-6">
                                             <select class="form-control" id="bulan" name="bulan">
-                                                <option value="0" selected="selected" disabled="true">-- Select Year First --</option>
+                                                <option value="0" selected="selected" disabled="true">-- Select Year
+                                                    First --</option>
                                             </select>
                                         </div>
                                     </div>
-                                    <button type="submit" id="btn-cetak" class="mt-3 btn btn-primary d-none">Cetak</button>
+                                    <button type="submit" id="btn-cetak"
+                                        class="mt-3 btn btn-primary d-none">Cetak</button>
                                 </form>
                             </div>
                         </div>
