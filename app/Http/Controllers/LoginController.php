@@ -7,21 +7,28 @@ use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class LoginController extends Controller
 {
     /**
-     * Fungsi untuk menampilkan halaman login
+     * Method to show login view
+     *
+     * @return void
      */
-    public function index()
+    public function index(): View
     {
         return view('auth.login');
     }
 
     /**
-     * Fungsi untuk melakukan proses login
+     * Method to authenticate login
+     *
+     * @param Request $request
+     * @return void
      */
-    public function auth(Request $request)
+    public function auth(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
             'email' => 'required|email',
@@ -36,6 +43,7 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
+
             if (Auth::user()->role == 1) {
                 return redirect('admin');
             } else {
@@ -47,17 +55,22 @@ class LoginController extends Controller
     }
 
     /**
-     * Fungsi untuk menampilkan halaman register
+     * Method to show register view
+     *
+     * @return void
      */
-    public function registerView()
+    public function registerView(): View
     {
         return view('auth.register');
     }
 
     /**
-     * Fungsi untuk melakukan proses register
+     * Method to register a new user
+     *
+     * @param Request $request
+     * @return RedirectResponse
      */
-    public function register(Request $request)
+    public function register(Request $request): RedirectResponse
     {
         $request->validate([
             'name' => 'required',
@@ -65,16 +78,16 @@ class LoginController extends Controller
             'password' => 'required|confirmed|min:6'
         ]);
 
-        // Cek apakah email sudah terdaftar
+        // Check if email already registered
         if (User::where('email', '=', $request->input('email'))->exists()) {
             return redirect('register')->with('error', 'Email sudah terdaftar, harap mendaftarkan email yang lain.');
         }
 
-        $hash_password = Hash::make($request->input('password'));
+        $hashPassword = Hash::make($request->input('password'));
 
         $user = new User([
             'email' => $request->input('email'),
-            'password' => $hash_password,
+            'password' => $hashPassword,
             'name' => $request->input('name')
         ]);
 
@@ -85,17 +98,22 @@ class LoginController extends Controller
 
 
     /**
-     * Fungsi untuk menampilkan view register admin
+     * Method to show register admin view
+     *
+     * @return View
      */
-    public function registerAdminView()
+    public function registerAdminView(): View
     {
         return view('auth.registerAdmin');
     }
 
     /**
-     * Fungsi untuk register admin
+     * Method to add new admin-level user
+     *
+     * @param Request $request
+     * @return RedirectResponse
      */
-    public function registerAdmin(Request $request)
+    public function registerAdmin(Request $request): RedirectResponse
     {
         $request->validate([
             'name' => 'required',
@@ -104,21 +122,21 @@ class LoginController extends Controller
             'secret' => 'required'
         ]);
 
-        // Cek apakah email sudah terdaftar
+        // Check if email already registered
         if (User::where('email', '=', $request->input('email'))->exists()) {
             return redirect('register-admin')->with('error', 'Email sudah terdaftar, harap mendaftarkan email yang lain.');
         }
 
-        // Cek apakah secret key sama
+        // Check if secret key is the same
         if ($request->input('secret') != env('REGISTER_ADMIN_SECRET_KEY', 'Secret123')) {
             return redirect('register-admin')->with('error', 'Secret key salah.');
         }
 
-        $hash_password = Hash::make($request->input('password'));
+        $hashPassword = Hash::make($request->input('password'));
 
         $user = new User([
             'email' => $request->input('email'),
-            'password' => $hash_password,
+            'password' => $hashPassword,
             'role' => 1,
             'name' => $request->input('name')
         ]);
@@ -129,14 +147,18 @@ class LoginController extends Controller
     }
 
     /**
-     * Fungsi untuk melakukan proses logout
+     * Method to logout user from session
+     *
+     * @param Request $request
+     * @return RedirectResponse
      */
-    public function logout(Request $request)
+    public function logout(Request $request): RedirectResponse
     {
         Auth::logout();
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('login')
-            ->with('success', Lang::get('auth.logout_success'));
+
+        return redirect('login')->with('success', Lang::get('auth.logout_success'));
     }
 }
