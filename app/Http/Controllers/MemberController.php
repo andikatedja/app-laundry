@@ -15,7 +15,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
-class Member extends Controller
+class MemberController extends Controller
 {
     /**
      * Method to show member dashboard view

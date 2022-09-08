@@ -20,7 +20,7 @@ use DateTime;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class Admin extends Controller
+class AdminController extends Controller
 {
     /**
      * Function to show admin dashboard view
