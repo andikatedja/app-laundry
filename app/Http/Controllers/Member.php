@@ -11,55 +11,66 @@ use App\Models\TransactionDetail;
 use App\Models\User;
 use App\Models\UserVoucher;
 use App\Models\Voucher;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
 class Member extends Controller
 {
     /**
-     * Fungsi untuk menampilkan halaman dashboard member (Beranda)
+     * Method to show member dashboard view
+     *
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
         $user = Auth::user();
-        $transaksi_terakhir = Transaction::where('member_id', $user->id)
+        $latestTransactions = Transaction::where('member_id', $user->id)
             ->orderBy('created_at', 'DESC')
             ->orderBy('status_id', 'ASC')
             ->limit(10)
             ->get();
 
-        return view('member.index', compact('user', 'transaksi_terakhir'));
+        return view('member.index', compact('user', 'latestTransactions'));
     }
 
     /**
-     * Fungsi untuk menampilkan daftar harga
+     * Method to show price lists view
+     *
+     * @return View
      */
-    public function harga()
+    public function harga(): View
     {
         $user = Auth::user();
         $satuan = PriceList::where('category_id', 1)->get();
         $kiloan = PriceList::where('category_id', 2)->get();
-        $serviceType = ServiceType::all();
+        $serviceTypes = ServiceType::all();
 
-        return view('member.harga', compact('user', 'satuan', 'kiloan', 'serviceType'));
+        return view('member.harga', compact('user', 'satuan', 'kiloan', 'serviceTypes'));
     }
 
     /**
-     * Fungsi untuk menampilkan halaman riwayat transaksi member
+     * Method to show transactions history based on current logged on member
+     *
+     * @return View
      */
-    public function riwayatTransaksi()
+    public function riwayatTransaksi(): View
     {
         $user = Auth::user();
-        $transaksi = Transaction::where('member_id', $user->id)
+        $transactions = Transaction::where('member_id', $user->id)
             ->orderBy('created_at', 'DESC')
             ->orderBy('status_id', 'ASC')
             ->get();
-        return view('member.riwayat', compact('user', 'transaksi'));
+
+        return view('member.riwayat', compact('user', 'transactions'));
     }
 
     /**
-     * Fungsi untuk menampilkan halaman poin
+     * Method to show member points view
+     *
+     * @return View
      */
-    public function poin()
+    public function poin(): View
     {
         $user = Auth::user();
         $vouchers = Voucher::where('active_status', 1)->get();
@@ -67,21 +78,25 @@ class Member extends Controller
             'user_id' => $user->id,
             'used' => 0
         ])->get();
+
         return view('member.poin', compact('user', 'vouchers', 'memberVouchers'));
     }
 
     /**
-     * Fungsi untuk menukar poin
+     * Method to process point redemption
+     *
+     * @param string|int $id_voucher
+     * @return RedirectResponse
      */
-    public function tukarPoin($id_voucher)
+    public function tukarPoin(string|int $id_voucher): RedirectResponse
     {
         $user = User::where('email', '=', Auth::user()->email)->first();
 
-        // Ambil data poin yang diperlukan untuk menukar voucher
+        // Get the voucher data
         $voucher = Voucher::where('id', $id_voucher)->first();
 
-        // Cek apakah poin member mencukupi untuk menukar voucher
-        // Jika poin mencukupi, tambahkan ke tabel users voucher
+        // Check if member's points are sufficient to redeem
+        // If points are sufficient, then save to database
         if ($user->point >= $voucher->point_need) {
             $user_voucher = new UserVoucher([
                 'voucher_id' => $id_voucher,
@@ -90,11 +105,11 @@ class Member extends Controller
             ]);
             $user_voucher->save();
 
-            // Update point member
+            // Subtract member's point
             $user->point = $user->point - $voucher->point_need;
             $user->save();
 
-            //Redirect ke poin dan pesan sukses
+            // Redirect to point view
             return redirect('member/poin')->with('success', 'Poin berhasil ditukar menjadi voucher!');
         } else {
             return redirect('member/poin')->with('error', 'Poin tidak mencukupi untuk menukar voucher!');
@@ -102,19 +117,25 @@ class Member extends Controller
     }
 
     /**
-     * Fungsi untuk menampilkan halaman saran komplain
+     * method to show complaint suggestion view
+     *
+     * @return View
      */
-    public function saranKomplain()
+    public function saranKomplain(): View
     {
         $user = Auth::user();
-        $saran_komplain = ComplaintSuggestion::where('user_id', $user->id)->get();
-        return view('member.saran', compact('user', 'saran_komplain'));
+        $complaintSuggestion = ComplaintSuggestion::where('user_id', $user->id)->get();
+
+        return view('member.saran', compact('user', 'complaintSuggestion'));
     }
 
     /**
-     * Fungsi untuk mengirimkan saran komplain
+     * Method to process complaint suggestion
+     *
+     * @param Request $request
+     * @return RedirectResponse
      */
-    public function kirimSaranKomplain(Request $request)
+    public function kirimSaranKomplain(Request $request): RedirectResponse
     {
         $request->validate([
             'isi_sarankomplain' => 'required'
@@ -122,25 +143,29 @@ class Member extends Controller
 
         $user = Auth::user();
 
-        $complaint_suggestion = new ComplaintSuggestion([
+        $complaintSuggestion = new ComplaintSuggestion([
             'body' => $request->input('isi_sarankomplain'),
             'type' => $request->input('tipe'),
             'user_id' => $user->id,
             'reply' => ''
         ]);
 
-        $complaint_suggestion->save();
+        $complaintSuggestion->save();
 
         return redirect('member/saran')->with('success', 'Saran/komplain berhasil dikirim!');
     }
 
     /**
-     * Fungsi untuk menampilkan halaman detail transaksi
+     * Method to show detail transaction
+     *
+     * @param string|int $id_transaksi
+     * @return View
      */
-    public function detailTransaksi($id_transaksi)
+    public function detailTransaksi(string|int $id_transaksi): View
     {
         $user = Auth::user();
-        $transaksi = TransactionDetail::where('transaction_id', $id_transaksi)->get();
-        return view('member.detail', compact('user', 'transaksi', 'id_transaksi'));
+        $transactions = TransactionDetail::where('transaction_id', $id_transaksi)->get();
+
+        return view('member.detail', compact('user', 'transactions', 'id_transaksi'));
     }
 }
