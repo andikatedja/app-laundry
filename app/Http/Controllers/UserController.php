@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -11,18 +13,24 @@ use Illuminate\Support\Facades\File;
 class UserController extends Controller
 {
     /**
-     * Fungsi untuk menampilkan halaman edit profil
+     * Method to show user profile
+     *
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
         $user = Auth::user();
+
         return view('user.profile', compact('user'));
     }
 
     /**
-     * Fungsi untuk melakukan edit profil
+     * Method to process user profile edit
+     *
+     * @param Request $request
+     * @return RedirectResponse
      */
-    public function editprofil(Request $request)
+    public function editprofil(Request $request): RedirectResponse
     {
         $request->validate([
             'name' => 'required',
@@ -34,11 +42,12 @@ class UserController extends Controller
         $user = User::where('email', '=', Auth::user()->email)->first();
 
         if ($request->hasFile('image')) {
-            // cek jika foto sebelumnya tidak default.jpg
+            // Check if previous photo is not default
             if ($user->profile_picture != 'default.jpg') {
-                // Delete file lama
+                // Delete old file
                 File::delete(public_path('img/profile/' . $user->profile_picture));
             }
+
             $image = $request->file('image');
             $extension = $image->getClientOriginalExtension();
             $filename = $user->id . '.' . $extension;
@@ -57,36 +66,44 @@ class UserController extends Controller
     }
 
     /**
-     * Fungsi untuk reset foto
+     * Method to reset user profile picture
+     *
+     * @return RedirectResponse
      */
-    public function resetfoto()
+    public function resetfoto(): RedirectResponse
     {
         $user = User::where('email', '=', Auth::user()->email)->first();
         $user->profile_picture = 'default.jpg';
         $user->save();
+
         return redirect('profile')->with('success', 'Foto profil berhasil direset');
     }
 
     /**
-     * Fungsi untuk melakukan update password
+     * Method to update user's password
+     *
+     * @param Request $request
+     * @return RedirectResponse
      */
-    public function editpassword(Request $request)
+    public function editpassword(Request $request): RedirectResponse
     {
         $request->validate([
             'current-password' => 'required',
             'password' => 'required|min:6|confirmed',
         ]);
+
         $user = User::where('email', '=', Auth::user()->email)->first();
 
-        //Cek apakah password lama sama
+        // Check if current password is the same
         if (!Hash::check($request->input('current-password'), $user->password)) {
             return redirect('profile')->with('error', 'Kata sandi sekarang salah!');
         }
 
-        $password_hash = Hash::make($request->input('password'));
+        $passwordHash = Hash::make($request->input('password'));
 
-        $user->password = $password_hash;
+        $user->password = $passwordHash;
         $user->save();
+
         return redirect('profile')->with('success', 'Kata sandi berhasil diubah');
     }
 }
