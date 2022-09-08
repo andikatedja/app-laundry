@@ -96,7 +96,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($serviceType as $item)
+                                    @foreach ($serviceTypes as $item)
                                     <tr>
                                         <td>{{$loop->iteration}}</td>
                                         <td>{{$item->name}}</td>

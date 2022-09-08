@@ -81,9 +81,9 @@ Route::group([
     Route::get('/', 'index');
     Route::get('harga', 'harga');
     Route::get('poin', 'poin');
-    Route::get('poin/tukar/{id_voucher}', 'tukarPoin');
+    Route::get('poin/tukar/{voucher_id}', 'tukarPoin');
     Route::get('transaksi', 'riwayatTransaksi');
-    Route::get('transaksi/{id_transaksi}', 'detailTransaksi');
+    Route::get('transaksi/{id}', 'detailTransaksi');
     Route::get('saran', 'saranKomplain');
     Route::post('kirimsaran', 'kirimSaranKomplain');
 });

@@ -100,25 +100,25 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($saran_komplain as $item)
+                                @foreach ($complaintSuggestions as $complaintSuggestion)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
-                                    <td>{{date('d F Y', strtotime($item->created_at))}}</td>
+                                    <td>{{date('d F Y', strtotime($complaintSuggestion->created_at))}}</td>
                                     <td>
-                                        @if ($item->type == 1)
+                                        @if ($complaintSuggestion->type == 1)
                                         Saran
                                         @else
                                         Komplain
                                         @endif
                                     </td>
-                                    <td>{{$item->body}}</td>
-                                    @if ($item->reply == null)
+                                    <td>{{$complaintSuggestion->body}}</td>
+                                    @if ($complaintSuggestion->reply == null)
                                     <td class="text-danger">
                                         Belum ada balasan
                                     </td>
                                     @else
                                     <td>
-                                        {{$item->reply}}
+                                        {{$complaintSuggestion->reply}}
                                     </td>
                                     @endif
                                 </tr>

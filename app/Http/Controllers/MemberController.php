@@ -46,7 +46,7 @@ class MemberController extends Controller
         $kiloan = PriceList::where('category_id', 2)->get();
         $serviceTypes = ServiceType::all();
 
-        return view('member.harga', compact('user', 'satuan', 'kiloan', 'serviceTypes'));
+        return view('member.price_lists', compact('user', 'satuan', 'kiloan', 'serviceTypes'));
     }
 
     /**
@@ -62,7 +62,7 @@ class MemberController extends Controller
             ->orderBy('status_id', 'ASC')
             ->get();
 
-        return view('member.riwayat', compact('user', 'transactions'));
+        return view('member.transactions_history', compact('user', 'transactions'));
     }
 
     /**
@@ -79,27 +79,27 @@ class MemberController extends Controller
             'used' => 0
         ])->get();
 
-        return view('member.poin', compact('user', 'vouchers', 'memberVouchers'));
+        return view('member.point', compact('user', 'vouchers', 'memberVouchers'));
     }
 
     /**
      * Method to process point redemption
      *
-     * @param string|int $id_voucher
+     * @param string|int $voucher_id
      * @return RedirectResponse
      */
-    public function tukarPoin(string|int $id_voucher): RedirectResponse
+    public function tukarPoin(string|int $voucher_id): RedirectResponse
     {
         $user = User::where('email', '=', Auth::user()->email)->first();
 
         // Get the voucher data
-        $voucher = Voucher::where('id', $id_voucher)->first();
+        $voucher = Voucher::where('id', $voucher_id)->first();
 
         // Check if member's points are sufficient to redeem
         // If points are sufficient, then save to database
         if ($user->point >= $voucher->point_need) {
             $user_voucher = new UserVoucher([
-                'voucher_id' => $id_voucher,
+                'voucher_id' => $voucher_id,
                 'user_id' => $user->id,
                 'used' => 0
             ]);
@@ -124,9 +124,9 @@ class MemberController extends Controller
     public function saranKomplain(): View
     {
         $user = Auth::user();
-        $complaintSuggestion = ComplaintSuggestion::where('user_id', $user->id)->get();
+        $complaintSuggestions = ComplaintSuggestion::where('user_id', $user->id)->get();
 
-        return view('member.saran', compact('user', 'complaintSuggestion'));
+        return view('member.complaint_suggestions', compact('user', 'complaintSuggestions'));
     }
 
     /**
@@ -158,14 +158,14 @@ class MemberController extends Controller
     /**
      * Method to show detail transaction
      *
-     * @param string|int $id_transaksi
+     * @param string|int $id
      * @return View
      */
-    public function detailTransaksi(string|int $id_transaksi): View
+    public function detailTransaksi(string|int $id): View
     {
         $user = Auth::user();
-        $transactions = TransactionDetail::where('transaction_id', $id_transaksi)->get();
+        $transactions = TransactionDetail::where('transaction_id', $id)->get();
 
-        return view('member.detail', compact('user', 'transactions', 'id_transaksi'));
+        return view('member.detail', compact('user', 'transactions', 'id'));
     }
 }

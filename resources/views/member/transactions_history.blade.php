@@ -33,19 +33,19 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($transaksi as $item)
+                                @foreach ($transactions as $transaction)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
-                                    <td>{{date('d F Y', strtotime($item->created_at))}}</td>
+                                    <td>{{date('d F Y', strtotime($transaction->created_at))}}</td>
                                     <td>
-                                        @if ($item->status_id != '3')
-                                        <span class="text-warning">{{$item->status->name}}</span>
+                                        @if ($transaction->status_id != '3')
+                                        <span class="text-warning">{{$transaction->status->name}}</span>
                                         @else
-                                        <span class="text-success">{{$item->status->name}}</span>
+                                        <span class="text-success">{{$transaction->status->name}}</span>
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{url('member/transaksi') . '/' . $item->id}}"
+                                        <a href="{{url('member/transaksi') . '/' . $transaction->id}}"
                                             class="badge badge-primary">Lihat Detail ></a>
                                     </td>
                                 </tr>

@@ -23,7 +23,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <h3>ID Transaksi: {{$id_transaksi}}</h3>
+                        <h3>ID Transaksi: {{$id}}</h3>
                         <hr>
                         <table id="tbl-detail" class="table dataTable dt-responsive nowrap" style="width:100%">
                             <thead class="thead-light">
@@ -38,26 +38,26 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($transaksi as $item)
+                                @foreach ($transactions as $transaction)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
-                                    <td>{{$item->price_list->item->name}}</td>
-                                    <td>{{$item->price_list->category->name}}</td>
-                                    <td>{{$item->price_list->service->name}}</td>
-                                    <td>{{$item->quantity}}</td>
-                                    <td>{{$item->price}}</td>
-                                    <td>{{$item->sub_total}}</td>
+                                    <td>{{$transaction->price_list->item->name}}</td>
+                                    <td>{{$transaction->price_list->category->name}}</td>
+                                    <td>{{$transaction->price_list->service->name}}</td>
+                                    <td>{{$transaction->quantity}}</td>
+                                    <td>{{$transaction->price}}</td>
+                                    <td>{{$transaction->sub_total}}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
                         <hr>
-                        <h5>Tipe Servis: {{$transaksi[0]->transaction->service_type->name}}</h5>
-                        <h5>Biaya Servis: {{$transaksi[0]->transaction->service_cost}}</h5>
-                        <h5>Potongan: {{$transaksi[0]->transaction->discount}}</h5>
+                        <h5>Tipe Servis: {{$transactions[0]->transaction->service_type->name}}</h5>
+                        <h5>Biaya Servis: {{$transactions[0]->transaction->service_cost}}</h5>
+                        <h5>Potongan: {{$transactions[0]->transaction->discount}}</h5>
                         <hr>
-                        <h4>Total Biaya: {{$transaksi[0]->transaction->total}}</h4>
-                        <h4>Dibayar: {{$transaksi[0]->transaction->payment_amount}}</h4>
+                        <h4>Total Biaya: {{$transactions[0]->transaction->total}}</h4>
+                        <h4>Dibayar: {{$transactions[0]->transaction->payment_amount}}</h4>
                     </div>
                 </div>
             </div>

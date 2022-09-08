@@ -57,7 +57,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($transaksi_terakhir as $item)
+                                @foreach ($latestTransactions as $item)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
                                     <td>{{date('d F Y', strtotime($item->created_at))}}</td>
