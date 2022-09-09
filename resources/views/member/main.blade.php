@@ -35,14 +35,15 @@
             <ul class="navbar-nav ml-auto">
                 <!-- Notifications Dropdown Menu -->
                 <li class="nav-item">
-                    <a class="nav-link" href="{{url('member/poin')}}">
+                    <a class="nav-link" href="{{url('member/point')}}">
                         <i class="mr-2 fas fa-star"></i>Tukar Poin
                     </a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
                         <img class="img-circle img-fit mr-1" width="25" height="25"
-                            src="{{asset('img/profile') . '/' . $user->profile_picture}}" alt="Foto Profil"> {{$user->name}}
+                            src="{{asset('img/profile') . '/' . $user->profile_picture}}" alt="Foto Profil">
+                        {{$user->name}}
                     </a>
                     <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
                         <a href="{{url('profile')}}" class="dropdown-item">
@@ -80,22 +81,22 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{url('member/harga')}}"
-                                class="nav-link {{(request()->is('member/harga')) ? 'active' : ''}}">
+                            <a href="{{url('member/price-lists')}}"
+                                class="nav-link {{(request()->is('member/price-lists')) ? 'active' : ''}}">
                                 <i class="nav-icon fas fa-list"></i>
                                 <p>Daftar Harga</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{url('member/transaksi')}}"
-                                class="nav-link {{(request()->is('member/transaksi*')) ? 'active' : ''}}">
+                            <a href="{{url('member/transactions')}}"
+                                class="nav-link {{(request()->is('member/transactions*')) ? 'active' : ''}}">
                                 <i class="nav-icon fas fa-history"></i>
                                 <p>Riwayat Transaksi</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{url('member/poin')}}"
-                                class="nav-link {{(request()->is('member/poin')) ? 'active' : ''}}">
+                            <a href="{{url('member/point')}}"
+                                class="nav-link {{(request()->is('member/point')) ? 'active' : ''}}">
                                 <i class="nav-icon fas fa-star"></i>
                                 <p>Tukar Poin</p>
                             </a>
@@ -108,8 +109,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{url('member/saran')}}"
-                                class="nav-link {{(request()->is('member/saran')) ? 'active' : ''}}">
+                            <a href="{{url('member/complaint-suggestions')}}"
+                                class="nav-link {{(request()->is('member/complaint-suggestions')) ? 'active' : ''}}">
                                 <i class="nav-icon fas fa-sticky-note"></i>
                                 <p>Saran / Komplain</p>
                             </a>

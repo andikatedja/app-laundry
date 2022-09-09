@@ -55,7 +55,7 @@
                                             <label class="custom-file-label" for="foto_profil">Choose file</label>
                                         </div>
                                     </div>
-                                    <a href="{{url('member/edit/resetfoto')}}"
+                                    <a href="{{url('profile/resetfoto')}}"
                                         onclick="return confirm('Apakah anda yakin ingin reset foto profil?')"
                                         class="btn btn-danger">Reset Foto</a>
                                 </div>
@@ -128,7 +128,7 @@
                 <h3 class="mt-2">Ubah Kata Sandi</h3>
                 <div class="card">
                     <div class="card-body">
-                        <form action="{{url('member/edit/password')}}" method="POST">
+                        <form action="{{url('profile/password')}}" method="POST">
                             @csrf
                             @method('patch')
                             <div class="form-group">

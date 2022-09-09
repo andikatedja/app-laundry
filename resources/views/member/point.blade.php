@@ -65,7 +65,7 @@
                                     <td>{{$voucher->name}}</td>
                                     <td>{{$voucher->description}}</td>
                                     <td>{{$voucher->point_need}}</td>
-                                    <td><a href="{{url('member/poin/tukar') . '/' . $voucher->id}}"
+                                    <td><a href="{{url('member/point/redeem') . '/' . $voucher->id}}"
                                             class="badge badge-primary"
                                             onclick="return confirm('Apakah anda yakin ingin menukar poin?')">Tukar</a>
                                     </td>

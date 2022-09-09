@@ -42,7 +42,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6">
-                                <form action="{{url('member/kirimsaran')}}" method="POST">
+                                <form action="{{url('member/complaint-suggestions')}}" method="POST">
                                     @csrf
                                     <h5>Silahkan isi form dibawah ini sesuai kriteria</h5>
                                     <div class="form-group">

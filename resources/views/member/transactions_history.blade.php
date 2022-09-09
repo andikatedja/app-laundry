@@ -45,7 +45,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{url('member/transaksi') . '/' . $transaction->id}}"
+                                        <a href="{{url('member/transactions') . '/' . $transaction->id}}"
                                             class="badge badge-primary">Lihat Detail ></a>
                                     </td>
                                 </tr>

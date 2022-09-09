@@ -32,7 +32,7 @@
                             <div class="col-2 text-center">
                                 <p class="small m-0">Poin</p>
                                 <h2 class="m-0">{{$user->point}}</h2>
-                                <a href="{{url('member/poin')}}" class="badge badge-primary badge-pill">Tukar Poin</a>
+                                <a href="{{url('member/point')}}" class="badge badge-primary badge-pill">Tukar Poin</a>
                             </div>
                         </div>
                     </div>
@@ -69,7 +69,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{url('member/transaksi') . '/' . $item->id}}"
+                                        <a href="{{url('member/transactions') . '/' . $item->id}}"
                                             class="badge badge-primary">Lihat Detail ></a>
                                     </td>
                                 </tr>

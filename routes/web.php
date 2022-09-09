@@ -79,13 +79,13 @@ Route::group([
     'controller' => MemberController::class
 ], function () {
     Route::get('/', 'index');
-    Route::get('harga', 'harga');
-    Route::get('poin', 'poin');
-    Route::get('poin/tukar/{voucher_id}', 'tukarPoin');
-    Route::get('transaksi', 'riwayatTransaksi');
-    Route::get('transaksi/{id}', 'detailTransaksi');
-    Route::get('saran', 'saranKomplain');
-    Route::post('kirimsaran', 'kirimSaranKomplain');
+    Route::get('price-lists', 'priceLists');
+    Route::get('point', 'point');
+    Route::get('point/redeem/{voucher}', 'redeemVoucher');
+    Route::get('transactions', 'transactionsHistory');
+    Route::get('transactions/{id}', 'transactionsDetail');
+    Route::get('complaint-suggestions', 'complaintSuggestions');
+    Route::post('complaint-suggestions', 'sendComplaintSuggestions');
 });
 
 // User profile routes

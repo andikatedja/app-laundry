@@ -39,7 +39,7 @@ class MemberController extends Controller
      *
      * @return View
      */
-    public function harga(): View
+    public function priceLists(): View
     {
         $user = Auth::user();
         $satuan = PriceList::where('category_id', 1)->get();
@@ -54,7 +54,7 @@ class MemberController extends Controller
      *
      * @return View
      */
-    public function riwayatTransaksi(): View
+    public function transactionsHistory(): View
     {
         $user = Auth::user();
         $transactions = Transaction::where('member_id', $user->id)
@@ -70,7 +70,7 @@ class MemberController extends Controller
      *
      * @return View
      */
-    public function poin(): View
+    public function point(): View
     {
         $user = Auth::user();
         $vouchers = Voucher::where('active_status', 1)->get();
@@ -88,18 +88,18 @@ class MemberController extends Controller
      * @param string|int $voucher_id
      * @return RedirectResponse
      */
-    public function tukarPoin(string|int $voucher_id): RedirectResponse
+    public function redeemVoucher(string|int $voucher): RedirectResponse
     {
         $user = User::where('email', '=', Auth::user()->email)->first();
 
         // Get the voucher data
-        $voucher = Voucher::where('id', $voucher_id)->first();
+        $voucher = Voucher::where('id', $voucher)->first();
 
         // Check if member's points are sufficient to redeem
         // If points are sufficient, then save to database
         if ($user->point >= $voucher->point_need) {
             $user_voucher = new UserVoucher([
-                'voucher_id' => $voucher_id,
+                'voucher_id' => $voucher,
                 'user_id' => $user->id,
                 'used' => 0
             ]);
@@ -110,9 +110,9 @@ class MemberController extends Controller
             $user->save();
 
             // Redirect to point view
-            return redirect('member/poin')->with('success', 'Poin berhasil ditukar menjadi voucher!');
+            return redirect('member/point')->with('success', 'Poin berhasil ditukar menjadi voucher!');
         } else {
-            return redirect('member/poin')->with('error', 'Poin tidak mencukupi untuk menukar voucher!');
+            return redirect('member/point')->with('error', 'Poin tidak mencukupi untuk menukar voucher!');
         }
     }
 
@@ -121,7 +121,7 @@ class MemberController extends Controller
      *
      * @return View
      */
-    public function saranKomplain(): View
+    public function complaintSuggestions(): View
     {
         $user = Auth::user();
         $complaintSuggestions = ComplaintSuggestion::where('user_id', $user->id)->get();
@@ -135,7 +135,7 @@ class MemberController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function kirimSaranKomplain(Request $request): RedirectResponse
+    public function sendComplaintSuggestions(Request $request): RedirectResponse
     {
         $request->validate([
             'isi_sarankomplain' => 'required'
@@ -152,7 +152,7 @@ class MemberController extends Controller
 
         $complaintSuggestion->save();
 
-        return redirect('member/saran')->with('success', 'Saran/komplain berhasil dikirim!');
+        return redirect('member/complaint-suggestions')->with('success', 'Saran/komplain berhasil dikirim!');
     }
 
     /**
@@ -161,7 +161,7 @@ class MemberController extends Controller
      * @param string|int $id
      * @return View
      */
-    public function detailTransaksi(string|int $id): View
+    public function transactionsDetail(string|int $id): View
     {
         $user = Auth::user();
         $transactions = TransactionDetail::where('transaction_id', $id)->get();
