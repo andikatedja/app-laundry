@@ -25,13 +25,13 @@ Route::get('/', function () {
 
 // Auth routes
 Route::group(['middleware' => 'language', 'controller' => LoginController::class], function () {
-    Route::get('login', 'index')->middleware('islogin');
-    Route::post('login', 'auth');
-    Route::get('register', 'registerView');
-    Route::post('register', 'register');
-    Route::get('register-admin', 'registerAdminView');
-    Route::post('register-admin', 'registerAdmin');
-    Route::get('logout', 'logout');
+    Route::get('login', 'index')->middleware('islogin')->name('login.index');
+    Route::post('login', 'auth')->name('login.authenticate');
+    Route::get('register', 'registerView')->name('login.register');
+    Route::post('register', 'register')->name('login.register.store');
+    Route::get('register-admin', 'registerAdminView')->name('login.register_admin');
+    Route::post('register-admin', 'registerAdmin')->name('login.register_admin.store');
+    Route::get('logout', 'logout')->name('login.logout');
 });
 
 
