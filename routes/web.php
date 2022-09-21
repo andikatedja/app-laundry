@@ -78,14 +78,14 @@ Route::group([
     'middleware' => ['language', 'islogin'],
     'controller' => MemberController::class
 ], function () {
-    Route::get('/', 'index');
-    Route::get('price-lists', 'priceLists');
-    Route::get('point', 'point');
-    Route::get('point/redeem/{voucher}', 'redeemVoucher');
-    Route::get('transactions', 'transactionsHistory');
-    Route::get('transactions/{id}', 'transactionsDetail');
-    Route::get('complaint-suggestions', 'complaintSuggestions');
-    Route::post('complaint-suggestions', 'sendComplaintSuggestions');
+    Route::get('/', 'index')->name('member.index');
+    Route::get('price-lists', 'priceLists')->name('member.price_lists');
+    Route::get('point', 'point')->name('member.point');
+    Route::get('point/redeem/{voucher}', 'redeemVoucher')->name('member.redeem');
+    Route::get('transactions', 'transactionsHistory')->name('member.transactions');
+    Route::get('transactions/{id}', 'transactionsDetail')->name('member.transactions.detail');
+    Route::get('complaint-suggestions', 'complaintSuggestions')->name('member.complaint');
+    Route::post('complaint-suggestions', 'sendComplaintSuggestions')->name('member.complaint_send');
 });
 
 // User profile routes

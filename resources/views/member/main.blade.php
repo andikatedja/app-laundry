@@ -35,7 +35,7 @@
             <ul class="navbar-nav ml-auto">
                 <!-- Notifications Dropdown Menu -->
                 <li class="nav-item">
-                    <a class="nav-link" href="{{url('member/point')}}">
+                    <a class="nav-link" href="{{ route('member.point') }}">
                         <i class="mr-2 fas fa-star"></i>Tukar Poin
                     </a>
                 </li>
@@ -46,7 +46,7 @@
                         {{$user->name}}
                     </a>
                     <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
-                        <a href="{{url('profile')}}" class="dropdown-item">
+                        <a href="{{ route('profile.index') }}" class="dropdown-item">
                             <i class="fas fa-user-edit mr-2"></i> Edit Profil
                         </a>
                         <div class="dropdown-divider"></div>
@@ -75,28 +75,29 @@
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
                         <li class="nav-item">
-                            <a href="{{url('member')}}" class="nav-link {{(request()->is('member')) ? 'active' : ''}}">
+                            <a href="{{ route('member.index') }}"
+                                class="nav-link {{ (request()->routeIs('member.index')) ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>Beranda</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{url('member/price-lists')}}"
-                                class="nav-link {{(request()->is('member/price-lists')) ? 'active' : ''}}">
+                            <a href="{{ route('member.price_lists') }}"
+                                class="nav-link {{ (request()->routeIs('member.price_lists')) ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-list"></i>
                                 <p>Daftar Harga</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{url('member/transactions')}}"
-                                class="nav-link {{(request()->is('member/transactions*')) ? 'active' : ''}}">
+                            <a href="{{ route('member.transactions') }}"
+                                class="nav-link {{ (request()->routeIs('member.transactions*')) ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-history"></i>
                                 <p>Riwayat Transaksi</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{url('member/point')}}"
-                                class="nav-link {{(request()->is('member/point')) ? 'active' : ''}}">
+                            <a href="{{ route('member.point') }}"
+                                class="nav-link {{ (request()->routeIs('member.point')) ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-star"></i>
                                 <p>Tukar Poin</p>
                             </a>
@@ -109,8 +110,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{url('member/complaint-suggestions')}}"
-                                class="nav-link {{(request()->is('member/complaint-suggestions')) ? 'active' : ''}}">
+                            <a href="{{ route('member.complaint') }}"
+                                class="nav-link {{ (request()->routeIs('member.complaint')) ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-sticky-note"></i>
                                 <p>Saran / Komplain</p>
                             </a>
@@ -138,7 +139,7 @@
 
         <!-- Main Footer -->
         <footer class="main-footer">
-            Copyright &copy; 2022 {{config('app.name')}} All rights reserved.
+            Copyright &copy; 2022 {{ config('app.name') }} All rights reserved.
         </footer>
     </div>
     <!-- ./wrapper -->
@@ -159,7 +160,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <a href="{{url('logout')}}" class="btn btn-primary">Keluar</a>
+                    <a href="{{ url('logout') }}" class="btn btn-primary">Keluar</a>
                 </div>
             </div>
         </div>
