@@ -37,7 +37,8 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
                         <img class="img-circle img-fit mr-1" width="25" height="25"
-                            src="{{asset('img/profile') . '/' . $user->profile_picture}}" alt="Foto Profil"> {{$user->name}}
+                            src="{{asset('img/profile') . '/' . $user->profile_picture}}" alt="Foto Profil">
+                        {{$user->name}}
                     </a>
                     <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
                         <a href="{{url('profile')}}" class="dropdown-item">
@@ -124,8 +125,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{url('profile')}}"
-                                class="nav-link {{(request()->is('profile')) ? 'active' : ''}}">
+                            <a href="{{ route('profile.index') }}"
+                                class="nav-link {{ (request()->routeIs('profile.index')) ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-user-edit"></i>
                                 <p>Edit Profil</p>
                             </a>

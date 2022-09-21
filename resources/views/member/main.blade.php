@@ -102,8 +102,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{url('profile')}}"
-                                class="nav-link {{(request()->is('profile')) ? 'active' : ''}}">
+                            <a href="{{ route('profile.index') }}"
+                                class="nav-link {{ (request()->routeIs('profile.index')) ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-user-edit"></i>
                                 <p>Edit Profil</p>
                             </a>
