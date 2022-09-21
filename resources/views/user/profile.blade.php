@@ -1,4 +1,3 @@
-
 @extends(($user->role == 2) ? 'member.main' : 'admin.main')
 
 @section('main-content')
@@ -41,7 +40,7 @@
                 @endif
                 <div class="card">
                     <div class="card-body">
-                        <form action="" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('patch')
                             <div class="row">
@@ -56,7 +55,7 @@
                                             <label class="custom-file-label" for="foto_profil">Choose file</label>
                                         </div>
                                     </div>
-                                    <a href="{{url('profile/resetfoto')}}"
+                                    <a href="{{ route('profile.reset_photo') }}"
                                         onclick="return confirm('Apakah anda yakin ingin reset foto profil?')"
                                         class="btn btn-danger">Reset Foto</a>
                                 </div>
@@ -129,7 +128,7 @@
                 <h3 class="mt-2">Ubah Kata Sandi</h3>
                 <div class="card">
                     <div class="card-body">
-                        <form action="{{url('profile/password')}}" method="POST">
+                        <form action="{{ route('profile.update_password') }}" method="POST">
                             @csrf
                             @method('patch')
                             <div class="form-group">

@@ -30,7 +30,7 @@ class UserController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function editprofil(Request $request): RedirectResponse
+    public function update(Request $request): RedirectResponse
     {
         $request->validate([
             'name' => 'required',
@@ -70,7 +70,7 @@ class UserController extends Controller
      *
      * @return RedirectResponse
      */
-    public function resetfoto(): RedirectResponse
+    public function resetPhoto(): RedirectResponse
     {
         $user = User::where('email', '=', Auth::user()->email)->first();
         $user->profile_picture = 'default.jpg';
@@ -85,7 +85,7 @@ class UserController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function editpassword(Request $request): RedirectResponse
+    public function updatePassword(Request $request): RedirectResponse
     {
         $request->validate([
             'current-password' => 'required',

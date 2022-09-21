@@ -94,10 +94,10 @@ Route::group([
     'middleware' => ['language', 'islogin'],
     'controller' => UserController::class
 ], function () {
-    Route::get('/', 'index');
-    Route::get('resetfoto', 'resetfoto');
-    Route::patch('/', 'editprofil');
-    Route::patch('password', 'editpassword');
+    Route::get('/', 'index')->name('profile.index');
+    Route::get('reset-photo', 'resetPhoto')->name('profile.reset_photo');
+    Route::patch('/', 'update')->name('profile.update');
+    Route::patch('password', 'updatePassword')->name('profile.update_password');
 });
 
 // Set language route
