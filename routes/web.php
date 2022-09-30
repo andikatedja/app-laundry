@@ -1,7 +1,8 @@
 <?php
 
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -24,14 +25,16 @@ Route::get('/', function () {
 })->middleware('language');
 
 // Auth routes
-Route::group(['middleware' => 'language', 'controller' => LoginController::class], function () {
-    Route::get('login', 'index')->middleware('islogin')->name('login.index');
-    Route::post('login', 'auth')->name('login.authenticate');
-    Route::get('register', 'registerView')->name('login.register');
-    Route::post('register', 'register')->name('login.register.store');
-    Route::get('register-admin', 'registerAdminView')->name('login.register_admin');
-    Route::post('register-admin', 'registerAdmin')->name('login.register_admin.store');
-    Route::get('logout', 'logout')->name('login.logout');
+Route::group(['middleware' => 'language'], function () {
+    Route::get('login', [LoginController::class, 'show'])->name('login.show')->middleware('islogin');
+    Route::post('login', [LoginController::class, 'authenticate'])->name('login.authenticate');
+    Route::get('logout', [LoginController::class, 'logout'])->name('login.logout');
+});
+Route::group(['middleware' => 'language'], function () {
+    Route::get('register', [RegisterController::class, 'show'])->name('register.show');
+    Route::post('register', [RegisterController::class, 'register'])->name('register.register');
+    Route::get('register-admin', [RegisterController::class, 'registerAdminView'])->name('register.admin');
+    Route::post('register-admin', [RegisterController::class, 'registerAdmin'])->name('register.register_admin');
 });
 
 
