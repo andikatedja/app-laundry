@@ -108,6 +108,8 @@ Route::get('/{locale}', function ($locale, Request $request) {
     if (!in_array($locale, ['en', 'id'])) {
         abort(404);
     }
+
     $request->session()->put('locale', $locale);
+
     return redirect()->back();
 });
