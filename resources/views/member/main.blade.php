@@ -6,12 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-    <title>{{config('app.name')}} - Member</title>
+    <title>{{ config('app.name') }} - Member</title>
 
     <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="{{asset('vendor/fontawesome-free/css/all.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}">
     <!-- Theme style -->
-    <link rel="stylesheet" href="{{asset('vendor/adminlte/css/adminlte.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('vendor/adminlte/css/adminlte.min.css') }}">
     <!-- Custom styles for this template -->
     <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet">
     <!-- Google Font: Nunito -->
@@ -27,7 +27,8 @@
             <!-- Left navbar links -->
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i
+                            class="fas fa-bars"></i></a>
                 </li>
             </ul>
 
@@ -42,11 +43,11 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
                         <img class="img-circle img-fit mr-1" width="25" height="25"
-                            src="{{asset('img/profile') . '/' . $user->profile_picture}}" alt="Foto Profil">
-                        {{$user->name}}
+                            src="{{ $user->getFileAsset() }}" alt="Foto Profil">
+                        {{ $user->name }}
                     </a>
                     <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
-                        <a href="{{ route('profile.index') }}" class="dropdown-item">
+                        <a href="{{ route('profile.show') }}" class="dropdown-item">
                             <i class="fas fa-user-edit mr-2"></i> Edit Profil
                         </a>
                         <div class="dropdown-divider"></div>
@@ -64,7 +65,7 @@
             <!-- Brand Logo -->
             <a href="" class="brand-link mt-2">
                 <i class="fas fa-tshirt brand-image mt-1 ml-3"></i>
-                <h4 class="brand-text text-center">{{config('app.name')}}</h4>
+                <h4 class="brand-text text-center">{{ config('app.name') }}</h4>
             </a>
 
             <!-- Sidebar -->
@@ -76,42 +77,42 @@
                         data-accordion="false">
                         <li class="nav-item">
                             <a href="{{ route('member.index') }}"
-                                class="nav-link {{ (request()->routeIs('member.index')) ? 'active' : '' }}">
+                                class="nav-link {{ request()->routeIs('member.index') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>Beranda</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('member.price_lists') }}"
-                                class="nav-link {{ (request()->routeIs('member.price_lists')) ? 'active' : '' }}">
+                                class="nav-link {{ request()->routeIs('member.price_lists') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-list"></i>
                                 <p>Daftar Harga</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('member.transactions') }}"
-                                class="nav-link {{ (request()->routeIs('member.transactions*')) ? 'active' : '' }}">
+                                class="nav-link {{ request()->routeIs('member.transactions*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-history"></i>
                                 <p>Riwayat Transaksi</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('member.point') }}"
-                                class="nav-link {{ (request()->routeIs('member.point')) ? 'active' : '' }}">
+                                class="nav-link {{ request()->routeIs('member.point') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-star"></i>
                                 <p>Tukar Poin</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('profile.index') }}"
-                                class="nav-link {{ (request()->routeIs('profile.index')) ? 'active' : '' }}">
+                            <a href="{{ route('profile.show') }}"
+                                class="nav-link {{ request()->routeIs('profile.show') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-user-edit"></i>
                                 <p>Edit Profil</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('member.complaint') }}"
-                                class="nav-link {{ (request()->routeIs('member.complaint')) ? 'active' : '' }}">
+                                class="nav-link {{ request()->routeIs('member.complaint') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-sticky-note"></i>
                                 <p>Saran / Komplain</p>
                             </a>
@@ -169,13 +170,13 @@
     <!-- REQUIRED SCRIPTS -->
 
     <!-- jQuery -->
-    <script src="{{asset('vendor/jquery/jquery.min.js')}}"></script>
+    <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
     <!-- Bootstrap 4 -->
-    <script src="{{asset('vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
-    <script src="{{asset('vendor/bs-custom-file-input/bs-custom-file-input.min.js')}}"></script>
+    <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('vendor/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
     <!-- AdminLTE App -->
-    <script src="{{asset('vendor/adminlte/js/adminlte.min.js')}}"></script>
-    <script src="{{asset('js/myscript.js')}}"></script>
+    <script src="{{ asset('vendor/adminlte/js/adminlte.min.js') }}"></script>
+    <script src="{{ asset('js/myscript.js') }}"></script>
     @yield('scripts')
 </body>
 

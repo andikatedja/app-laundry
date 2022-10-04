@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -92,15 +93,11 @@ Route::group([
 });
 
 // User profile routes
-Route::group([
-    'prefix' => 'profile',
-    'middleware' => ['language', 'islogin'],
-    'controller' => UserController::class
-], function () {
-    Route::get('/', 'index')->name('profile.index');
-    Route::get('reset-photo', 'resetPhoto')->name('profile.reset_photo');
-    Route::patch('/', 'update')->name('profile.update');
-    Route::patch('password', 'updatePassword')->name('profile.update_password');
+Route::group(['prefix' => 'profile', 'middleware' => ['language', 'islogin'],], function () {
+    Route::get('/', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('reset-photo', [ProfileController::class, 'resetPhoto'])->name('profile.reset_photo');
+    Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('password', [ProfileController::class, 'updatePassword'])->name('profile.update_password');
 });
 
 // Set language route
