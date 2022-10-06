@@ -36,7 +36,7 @@ class ProfileController extends Controller
     {
         $user = User::where('email', $request->user()->email)->first();
 
-        $user->fill($request->safe(['profile_picture']));
+        $user->fill($request->safe()->all());
         $user->save();
 
         return redirect('profile')->with('success', 'Profil berhasil diedit!');
@@ -65,22 +65,20 @@ class ProfileController extends Controller
     public function updatePassword(Request $request): RedirectResponse
     {
         $request->validate([
-            'current-password' => 'required',
-            'password' => 'required|min:8|confirmed',
+            'current_password' => ['required'],
+            'password' => ['required', 'min:8', 'confirmed'],
         ]);
 
         $user = User::where('email', '=', Auth::user()->email)->first();
 
         // Check if current password is the same
-        if (!Hash::check($request->input('current-password'), $user->password)) {
+        if (!Hash::check($request->input('current_password'), $user->password)) {
             return redirect('profile')->with('error', 'Kata sandi sekarang salah!');
         }
 
-        $passwordHash = Hash::make($request->input('password'));
+        $user->fill($request->only(['password']));
+        $user->saveOrFail();
 
-        $user->password = $passwordHash;
-        $user->save();
-
-        return redirect('profile')->with('success', 'Kata sandi berhasil diubah');
+        return redirect()->route('profile.show')->with('success', 'Kata sandi berhasil diubah');
     }
 }
