@@ -5,6 +5,11 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\Profile\ProfileController;
+use App\Http\Controllers\Member\DashboardController as MemberDashboard;
+use App\Http\Controllers\Member\PointController as MemberPoint;
+use App\Http\Controllers\Member\PriceListController as MemberPriceList;
+use App\Http\Controllers\Member\TransactionController as MemberTransaction;
+use App\Http\Controllers\Member\ComplaintSuggestionController as MemberComplaintSuggestion;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -80,16 +85,15 @@ Route::group([
 Route::group([
     'prefix' => 'member',
     'middleware' => ['language', 'islogin'],
-    'controller' => MemberController::class
 ], function () {
-    Route::get('/', 'index')->name('member.index');
-    Route::get('price-lists', 'priceLists')->name('member.price_lists');
-    Route::get('point', 'point')->name('member.point');
-    Route::get('point/redeem/{voucher}', 'redeemVoucher')->name('member.redeem');
-    Route::get('transactions', 'transactionsHistory')->name('member.transactions');
-    Route::get('transactions/{id}', 'transactionsDetail')->name('member.transactions.detail');
-    Route::get('complaint-suggestions', 'complaintSuggestions')->name('member.complaint');
-    Route::post('complaint-suggestions', 'sendComplaintSuggestions')->name('member.complaint_send');
+    Route::get('/', [MemberDashboard::class, 'index'])->name('member.index');
+    Route::get('price-lists', [MemberPriceList::class, 'priceLists'])->name('member.price_lists');
+    Route::get('point', [MemberPoint::class, 'point'])->name('member.point');
+    Route::get('point/redeem/{voucher}', [MemberPoint::class, 'redeemVoucher'])->name('member.redeem');
+    Route::get('transactions', [MemberTransaction::class, 'transactionsHistory'])->name('member.transactions');
+    Route::get('transactions/{id}', [MemberTransaction::class, 'transactionsDetail'])->name('member.transactions.detail');
+    Route::get('complaint-suggestions', [MemberComplaintSuggestion::class, 'complaintSuggestions'])->name('member.complaint');
+    Route::post('complaint-suggestions', [MemberComplaintSuggestion::class, 'sendComplaintSuggestions'])->name('member.complaint_send');
 });
 
 // User profile routes
