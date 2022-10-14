@@ -36,7 +36,7 @@
             <ul class="navbar-nav ml-auto">
                 <!-- Notifications Dropdown Menu -->
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('member.point') }}">
+                    <a class="nav-link" href="{{ route('member.points.index') }}">
                         <i class="mr-2 fas fa-star"></i>Tukar Poin
                     </a>
                 </li>
@@ -83,36 +83,36 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('member.price_lists') }}"
-                                class="nav-link {{ request()->routeIs('member.price_lists') ? 'active' : '' }}">
+                            <a href="{{ route('member.price_lists.index') }}"
+                                class="nav-link {{ request()->routeIs('member.price_lists.index') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-list"></i>
                                 <p>Daftar Harga</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('member.transactions') }}"
+                            <a href="{{ route('member.transactions.index') }}"
                                 class="nav-link {{ request()->routeIs('member.transactions*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-history"></i>
                                 <p>Riwayat Transaksi</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('member.point') }}"
-                                class="nav-link {{ request()->routeIs('member.point') ? 'active' : '' }}">
+                            <a href="{{ route('member.points.index') }}"
+                                class="nav-link {{ request()->routeIs('member.points.index') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-star"></i>
                                 <p>Tukar Poin</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('profile.index') }}"
-                                class="nav-link {{ request()->routeIs('profile.show') ? 'active' : '' }}">
+                                class="nav-link {{ request()->routeIs('profile.index') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-user-edit"></i>
                                 <p>Edit Profil</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('member.complaint') }}"
-                                class="nav-link {{ request()->routeIs('member.complaint') ? 'active' : '' }}">
+                            <a href="{{ route('member.complaints.index') }}"
+                                class="nav-link {{ request()->routeIs('member.complaints.index') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-sticky-note"></i>
                                 <p>Saran / Komplain</p>
                             </a>

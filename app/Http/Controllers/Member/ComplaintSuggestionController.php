@@ -16,7 +16,7 @@ class ComplaintSuggestionController extends Controller
      *
      * @return View
      */
-    public function complaintSuggestions(): View
+    public function index(): View
     {
         $user = Auth::user();
         $complaintSuggestions = ComplaintSuggestion::where('user_id', $user->id)->get();
@@ -30,7 +30,7 @@ class ComplaintSuggestionController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function sendComplaintSuggestions(Request $request): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'isi_sarankomplain' => 'required'

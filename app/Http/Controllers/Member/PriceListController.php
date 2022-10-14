@@ -16,7 +16,7 @@ class PriceListController extends Controller
      *
      * @return View
      */
-    public function priceLists(): View
+    public function index(): View
     {
         $user = Auth::user();
         $satuan = PriceList::where('category_id', 1)->get();

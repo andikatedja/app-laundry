@@ -16,7 +16,7 @@ class TransactionController extends Controller
      *
      * @return View
      */
-    public function transactionsHistory(): View
+    public function index(): View
     {
         $user = Auth::user();
         $transactions = Transaction::with('status')->where('member_id', $user->id)
@@ -33,7 +33,7 @@ class TransactionController extends Controller
      * @param string|int $id
      * @return View
      */
-    public function transactionsDetail(string|int $id): View
+    public function show(string|int $id): View
     {
         $user = Auth::user();
         $transactions = TransactionDetail::where('transaction_id', $id)->get();
