@@ -1,18 +1,10 @@
 <?php
 
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\MemberController;
 use App\Http\Controllers\Profile\ProfileController;
-use App\Http\Controllers\Member\DashboardController as MemberDashboard;
-use App\Http\Controllers\Member\PointController as MemberPoint;
-use App\Http\Controllers\Member\PriceListController as MemberPriceList;
-use App\Http\Controllers\Member\TransactionController as MemberTransaction;
-use App\Http\Controllers\Member\ComplaintSuggestionController as MemberComplaintSuggestion;
 use App\Http\Controllers\Profile\ProfilePasswordController;
 use App\Http\Controllers\Profile\ProfilePhotoController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -43,59 +35,6 @@ Route::group(['middleware' => 'language'], function () {
     Route::post('register', [RegisterController::class, 'register'])->name('register.register');
     Route::get('register-admin', [RegisterController::class, 'registerAdminView'])->name('register.admin');
     Route::post('register-admin', [RegisterController::class, 'registerAdmin'])->name('register.register_admin');
-});
-
-
-// Admin routes
-Route::group([
-    'prefix' => 'admin',
-    'middleware' => ['language', 'islogin'],
-    'controller' => AdminController::class
-], function () {
-    Route::get('/', 'index');
-    Route::get('input-transaksi', 'inputTransaksi');
-    Route::get('transaksi', 'riwayatTransaksi');
-    Route::get('hapus-sesstransaksi', 'hapusSessTransaksi');
-    Route::get('hapus-transaksi/{row_id}', 'hapusTransaksi');
-    Route::post('simpan-transaksi', 'simpanTransaksi');
-    Route::post('tambah-transaksi', 'tambahTransaksi');
-    Route::post('ambil-detail-transaksi', 'ambilDetailTransaksi');
-    Route::post('ubah-status-transaksi', 'ubahStatusTransaksi');
-    Route::get('cetak-transaksi/{id}', 'cetakTransaksi');
-    Route::get('harga', 'harga');
-    Route::post('ambil-harga', 'ambilHarga');
-    Route::post('tambah-harga', 'tambahHarga');
-    Route::post('ubah-harga', 'ubahHarga');
-    Route::post('tambah-barang', 'tambahBarang');
-    Route::post('tambah-servis', 'tambahServis');
-    Route::get('members', 'members');
-    Route::get('voucher', 'voucher');
-    Route::post('voucher/tambah', 'tambahVoucher');
-    Route::post('voucher/ubahaktif', 'ubahAktifVoucher');
-    Route::get('saran', 'saran');
-    Route::post('ambil-sarankomplain', 'ambilSaranKomplain');
-    Route::post('kirim-balasan', 'kirimBalasan');
-    Route::get('laporan', 'laporan');
-    Route::post('get-month', 'getMonth');
-    Route::post('cetak-laporan', 'cetakLaporan');
-    Route::get('laporanview', 'laporanview');
-    Route::get('get-service-type', 'getServiceType');
-    Route::patch('update-service-type', 'updateServiceType');
-});
-
-//Member routes
-Route::group([
-    'prefix' => 'member',
-    'middleware' => ['language', 'islogin'],
-], function () {
-    Route::get('/', [MemberDashboard::class, 'index'])->name('member.index');
-    Route::get('price-lists', [MemberPriceList::class, 'priceLists'])->name('member.price_lists');
-    Route::get('point', [MemberPoint::class, 'point'])->name('member.point');
-    Route::get('point/redeem/{voucher}', [MemberPoint::class, 'redeemVoucher'])->name('member.redeem');
-    Route::get('transactions', [MemberTransaction::class, 'transactionsHistory'])->name('member.transactions');
-    Route::get('transactions/{id}', [MemberTransaction::class, 'transactionsDetail'])->name('member.transactions.detail');
-    Route::get('complaint-suggestions', [MemberComplaintSuggestion::class, 'complaintSuggestions'])->name('member.complaint');
-    Route::post('complaint-suggestions', [MemberComplaintSuggestion::class, 'sendComplaintSuggestions'])->name('member.complaint_send');
 });
 
 // User profile routes
