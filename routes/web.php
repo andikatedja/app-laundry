@@ -98,7 +98,7 @@ Route::group([
 
 // User profile routes
 Route::group(['prefix' => 'profile', 'middleware' => ['language', 'islogin'],], function () {
-    Route::get('/', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/', [ProfileController::class, 'index'])->name('profile.index');
     Route::get('reset-photo', [ProfileController::class, 'resetPhoto'])->name('profile.reset_photo');
     Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
     Route::patch('password', [ProfileController::class, 'updatePassword'])->name('profile.update_password');

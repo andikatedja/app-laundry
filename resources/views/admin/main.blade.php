@@ -126,7 +126,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('profile.show') }}"
+                            <a href="{{ route('profile.index') }}"
                                 class="nav-link {{ request()->routeIs('profile.show') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-user-edit"></i>
                                 <p>Edit Profil</p>

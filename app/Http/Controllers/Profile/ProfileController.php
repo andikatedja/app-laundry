@@ -19,7 +19,7 @@ class ProfileController extends Controller
      *
      * @return View
      */
-    public function show(): View
+    public function index(): View
     {
         $user = Auth::user();
 
@@ -79,6 +79,6 @@ class ProfileController extends Controller
         $user->fill($request->only(['password']));
         $user->saveOrFail();
 
-        return redirect()->route('profile.show')->with('success', 'Kata sandi berhasil diubah');
+        return redirect()->route('profile.index')->with('success', 'Kata sandi berhasil diubah');
     }
 }

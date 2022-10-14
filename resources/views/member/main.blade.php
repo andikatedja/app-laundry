@@ -47,7 +47,7 @@
                         {{ $user->name }}
                     </a>
                     <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
-                        <a href="{{ route('profile.show') }}" class="dropdown-item">
+                        <a href="{{ route('profile.index') }}" class="dropdown-item">
                             <i class="fas fa-user-edit mr-2"></i> Edit Profil
                         </a>
                         <div class="dropdown-divider"></div>
@@ -104,7 +104,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('profile.show') }}"
+                            <a href="{{ route('profile.index') }}"
                                 class="nav-link {{ request()->routeIs('profile.show') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-user-edit"></i>
                                 <p>Edit Profil</p>
