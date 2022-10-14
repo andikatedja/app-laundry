@@ -10,7 +10,7 @@ class ServiceType extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $fillable = ['name', 'description', 'cost'];
 
     public function transaction()
     {

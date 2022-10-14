@@ -10,7 +10,15 @@ class Transaction extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'status_id',
+        'admin_id',
+        'member_id',
+        'discount',
+        'total',
+        'service_type_id',
+        'service_cost',
+    ];
 
     public function member()
     {
