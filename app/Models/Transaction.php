@@ -37,24 +37,18 @@ class Transaction extends Model
         return $this->belongsTo(ServiceType::class);
     }
 
-    public function total(): Attribute
+    public function getFormattedTotal(): string
     {
-        return Attribute::make(
-            get: fn ($value) => 'Rp ' . number_format($value, 0, ',', '.')
-        );
+        return 'Rp ' . number_format($this->total, 0, ',', '.');
     }
 
-    public function paymentAmount(): Attribute
+    public function getFormattedPaymentAmount(): string
     {
-        return Attribute::make(
-            get: fn ($value) => 'Rp ' . number_format($value, 0, ',', '.')
-        );
+        return 'Rp ' . number_format($this->payment_amount, 0, ',', '.');
     }
 
-    public function serviceCost(): Attribute
+    public function getFormattedServiceCost(): string
     {
-        return Attribute::make(
-            get: fn ($value) => 'Rp ' . number_format($value, 0, ',', '.')
-        );
+        return 'Rp ' . number_format($this->service_cost, 0, ',', '.');
     }
 }

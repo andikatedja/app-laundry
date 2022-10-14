@@ -17,10 +17,8 @@ class ServiceType extends Model
         return $this->hasMany(Transaction::class);
     }
 
-    public function cost(): Attribute
+    public function getFormattedCost(): string
     {
-        return Attribute::make(
-            get: fn ($value) => 'Rp ' . number_format($value, 0, ',', '.')
-        );
+        return 'Rp ' . number_format($this->cost, 0, ',', '.');
     }
 }

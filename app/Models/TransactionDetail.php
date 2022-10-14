@@ -22,17 +22,13 @@ class TransactionDetail extends Model
         return $this->belongsTo(PriceList::class);
     }
 
-    public function price(): Attribute
+    public function getFormattedPrice(): string
     {
-        return Attribute::make(
-            get: fn ($value) => 'Rp ' . number_format($value, 0, ',', '.')
-        );
+        return 'Rp ' . number_format($this->price, 0, ',', '.');
     }
 
-    public function subTotal(): Attribute
+    public function getFormattedSubTotal(): string
     {
-        return Attribute::make(
-            get: fn ($value) => 'Rp ' . number_format($value, 0, ',', '.')
-        );
+        return 'Rp ' . number_format($this->sub_total, 0, ',', '.');
     }
 }
