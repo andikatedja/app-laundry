@@ -41,44 +41,4 @@ class ProfileController extends Controller
 
         return redirect('profile')->with('success', 'Profil berhasil diedit!');
     }
-
-    /**
-     * Method to reset user profile picture
-     *
-     * @return RedirectResponse
-     */
-    public function resetPhoto(): RedirectResponse
-    {
-        $user = User::where('email', '=', Auth::user()->email)->first();
-        $user->profile_picture = 'default.jpg';
-        $user->save();
-
-        return redirect('profile')->with('success', 'Foto profil berhasil direset');
-    }
-
-    /**
-     * Method to update user's password
-     *
-     * @param Request $request
-     * @return RedirectResponse
-     */
-    public function updatePassword(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'current_password' => ['required'],
-            'password' => ['required', 'min:8', 'confirmed'],
-        ]);
-
-        $user = User::where('email', '=', Auth::user()->email)->first();
-
-        // Check if current password is the same
-        if (!Hash::check($request->input('current_password'), $user->password)) {
-            return redirect('profile')->with('error', 'Kata sandi sekarang salah!');
-        }
-
-        $user->fill($request->only(['password']));
-        $user->saveOrFail();
-
-        return redirect()->route('profile.index')->with('success', 'Kata sandi berhasil diubah');
-    }
 }

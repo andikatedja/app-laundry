@@ -10,6 +10,8 @@ use App\Http\Controllers\Member\PointController as MemberPoint;
 use App\Http\Controllers\Member\PriceListController as MemberPriceList;
 use App\Http\Controllers\Member\TransactionController as MemberTransaction;
 use App\Http\Controllers\Member\ComplaintSuggestionController as MemberComplaintSuggestion;
+use App\Http\Controllers\Profile\ProfilePasswordController;
+use App\Http\Controllers\Profile\ProfilePhotoController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -99,9 +101,9 @@ Route::group([
 // User profile routes
 Route::group(['prefix' => 'profile', 'middleware' => ['language', 'islogin'],], function () {
     Route::get('/', [ProfileController::class, 'index'])->name('profile.index');
-    Route::get('reset-photo', [ProfileController::class, 'resetPhoto'])->name('profile.reset_photo');
     Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
-    Route::patch('password', [ProfileController::class, 'updatePassword'])->name('profile.update_password');
+    Route::get('/delete/photo', [ProfilePhotoController::class, 'destroy'])->name('profile.destroy.photo');
+    Route::patch('/update/password', [ProfilePasswordController::class, 'update'])->name('profile.update.password');
 });
 
 // Set language route
