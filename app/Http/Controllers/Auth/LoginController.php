@@ -6,10 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller
 {
@@ -32,11 +30,11 @@ class LoginController extends Controller
     public function authenticate(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
+            'email'    => ['required', 'email'],
             'password' => ['required'],
         ]);
 
-        $remember = $request->has('remember') ? true : false;
+        $remember = $request->has('remember');
 
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
@@ -48,7 +46,9 @@ class LoginController extends Controller
             }
         }
 
-        return redirect('login')->with('error', Lang::get('auth.error_email_password'));
+        return redirect()->route('login.show')
+            ->with('error', Lang::get('auth.error_email_password'))
+            ->withInput();
     }
 
     /**
@@ -64,6 +64,7 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login.show')->with('success', Lang::get('auth.logout_success'));
+        return redirect()->route('login.show')
+            ->with('success', Lang::get('auth.logout_success'));
     }
 }

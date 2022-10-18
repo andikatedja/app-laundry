@@ -8,17 +8,14 @@ use App\Http\Requests\Auth\RegisterMemberRequest;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Lang;
-use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
     /**
      * Method to show register view
      *
-     * @return void
+     * @return View
      */
     public function show(): View
     {
@@ -59,7 +56,8 @@ class RegisterController extends Controller
     {
         // Check if secret key is the same
         if ($request->input('secret') != env('REGISTER_ADMIN_SECRET_KEY', 'Secret123')) {
-            return redirect()->route('register.admin')->with('error', 'Secret key salah.');
+            return redirect()->route('register.admin')
+                ->with('error', 'Secret key salah.');
         }
 
         $user = new User(
@@ -68,6 +66,7 @@ class RegisterController extends Controller
         $user->role = 1;
         $user->saveOrFail();
 
-        return redirect()->route('login.show')->with('success', Lang::get('auth.register_success'));
+        return redirect()->route('login.show')
+            ->with('success', Lang::get('auth.register_success'));
     }
 }
