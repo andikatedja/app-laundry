@@ -153,7 +153,7 @@ trait ProfilePicture
      */
     public function isDefaultFileName(): bool
     {
-        return $this->getAttribute($this->fileColumn()) === $this->getDefaultFileName();
+        return $this->getRawOriginal($this->fileColumn()) === $this->getDefaultFileName();
     }
 
     /**
