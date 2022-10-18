@@ -1,18 +1,24 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\Transaction\TransactionController;
+use App\Http\Controllers\Admin\Transaction\TransactionSessionController;
 use App\Http\Controllers\AdminController;
 
 Route::group([
     'middleware' => ['language', 'islogin'],
     'controller' => AdminController::class
 ], function () {
-    Route::get('/', 'index');
-    Route::get('/input-transaksi', 'inputTransaksi');
-    Route::get('/transaksi', 'riwayatTransaksi');
+    Route::get('/', [DashboardController::class, 'index']);
+
+    Route::get('/transactions/create', [TransactionController::class, 'create']);
+    Route::get('/transactions', [TransactionController::class, 'index']);
+    Route::post('/transactions', [TransactionController::class, 'store']);
+
+    Route::post('/transactions/session', [TransactionSessionController::class, 'store']);
+    Route::get('/transactions/session/{rowId}', [TransactionSessionController::class, 'destroy']);
+
     Route::get('/hapus-sesstransaksi', 'hapusSessTransaksi');
-    Route::get('/hapus-transaksi/{row_id}', 'hapusTransaksi');
-    Route::post('/simpan-transaksi', 'simpanTransaksi');
-    Route::post('/tambah-transaksi', 'tambahTransaksi');
     Route::post('/ambil-detail-transaksi', 'ambilDetailTransaksi');
     Route::post('/ubah-status-transaksi', 'ubahStatusTransaksi');
     Route::get('/cetak-transaksi/{id}', 'cetakTransaksi');
