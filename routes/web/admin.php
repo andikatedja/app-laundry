@@ -1,8 +1,16 @@
 <?php
 
+use App\Http\Controllers\Admin\ComplaintSuggestionController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ItemController;
+use App\Http\Controllers\Admin\MemberController;
+use App\Http\Controllers\Admin\PriceListController;
+use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\Transaction\PrintTransactionController;
 use App\Http\Controllers\Admin\Transaction\TransactionController;
 use App\Http\Controllers\Admin\Transaction\TransactionSessionController;
+use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\AdminController;
 
 Route::group([
@@ -14,30 +22,37 @@ Route::group([
     Route::get('/transactions/create', [TransactionController::class, 'create']);
     Route::get('/transactions', [TransactionController::class, 'index']);
     Route::post('/transactions', [TransactionController::class, 'store']);
+    Route::get('/transactions/{transaction}', [TransactionController::class, 'show']);
+    Route::patch('/transactions/{transaction}', [TransactionController::class, 'update']);
 
     Route::post('/transactions/session', [TransactionSessionController::class, 'store']);
     Route::get('/transactions/session/{rowId}', [TransactionSessionController::class, 'destroy']);
 
-    Route::get('/hapus-sesstransaksi', 'hapusSessTransaksi');
-    Route::post('/ambil-detail-transaksi', 'ambilDetailTransaksi');
-    Route::post('/ubah-status-transaksi', 'ubahStatusTransaksi');
-    Route::get('/cetak-transaksi/{id}', 'cetakTransaksi');
-    Route::get('/harga', 'harga');
-    Route::post('/ambil-harga', 'ambilHarga');
-    Route::post('/tambah-harga', 'tambahHarga');
-    Route::post('/ubah-harga', 'ubahHarga');
-    Route::post('/tambah-barang', 'tambahBarang');
-    Route::post('/tambah-servis', 'tambahServis');
-    Route::get('/members', 'members');
-    Route::get('/voucher', 'voucher');
-    Route::post('/voucher/tambah', 'tambahVoucher');
-    Route::post('/voucher/ubahaktif', 'ubahAktifVoucher');
-    Route::get('/saran', 'saran');
-    Route::post('/ambil-sarankomplain', 'ambilSaranKomplain');
-    Route::post('/kirim-balasan', 'kirimBalasan');
-    Route::get('/laporan', 'laporan');
+    Route::get('/transactions/print/{transaction}', [PrintTransactionController::class, 'index']);
+
+    Route::get('/price-lists', [PriceListController::class, 'index']);
+    Route::post('/price-lists', [PriceListController::class, 'store']);
+    Route::get('/price-lists/{priceList}', [PriceListController::class, 'show']);
+    Route::patch('/price-lists/{priceList}', [PriceListController::class, 'update']);
+
+    Route::post('/items', [ItemController::class, 'store']);
+
+    Route::post('/services', [ServiceController::class, 'store']);
+
+    Route::get('/members', [MemberController::class, 'index']);
+
+    Route::get('/vouchers', [VoucherController::class, 'index']);
+    Route::post('/vouchers', [VoucherController::class, 'store']);
+    Route::patch('/vouchers/{voucher}', [VoucherController::class, 'update']);
+
+    Route::get('/complaint-suggestions', [ComplaintSuggestionController::class, 'index']);
+    Route::get('/complaint-suggestions/{complaintSuggestion}', [ComplaintSuggestionController::class, 'show']);
+    Route::post('/complaint-suggestions/{complaintSuggestion}', [ComplaintSuggestionController::class, 'update']);
+
+    Route::get('/reports', [ReportController::class, 'index']);
+    Route::post('/reports/print', [ReportController::class, 'print']);
+
     Route::post('/get-month', 'getMonth');
-    Route::post('/cetak-laporan', 'cetakLaporan');
     Route::get('/laporanview', 'laporanview');
     Route::get('/get-service-type', 'getServiceType');
     Route::patch('/update-service-type', 'updateServiceType');

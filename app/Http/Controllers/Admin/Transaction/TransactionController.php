@@ -187,4 +187,31 @@ class TransactionController extends Controller
 
         return redirect('admin/input-transaksi')->with('success', 'Transaksi berhasil disimpan')->with('id_trs', $transaction->id);
     }
+
+    /**
+     * Fungsi untuk mengambil detail transaksi dari ajax
+     */
+    public function show(Transaction $transaction)
+    {
+        $transaction = $transaction->with(['transaction_detail', 'transaction.service_type', 'price_list', 'price_list.item', 'price_list.service', 'price_list.category'])->get();
+
+        return response()->json($transaction);
+    }
+
+    /**
+     * Fungsi untuk mengubah status transaksi dari sedang dikerjakan menjadi selesai
+     */
+    public function update(Transaction $transaction, Request $request)
+    {
+        $currentDate = null;
+        // Jika status 3 maka artinya sudah selesai, set tgl menjadi tgl selesai
+        if ($request->input('val') == 3) {
+            $currentDate = date('Y-m-d H:i:s');
+        }
+
+        $transaction = Transaction::where('id', $request->input('id_transaksi'))->first();
+        $transaction->status_id = $request->input('val');
+        $transaction->finish_date = $currentDate;
+        $transaction->save();
+    }
 }
