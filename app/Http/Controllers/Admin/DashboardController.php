@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 use App\Models\User;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,13 +14,14 @@ class DashboardController extends Controller
     /**
      * Function to show admin dashboard view
      *
-     * @return void
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
         $user = Auth::user();
 
-        $recentTransactions = Transaction::where('finish_date', null)
+        $recentTransactions = Transaction::whereNull('finish_date')
+            ->with('status')
             ->where('service_type_id', 1)
             ->orderByDesc('created_at')
             ->limit(10)
@@ -29,12 +31,19 @@ class DashboardController extends Controller
 
         $transactionsCount = Transaction::count();
 
-        $priorityTransactions = Transaction::where('finish_date', null)
+        $priorityTransactions = Transaction::whereNull('finish_date')
+            ->with('status')
             ->where('service_type_id', 2)
             ->orderByDesc('created_at')
             ->limit(10)
             ->get();
 
-        return view('admin.index', compact('user', 'recentTransactions', 'membersCount', 'transactionsCount', 'priorityTransactions'));
+        return view('admin.index', compact(
+            'user',
+            'recentTransactions',
+            'membersCount',
+            'transactionsCount',
+            'priorityTransactions'
+        ));
     }
 }
