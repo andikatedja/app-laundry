@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Controllers\Profile\ProfilePasswordController;
 use App\Http\Controllers\Profile\ProfilePhotoController;
@@ -48,12 +49,4 @@ Route::group([
 });
 
 // Set language route
-Route::get('/{locale}', function ($locale, Request $request) {
-    if (!in_array($locale, ['en', 'id'])) {
-        abort(404);
-    }
-
-    $request->session()->put('locale', $locale);
-
-    return redirect()->back();
-});
+Route::get('/{locale}', LocaleController::class);
