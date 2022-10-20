@@ -55,7 +55,7 @@
                                                 <label class="custom-file-label" for="foto_profil">Choose file</label>
                                             </div>
                                         </div>
-                                        <a href="{{ route('profile.destroy.photo') }}"
+                                        <a href="{{ route('profile.photo.destroy') }}"
                                             onclick="return confirm('Apakah anda yakin ingin reset foto profil?')"
                                             class="btn btn-danger">Reset Foto</a>
                                     </div>
@@ -128,7 +128,7 @@
                     <h3 class="mt-2">Ubah Kata Sandi</h3>
                     <div class="card">
                         <div class="card-body">
-                            <form action="{{ route('profile.update.password') }}" method="POST">
+                            <form action="{{ route('profile.password.update') }}" method="POST">
                                 @csrf
                                 @method('patch')
                                 <div class="form-group">

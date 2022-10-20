@@ -29,8 +29,7 @@ Route::group(['middleware' => 'language'], function () {
     Route::get('login', [LoginController::class, 'show'])->name('login.show')->middleware('islogin');
     Route::post('login', [LoginController::class, 'authenticate'])->name('login.authenticate');
     Route::get('logout', [LoginController::class, 'logout'])->name('login.logout');
-});
-Route::group(['middleware' => 'language'], function () {
+
     Route::get('register', [RegisterController::class, 'show'])->name('register.show');
     Route::post('register', [RegisterController::class, 'register'])->name('register.register');
     Route::get('register-admin', [RegisterController::class, 'registerAdminView'])->name('register.admin');
@@ -38,11 +37,14 @@ Route::group(['middleware' => 'language'], function () {
 });
 
 // User profile routes
-Route::group(['prefix' => 'profile', 'middleware' => ['language', 'islogin'],], function () {
+Route::group([
+    'prefix' => 'profile',
+    'middleware' => ['language', 'islogin'],
+], function () {
     Route::get('/', [ProfileController::class, 'index'])->name('profile.index');
     Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
-    Route::get('/delete/photo', [ProfilePhotoController::class, 'destroy'])->name('profile.destroy.photo');
-    Route::patch('/update/password', [ProfilePasswordController::class, 'update'])->name('profile.update.password');
+    Route::get('/photo/delete', [ProfilePhotoController::class, 'destroy'])->name('profile.photo.destroy');
+    Route::patch('/password', [ProfilePasswordController::class, 'update'])->name('profile.password.update');
 });
 
 // Set language route
