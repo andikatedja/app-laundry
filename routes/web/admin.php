@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\MemberController;
 use App\Http\Controllers\Admin\PriceListController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\ServiceTypeController;
 use App\Http\Controllers\Admin\Transaction\PrintTransactionController;
 use App\Http\Controllers\Admin\Transaction\TransactionController;
 use App\Http\Controllers\Admin\Transaction\TransactionSessionController;
@@ -51,9 +52,9 @@ Route::group([
 
     Route::get('/reports', [ReportController::class, 'index']);
     Route::post('/reports/print', [ReportController::class, 'print']);
+    Route::post('/reports/get-month', [ReportController::class, 'getMonth']);
 
-    Route::post('/get-month', 'getMonth');
     Route::get('/laporanview', 'laporanview');
-    Route::get('/get-service-type', 'getServiceType');
-    Route::patch('/update-service-type', 'updateServiceType');
+    Route::get('/service-type/{serviceType}', [ServiceTypeController::class, 'show']);
+    Route::patch('/service-type/{serviceType}', [ServiceTypeController::class, 'update']);
 });

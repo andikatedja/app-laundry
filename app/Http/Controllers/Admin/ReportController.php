@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
-use Barryvdh\DomPDF\Facade\Pdf;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use PDF;
 
 class ReportController extends Controller
 {
@@ -36,9 +36,20 @@ class ReportController extends Controller
             ->whereYear('created_at', $yearInput)->sum('total');
         $transactionsCount = Transaction::whereMonth('created_at', $monthInput)
             ->whereYear('created_at', $yearInput)->count();
-        $pdf = Pdf::loadview('admin.report_pdf', compact('monthInput', 'yearInput', 'revenue', 'transactionsCount'));
+        $pdf = PDF::loadview('admin.report_pdf', compact('monthInput', 'yearInput', 'revenue', 'transactionsCount'));
         // return $pdf->download('laporan-keuangan-' . $bulan . '-' . $tahun . '.pdf');
 
         return $pdf->stream();
+    }
+
+    /**
+     * Fungsi untuk mendapatkan bulan berdasarkan tahun transaksi
+     */
+    public function getMonth(Request $request)
+    {
+        $year = $request->input('tahun');
+        $month = Transaction::whereYear('created_at', $year)->selectRaw('MONTH(created_at) as Bulan')->distinct()->get();
+
+        return response()->json($month);
     }
 }
