@@ -12,49 +12,68 @@ use App\Http\Controllers\Admin\Transaction\PrintTransactionController;
 use App\Http\Controllers\Admin\Transaction\TransactionController;
 use App\Http\Controllers\Admin\Transaction\TransactionSessionController;
 use App\Http\Controllers\Admin\VoucherController;
-use App\Http\Controllers\AdminController;
+
+Route::get('/', [DashboardController::class, 'index'])->name('index');
 
 Route::group([
-    'middleware' => ['language', 'islogin'],
-    'controller' => AdminController::class
+    'as' => 'transactions.',
 ], function () {
-    Route::get('/', [DashboardController::class, 'index']);
+    Route::get('/transactions/create', [TransactionController::class, 'create'])->name('create');
+    Route::get('/transactions', [TransactionController::class, 'index'])->name('index');
+    Route::post('/transactions', [TransactionController::class, 'store'])->name('store');
+    Route::get('/transactions/{transaction}', [TransactionController::class, 'show'])->name('show');
+    Route::patch('/transactions/{transaction}', [TransactionController::class, 'update'])->name('update');
 
-    Route::get('/transactions/create', [TransactionController::class, 'create']);
-    Route::get('/transactions', [TransactionController::class, 'index']);
-    Route::post('/transactions', [TransactionController::class, 'store']);
-    Route::get('/transactions/{transaction}', [TransactionController::class, 'show']);
-    Route::patch('/transactions/{transaction}', [TransactionController::class, 'update']);
+    Route::post('/transactions/session', [TransactionSessionController::class, 'store'])->name('session.store');
+    Route::get('/transactions/session/{rowId}', [TransactionSessionController::class, 'destroy'])->name('session.destroy');
 
-    Route::post('/transactions/session', [TransactionSessionController::class, 'store']);
-    Route::get('/transactions/session/{rowId}', [TransactionSessionController::class, 'destroy']);
+    Route::get('/transactions/print/{transaction}', [PrintTransactionController::class, 'index'])->name('print.index');
+});
 
-    Route::get('/transactions/print/{transaction}', [PrintTransactionController::class, 'index']);
+Route::group([
+    'as' => 'price-lists.',
+], function () {
+    Route::get('/price-lists', [PriceListController::class, 'index'])->name('index');
+    Route::post('/price-lists', [PriceListController::class, 'store'])->name('store');
+    Route::get('/price-lists/{priceList}', [PriceListController::class, 'show'])->name('show');
+    Route::patch('/price-lists/{priceList}', [PriceListController::class, 'update'])->name('update');
+});
 
-    Route::get('/price-lists', [PriceListController::class, 'index']);
-    Route::post('/price-lists', [PriceListController::class, 'store']);
-    Route::get('/price-lists/{priceList}', [PriceListController::class, 'show']);
-    Route::patch('/price-lists/{priceList}', [PriceListController::class, 'update']);
+Route::post('/items', [ItemController::class, 'store'])->name('items.store');
 
-    Route::post('/items', [ItemController::class, 'store']);
+Route::post('/services', [ServiceController::class, 'store'])->name('services.store');
 
-    Route::post('/services', [ServiceController::class, 'store']);
+Route::get('/members', [MemberController::class, 'index'])->name('members.index');
 
-    Route::get('/members', [MemberController::class, 'index']);
+Route::group([
+    'as' => 'vouchers.',
+], function () {
+    Route::get('/vouchers', [VoucherController::class, 'index'])->name('index');
+    Route::post('/vouchers', [VoucherController::class, 'store'])->name('store');
+    Route::patch('/vouchers/{voucher}', [VoucherController::class, 'update'])->name('update');
+});
 
-    Route::get('/vouchers', [VoucherController::class, 'index']);
-    Route::post('/vouchers', [VoucherController::class, 'store']);
-    Route::patch('/vouchers/{voucher}', [VoucherController::class, 'update']);
+Route::group([
+    'as' => 'complaint-suggestions.',
+], function () {
+    Route::get('/complaint-suggestions', [ComplaintSuggestionController::class, 'index'])->name('index');
+    Route::get('/complaint-suggestions/{complaintSuggestion}', [ComplaintSuggestionController::class, 'show'])->name('show');
+    Route::post('/complaint-suggestions/{complaintSuggestion}', [ComplaintSuggestionController::class, 'update'])->name('update');
+});
 
-    Route::get('/complaint-suggestions', [ComplaintSuggestionController::class, 'index']);
-    Route::get('/complaint-suggestions/{complaintSuggestion}', [ComplaintSuggestionController::class, 'show']);
-    Route::post('/complaint-suggestions/{complaintSuggestion}', [ComplaintSuggestionController::class, 'update']);
+Route::group([
+    'as' => 'reports.',
+], function () {
+    Route::get('/reports', [ReportController::class, 'index'])->name('index');
+    Route::post('/reports/print', [ReportController::class, 'print'])->name('print');
+    Route::post('/reports/get-month', [ReportController::class, 'getMonth'])->name('get-month');
+});
 
-    Route::get('/reports', [ReportController::class, 'index']);
-    Route::post('/reports/print', [ReportController::class, 'print']);
-    Route::post('/reports/get-month', [ReportController::class, 'getMonth']);
+// Route::get('/laporanview', 'laporanview');
 
-    Route::get('/laporanview', 'laporanview');
-    Route::get('/service-type/{serviceType}', [ServiceTypeController::class, 'show']);
-    Route::patch('/service-type/{serviceType}', [ServiceTypeController::class, 'update']);
+Route::group([
+    'as' => 'service-types.',
+], function () {
+    Route::get('/service-types/{serviceType}', [ServiceTypeController::class, 'show'])->name('show');
+    Route::patch('/service-types/{serviceType}', [ServiceTypeController::class, 'update'])->name('update');
 });

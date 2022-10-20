@@ -22,7 +22,7 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->routes(function () {
-            Route::middleware('web')
+            Route::middleware(['web', 'language', 'islogin'])
                 ->prefix('admin')
                 ->as('admin.')
                 ->group(base_path('routes/web/admin.php'));
