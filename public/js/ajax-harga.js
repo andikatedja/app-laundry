@@ -7,13 +7,15 @@ $.ajaxSetup({
 
 $(document).on("click", ".btn-ubah-harga", function () {
     let id_harga = $(this).data("id");
-    $("#id-harga-modal").val(id_harga);
+
+    $("#updatePriceForm").attr(
+        "action",
+        route("admin.price-lists.update", { priceList: id_harga })
+    );
+
     $.ajax({
-        url: base_url + "/ambil-harga",
-        data: {
-            id_harga: id_harga,
-        },
-        method: "POST",
+        url: route("admin.price-lists.show", { priceList: id_harga }),
+        method: "GET",
         dataType: "json",
         success: function (data) {
             $("#harga-modal").val(data.price);
@@ -22,13 +24,19 @@ $(document).on("click", ".btn-ubah-harga", function () {
 });
 
 $(document).on("click", ".btn-update-cost", function () {
-    const id_cost = $(this).data("id");
-    $("#id-cost-modal").val(id_cost);
+    const serviceTypeId = $(this).data("id");
+
+    $("#serviceTypeForm").attr(
+        "action",
+        route("admin.service-types.show", {
+            serviceType: serviceTypeId,
+        })
+    );
+
     $.ajax({
-        url: base_url + "/get-service-type",
-        data: {
-            id_cost: id_cost,
-        },
+        url: route("admin.service-types.show", {
+            serviceType: serviceTypeId,
+        }),
         method: "GET",
         dataType: "json",
         success: function (data) {

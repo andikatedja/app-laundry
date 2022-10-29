@@ -17,6 +17,7 @@
     <!-- Google Font: Nunito -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
     @yield('css')
+    @routes('admin')
 </head>
 
 <body class="hold-transition sidebar-mini">

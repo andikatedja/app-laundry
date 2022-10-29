@@ -18,6 +18,7 @@ class Transaction extends Model
         'total',
         'service_type_id',
         'service_cost',
+        'payment_amount',
     ];
 
     public function member()

@@ -227,8 +227,10 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('admin.price-lists.update', ['priceList' => 'id']) }}" method="post">
+                    <form action="{{ route('admin.price-lists.update', ['priceList' => 'id']) }}" method="post"
+                        id="updatePriceForm">
                         @csrf
+                        @method('PATCH')
                         <input id="id-harga-modal" type="hidden" name="id_harga">
                         <div class="form-group">
                             <label for="harga-modal">Harga</label>
@@ -255,7 +257,8 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('admin.service-types.update', ['serviceType' => 'id']) }}" method="POST">
+                    <form id="serviceTypeForm"
+                        action="{{ route('admin.service-types.update', ['serviceType' => 'id']) }}" method="POST">
                         @method('PATCH')
                         @csrf
                         <input id="id-cost-modal" type="hidden" name="id_cost">

@@ -24,6 +24,6 @@ class ServiceTypeController extends Controller
         $serviceType->cost = $request->input('cost');
         $serviceType->save();
 
-        return redirect('admin/harga')->with('success', 'Biaya service berhasil diubah!');
+        return redirect()->route('admin.price-lists.index')->with('success', 'Biaya service berhasil diubah!');
     }
 }

@@ -27,7 +27,8 @@ class VoucherController extends Controller
     {
         // Cek apakah potongan ada yang sama di database
         if (Voucher::where('discount_value', $request->input('potongan'))->exists()) {
-            return redirect('admin/voucher')->with('error', 'Voucher potongan ' . $request->input('potongan') . ' sudah ada');
+            return redirect()->route('admin.vouchers.index')
+                ->with('error', 'Voucher potongan ' . $request->input('potongan') . ' sudah ada');
         }
 
         // Masukkan potongan ke dalam tabel vouchers
@@ -40,7 +41,8 @@ class VoucherController extends Controller
         ]);
         $voucher->save();
 
-        return redirect('admin/voucher')->with('success', 'Voucher baru berhasil ditambah!');
+        return redirect()->route('admin.vouchers.index')
+            ->with('success', 'Voucher baru berhasil ditambah!');
     }
 
     /**

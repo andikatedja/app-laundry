@@ -1,20 +1,17 @@
-const base_url = $('meta[name="base_url"]').attr('content');
+const base_url = $('meta[name="base_url"]').attr("content");
 $.ajaxSetup({
     headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
     },
 });
 
-$(document).on('click', '.aktif-check', function () {
+$(document).on("click", ".aktif-check", function () {
     let id = $(this).val();
     $.ajax({
-        url: 'voucher/ubahaktif',
-        data: {
-            id: id,
-        },
-        method: 'POST',
+        url: route("admin.vouchers.update", { voucher: id }),
+        method: "PATCH",
         success: function () {
-            alert('Status aktif berhasil diubah!');
+            alert("Status aktif berhasil diubah!");
         },
     });
 });

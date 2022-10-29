@@ -214,7 +214,14 @@ class TransactionController extends Controller
      */
     public function show(Transaction $transaction): JsonResponse
     {
-        $transaction = $transaction->with(['transaction_detail', 'transaction.service_type', 'price_list', 'price_list.item', 'price_list.service', 'price_list.category'])->get();
+        $transaction = $transaction->load([
+            'transaction_details',
+            'transaction_details.price_list',
+            'transaction_details.price_list.item',
+            'transaction_details.price_list.service',
+            'transaction_details.price_list.category',
+            'service_type'
+        ]);
 
         return response()->json($transaction);
     }
