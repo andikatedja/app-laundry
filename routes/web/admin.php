@@ -16,27 +16,29 @@ use App\Http\Controllers\Admin\VoucherController;
 Route::get('/', [DashboardController::class, 'index'])->name('index');
 
 Route::group([
+    'prefix' => 'transactions',
     'as' => 'transactions.',
 ], function () {
-    Route::get('/transactions/create', [TransactionController::class, 'create'])->name('create');
-    Route::get('/transactions', [TransactionController::class, 'index'])->name('index');
-    Route::post('/transactions', [TransactionController::class, 'store'])->name('store');
-    Route::get('/transactions/{transaction}', [TransactionController::class, 'show'])->name('show');
-    Route::patch('/transactions/{transaction}', [TransactionController::class, 'update'])->name('update');
+    Route::get('/create', [TransactionController::class, 'create'])->name('create');
+    Route::get('/', [TransactionController::class, 'index'])->name('index');
+    Route::post('/', [TransactionController::class, 'store'])->name('store');
+    Route::get('/{transaction}', [TransactionController::class, 'show'])->name('show');
+    Route::patch('/{transaction}', [TransactionController::class, 'update'])->name('update');
 
-    Route::post('/transactions/session', [TransactionSessionController::class, 'store'])->name('session.store');
-    Route::get('/transactions/session/{rowId}', [TransactionSessionController::class, 'destroy'])->name('session.destroy');
+    Route::post('/session', [TransactionSessionController::class, 'store'])->name('session.store');
+    Route::get('/session/{rowId}', [TransactionSessionController::class, 'destroy'])->name('session.destroy');
 
-    Route::get('/transactions/print/{transaction}', [PrintTransactionController::class, 'index'])->name('print.index');
+    Route::get('/print/{transaction}', [PrintTransactionController::class, 'index'])->name('print.index');
 });
 
 Route::group([
+    'prefix' => 'price-lists',
     'as' => 'price-lists.',
 ], function () {
-    Route::get('/price-lists', [PriceListController::class, 'index'])->name('index');
-    Route::post('/price-lists', [PriceListController::class, 'store'])->name('store');
-    Route::get('/price-lists/{priceList}', [PriceListController::class, 'show'])->name('show');
-    Route::patch('/price-lists/{priceList}', [PriceListController::class, 'update'])->name('update');
+    Route::get('/', [PriceListController::class, 'index'])->name('index');
+    Route::post('/', [PriceListController::class, 'store'])->name('store');
+    Route::get('/{priceList}', [PriceListController::class, 'show'])->name('show');
+    Route::patch('/{priceList}', [PriceListController::class, 'update'])->name('update');
 });
 
 Route::post('/items', [ItemController::class, 'store'])->name('items.store');
@@ -46,34 +48,38 @@ Route::post('/services', [ServiceController::class, 'store'])->name('services.st
 Route::get('/members', [MemberController::class, 'index'])->name('members.index');
 
 Route::group([
+    'prefix' => 'vouchers',
     'as' => 'vouchers.',
 ], function () {
-    Route::get('/vouchers', [VoucherController::class, 'index'])->name('index');
-    Route::post('/vouchers', [VoucherController::class, 'store'])->name('store');
-    Route::patch('/vouchers/{voucher}', [VoucherController::class, 'update'])->name('update');
+    Route::get('/', [VoucherController::class, 'index'])->name('index');
+    Route::post('/', [VoucherController::class, 'store'])->name('store');
+    Route::patch('/{voucher}', [VoucherController::class, 'update'])->name('update');
 });
 
 Route::group([
+    'prefix' => 'complaint-suggestions',
     'as' => 'complaint-suggestions.',
 ], function () {
-    Route::get('/complaint-suggestions', [ComplaintSuggestionController::class, 'index'])->name('index');
-    Route::get('/complaint-suggestions/{complaintSuggestion}', [ComplaintSuggestionController::class, 'show'])->name('show');
-    Route::post('/complaint-suggestions/{complaintSuggestion}', [ComplaintSuggestionController::class, 'update'])->name('update');
+    Route::get('/', [ComplaintSuggestionController::class, 'index'])->name('index');
+    Route::get('/{complaintSuggestion}', [ComplaintSuggestionController::class, 'show'])->name('show');
+    Route::post('/{complaintSuggestion}', [ComplaintSuggestionController::class, 'update'])->name('update');
 });
 
 Route::group([
+    'prefix' => 'reports',
     'as' => 'reports.',
 ], function () {
-    Route::get('/reports', [ReportController::class, 'index'])->name('index');
-    Route::post('/reports/print', [ReportController::class, 'print'])->name('print');
-    Route::post('/reports/get-month', [ReportController::class, 'getMonth'])->name('get-month');
+    Route::get('/', [ReportController::class, 'index'])->name('index');
+    Route::post('/print', [ReportController::class, 'print'])->name('print');
+    Route::post('/get-month', [ReportController::class, 'getMonth'])->name('get-month');
 });
 
 // Route::get('/laporanview', 'laporanview');
 
 Route::group([
+    'prefix' => 'service-types',
     'as' => 'service-types.',
 ], function () {
-    Route::get('/service-types/{serviceType}', [ServiceTypeController::class, 'show'])->name('show');
-    Route::patch('/service-types/{serviceType}', [ServiceTypeController::class, 'update'])->name('update');
+    Route::get('/{serviceType}', [ServiceTypeController::class, 'show'])->name('show');
+    Route::patch('/{serviceType}', [ServiceTypeController::class, 'update'])->name('update');
 });
