@@ -25,14 +25,15 @@
                                     <div class="member-content">
                                         <h2 class="m-0">{{ $user->name }}</h2>
                                         <p class="small m-0">ID Member: {{ $user->id }}</p>
-                                        <a href="{{ url('profile') }}" class="badge badge-primary badge-pill">Edit
+                                        <a href="{{ route('profile.index') }}" class="badge badge-primary badge-pill">Edit
                                             Profil</a>
                                     </div>
                                 </div>
                                 <div class="col-2 text-center">
                                     <p class="small m-0">Poin</p>
                                     <h2 class="m-0">{{ $user->point }}</h2>
-                                    <a href="{{ url('member/point') }}" class="badge badge-primary badge-pill">Tukar
+                                    <a href="{{ route('member.points.index') }}"
+                                        class="badge badge-primary badge-pill">Tukar
                                         Poin</a>
                                 </div>
                             </div>
@@ -70,7 +71,7 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <a href="{{ url('member/transactions') . '/' . $item->id }}"
+                                                <a href="{{ route('member.transactions.show', ['transaction' => $item->id]) }}"
                                                     class="badge badge-primary">Lihat Detail ></a>
                                             </td>
                                         </tr>
