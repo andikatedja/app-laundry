@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,7 +10,16 @@ class Transaction extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'status_id',
+        'admin_id',
+        'member_id',
+        'discount',
+        'total',
+        'service_type_id',
+        'service_cost',
+        'payment_amount',
+    ];
 
     public function member()
     {
@@ -34,5 +44,20 @@ class Transaction extends Model
     public function service_type()
     {
         return $this->belongsTo(ServiceType::class);
+    }
+
+    public function getFormattedTotal(): string
+    {
+        return 'Rp ' . number_format($this->total, 0, ',', '.');
+    }
+
+    public function getFormattedPaymentAmount(): string
+    {
+        return 'Rp ' . number_format($this->payment_amount, 0, ',', '.');
+    }
+
+    public function getFormattedServiceCost(): string
+    {
+        return 'Rp ' . number_format($this->service_cost, 0, ',', '.');
     }
 }

@@ -10,11 +10,10 @@ $(document).on("click", ".lihat-isi", function () {
     $("#btn-kirim-balasan").data("id", id);
     $("#btn-hapus-aduan").data("id", id);
     $.ajax({
-        url: base_url + "/ambil-sarankomplain",
-        data: {
-            id: id,
-        },
-        method: "POST",
+        url: route("admin.complaint-suggestions.show", {
+            complaintSuggestion: id,
+        }),
+        method: "GET",
         dataType: "json",
         success: function (data) {
             $("#isi-aduan").html(data.body);
@@ -29,9 +28,10 @@ $(document).on("click", "#btn-kirim-balasan", function () {
     if (id != "") {
         let balasan = $("#balas").val();
         $.ajax({
-            url: base_url + "/kirim-balasan",
+            url: route("admin.complaint-suggestions.update", {
+                complaintSuggestion: id,
+            }),
             data: {
-                id: id,
                 balasan: balasan,
             },
             method: "POST",

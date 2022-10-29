@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,7 +10,7 @@ class PriceList extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $fillable = ['item_id', 'category_id', 'service_id', 'price'];
 
     public function item()
     {
@@ -29,5 +30,10 @@ class PriceList extends Model
     public function transaction_detail()
     {
         return $this->belongsTo(TransactionDetail::class);
+    }
+
+    public function getFormattedPrice(): string
+    {
+        return 'Rp ' . number_format($this->price, 0, ',', '.');
     }
 }

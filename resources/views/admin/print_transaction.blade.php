@@ -6,25 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Cetak Transaksi</title>
-    <link rel="stylesheet" href="{{asset('vendor/adminlte/css/adminlte.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('vendor/adminlte/css/adminlte.min.css') }}">
 </head>
 
 <body>
     <div class="container">
         <div class="row">
             <div class="col-12 text-center mt-5">
-                <h4>{{config('app.name')}}</h4>
+                <h4>{{ config('app.name') }}</h4>
                 <h5>Bukti Transaksi</h5>
             </div>
         </div>
         <hr>
         <div class="row">
             <div class="col-6">
-                <p>No Transaksi: {{$id}}</p>
+                <p>No Transaksi: {{ $transaction->id }}</p>
             </div>
             <div class="col-6 text-right">
-                <p>{{date('d F Y', strtotime($dataTransaksi->created_at))}}</p>
-                <p>{{$dataTransaksi->member->name}}</p>
+                <p>{{ date('d F Y', strtotime($transaction->created_at)) }}</p>
+                <p>{{ $transaction->member->name }}</p>
             </div>
         </div>
         <div class="row">
@@ -43,43 +43,43 @@
                     </thead>
                     <tbody>
                         @php
-                        $tot = 0;
+                            $tot = 0;
                         @endphp
 
-                        @foreach ($dataTransaksi->transaction_details as $item)
-                        <tr>
-                            <td>{{$loop->iteration}}</td>
-                            <td>{{$item->price_list->item->name}}</td>
-                            <td>{{$item->price_list->service->name}}</td>
-                            <td>{{$item->price_list->category->name}}</td>
-                            <td>{{$item->quantity}}</td>
-                            <td>{{$item->price}}</td>
-                            <td>{{$item->sub_total}}</td>
-                        </tr>
-                        @php
-                        $tot += $item->sub_total;
-                        @endphp
+                        @foreach ($transaction->transaction_details as $item)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $item->price_list->item->name }}</td>
+                                <td>{{ $item->price_list->service->name }}</td>
+                                <td>{{ $item->price_list->category->name }}</td>
+                                <td>{{ $item->quantity }}</td>
+                                <td>{{ $item->getFormattedPrice() }}</td>
+                                <td>{{ $item->getFormattedSubTotal() }}</td>
+                            </tr>
+                            @php
+                                $tot += $item->sub_total;
+                            @endphp
                         @endforeach
 
                         <tr>
                             <td colspan="6" class="text-center"><b>Sub Total Harga</b></td>
-                            <td>{{$tot}}</td>
+                            <td>{{ 'Rp ' . number_format($tot, 0, ',', '.') }}</td>
                         </tr>
                         <tr>
-                            <td colspan="6" class="text-center"><b>{{$dataTransaksi->service_type->name}}</b></td>
-                            <td>{{$dataTransaksi->service_cost}}</td>
+                            <td colspan="6" class="text-center"><b>{{ $transaction->service_type->name }}</b></td>
+                            <td>{{ $transaction->getFormattedServiceCost() }}</td>
                         </tr>
                         <tr>
                             <td colspan="6" class="text-center"><b>Potongan</b></td>
-                            <td>- {{$dataTransaksi->discount}}</td>
+                            <td>- {{ $transaction->discount }}</td>
                         </tr>
                         <tr>
                             <td colspan="6" class="text-center"><b>Total</b></td>
-                            <td><b>{{$dataTransaksi->total}}</b></td>
+                            <td><b>{{ $transaction->getFormattedTotal() }}</b></td>
                         </tr>
                         <tr>
                             <td colspan="6" class="text-center"><b>Dibayar</b></td>
-                            <td><b>{{$dataTransaksi->payment_amount}}</b></td>
+                            <td><b>{{ $transaction->getFormattedPaymentAmount() }}</b></td>
                         </tr>
                     </tbody>
                 </table>
@@ -87,19 +87,19 @@
         </div>
         <div class="row mt-3">
             <div class="col-4 text-center">
-                <p>Badung, {{date('d F Y')}}</p>
+                <p>Badung, {{ date('d F Y') }}</p>
                 <br>
                 <br>
                 <br>
-                <p>{{$dataTransaksi->admin->name}}</p>
+                <p>{{ $transaction->admin->name }}</p>
             </div>
             <div class="col-4"></div>
             <div class="col-4 text-center">
-                <p>Badung, {{date('d F Y')}}</p>
+                <p>Badung, {{ date('d F Y') }}</p>
                 <br>
                 <br>
                 <br>
-                <p>{{$dataTransaksi->member->name}}</p>
+                <p>{{ $transaction->member->name }}</p>
             </div>
         </div>
     </div>

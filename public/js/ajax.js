@@ -9,17 +9,13 @@ $(document).on("click", ".btn-detail", function () {
     $("#id-transaksi-detail").html(id_transaksi);
 
     $.ajax({
-        url: base_url + "/ambil-detail-transaksi",
-        data: {
-            id_transaksi: id_transaksi,
-        },
-        method: "POST",
+        url: route("admin.transactions.show", { transaction: id_transaksi }),
+        method: "GET",
         dataType: "json",
         success: function (data) {
             let table = "";
             let j = 1;
-            $.each(data, function (i, val) {
-                //console.log(data);
+            $.each(data.transaction_details, function (i, val) {
                 table +=
                     "<tr>" +
                     "<td>" +
@@ -46,8 +42,8 @@ $(document).on("click", ".btn-detail", function () {
                     "</tr>";
             });
             $("#tbl-ajax").html(table);
-            $("#service-type").html(data[0].transaction.service_type.name);
-            $("#payment-amount").html(data[0].transaction.payment_amount);
+            $("#service-type").html(data.service_type.name);
+            $("#payment-amount").html(data.payment_amount);
         },
     });
 });
@@ -57,12 +53,13 @@ $(document).on("change", ".select-status", function () {
     if (confirm("Apakah anda yakin mengubah status transaksi ini?")) {
         let val = $(this).val();
         $.ajax({
-            url: base_url + "/ubah-status-transaksi",
+            url: route("admin.transactions.update", {
+                transaction: id_transaksi,
+            }),
             data: {
-                id_transaksi: id_transaksi,
                 val: val,
             },
-            method: "POST",
+            method: "PATCH",
             success: function (data) {
                 location.reload();
             },
@@ -77,7 +74,7 @@ $(document).on("change", "#tahun", function () {
     let tahun = $(this).val();
     let option = "";
     $.ajax({
-        url: base_url + "/get-month",
+        url: route("admin.reports.get-month"),
         data: {
             tahun: tahun,
         },
