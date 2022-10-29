@@ -8,6 +8,7 @@ use App\Models\Item;
 use App\Models\PriceList;
 use App\Models\Service;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class TransactionSessionController extends Controller
@@ -16,9 +17,9 @@ class TransactionSessionController extends Controller
      * Method to add new transaction to session
      *
      * @param Request $request
-     * @return void
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $itemId = $request->input('item');
         $serviceId = $request->input('service');
@@ -105,9 +106,9 @@ class TransactionSessionController extends Controller
      *
      * @param mixed $row_id
      * @param Request $request
-     * @return void
+     * @return RedirectResponse
      */
-    public function destroy(string $rowId, Request $request)
+    public function destroy(string $rowId, Request $request): RedirectResponse
     {
         $sessionTransaction = $request->session()->get('transaction');
         unset($sessionTransaction[$rowId]);

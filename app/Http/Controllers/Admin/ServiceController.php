@@ -4,20 +4,25 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Service;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class ServiceController extends Controller
 {
     /**
-     * Fungsi untuk menambah servis baru
+     * Add new service to database
+     *
+     * @param Request $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $service = new Service([
             'name' => ucfirst($request->input('servis'))
         ]);
         $service->save();
 
-        return redirect('admin/harga')->with('success', 'Servis baru berhasil ditambah!');
+        return redirect()->route('admin.price-lists.index')
+            ->with('success', 'Servis baru berhasil ditambah!');
     }
 }

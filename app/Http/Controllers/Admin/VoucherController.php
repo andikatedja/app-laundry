@@ -4,15 +4,20 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Voucher;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class VoucherController extends Controller
 {
     /**
-     * Fungsi untuk menampilkan halaman voucher
+     * Show voucher page
+     *
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
         $user = Auth::user();
         $vouchers = Voucher::all();
@@ -21,9 +26,12 @@ class VoucherController extends Controller
     }
 
     /**
-     * Fungsi untuk menambahkan voucher baru
+     * Add new voucher to database
+     *
+     * @param Request $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         // Cek apakah potongan ada yang sama di database
         if (Voucher::where('discount_value', $request->input('potongan'))->exists()) {
@@ -46,9 +54,12 @@ class VoucherController extends Controller
     }
 
     /**
-     * Fungsi untuk mengubah status aktif voucher
+     * Update voucher status
+     *
+     * @param Voucher $voucher
+     * @return JsonResponse
      */
-    public function update(Voucher $voucher)
+    public function update(Voucher $voucher): JsonResponse
     {
         // Jika 1 maka ubah ke 0
         if ($voucher->active_status == 1) {
@@ -59,5 +70,7 @@ class VoucherController extends Controller
             $voucher->active_status = 1;
             $voucher->save();
         }
+
+        return response()->json();
     }
 }

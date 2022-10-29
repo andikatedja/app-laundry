@@ -53,12 +53,13 @@ $(document).on("change", ".select-status", function () {
     if (confirm("Apakah anda yakin mengubah status transaksi ini?")) {
         let val = $(this).val();
         $.ajax({
-            url: base_url + "/ubah-status-transaksi",
+            url: route("admin.transactions.update", {
+                transaction: id_transaksi,
+            }),
             data: {
-                id_transaksi: id_transaksi,
                 val: val,
             },
-            method: "POST",
+            method: "PATCH",
             success: function (data) {
                 location.reload();
             },
@@ -73,7 +74,7 @@ $(document).on("change", "#tahun", function () {
     let tahun = $(this).val();
     let option = "";
     $.ajax({
-        url: base_url + "/get-month",
+        url: route("admin.reports.get-month"),
         data: {
             tahun: tahun,
         },

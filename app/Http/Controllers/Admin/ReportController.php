@@ -5,16 +5,21 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 use DateTime;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use PDF;
 
 class ReportController extends Controller
 {
     /**
-     * Fungsi untuk menampilkan halaman laporan keuangan
+     * Show report page
+     *
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
         $user = Auth::user();
         $years = Transaction::selectRaw('YEAR(created_at) as Tahun')->distinct()->get();
@@ -24,9 +29,12 @@ class ReportController extends Controller
     }
 
     /**
-     * Fungsi untuk mencetak laporan dengan konversi ke pdf
+     * Print report as pdf
+     *
+     * @param Request $request
+     * @return Response
      */
-    public function print(Request $request)
+    public function print(Request $request): Response
     {
         $monthInput = $request->input('bulan');
         $yearInput = $request->input('tahun');
@@ -43,9 +51,12 @@ class ReportController extends Controller
     }
 
     /**
-     * Fungsi untuk mendapatkan bulan berdasarkan tahun transaksi
+     * Get month by year report
+     *
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function getMonth(Request $request)
+    public function getMonth(Request $request): JsonResponse
     {
         $year = $request->input('tahun');
         $month = Transaction::whereYear('created_at', $year)->selectRaw('MONTH(created_at) as Bulan')->distinct()->get();

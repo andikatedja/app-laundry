@@ -28,9 +28,10 @@ $(document).on("click", "#btn-kirim-balasan", function () {
     if (id != "") {
         let balasan = $("#balas").val();
         $.ajax({
-            url: base_url + "/kirim-balasan",
+            url: route("admin.complaint-suggestions.update", {
+                complaintSuggestion: id,
+            }),
             data: {
-                id: id,
                 balasan: balasan,
             },
             method: "POST",

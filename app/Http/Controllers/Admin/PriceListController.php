@@ -79,9 +79,13 @@ class PriceListController extends Controller
     }
 
     /**
-     * Fungsi untuk mengubah harga
+     * Change price list price
+     *
+     * @param PriceList $priceList
+     * @param Request $request
+     * @return RedirectResponse
      */
-    public function update(PriceList $priceList, Request $request)
+    public function update(PriceList $priceList, Request $request): RedirectResponse
     {
         $priceList->price = $request->input('harga');
         $priceList->save();
