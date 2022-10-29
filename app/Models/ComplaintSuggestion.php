@@ -9,7 +9,11 @@ class ComplaintSuggestion extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['body'];
+    protected $fillable = [
+        'body',
+        'type',
+        'user_id',
+    ];
 
     public function user()
     {

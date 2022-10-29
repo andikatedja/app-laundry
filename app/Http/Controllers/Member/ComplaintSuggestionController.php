@@ -42,11 +42,11 @@ class ComplaintSuggestionController extends Controller
             'body' => $request->input('isi_sarankomplain'),
             'type' => $request->input('tipe'),
             'user_id' => $user->id,
-            'reply' => ''
+            'reply' => '',
         ]);
 
         $complaintSuggestion->save();
 
-        return redirect('member/complaint-suggestions')->with('success', 'Saran/komplain berhasil dikirim!');
+        return redirect()->route('member.complaints.index')->with('success', 'Saran/komplain berhasil dikirim!');
     }
 }
