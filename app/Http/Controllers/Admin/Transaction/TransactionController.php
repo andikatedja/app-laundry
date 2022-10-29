@@ -13,6 +13,9 @@ use App\Models\Transaction;
 use App\Models\TransactionDetail;
 use App\Models\User;
 use App\Models\UserVoucher;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -20,18 +23,15 @@ use Illuminate\Support\Facades\DB;
 class TransactionController extends Controller
 {
     /**
-     * Fungsi untuk menampilkan halaman riwayat transaksi
+     * Display all transaction histories
+     *
+     * @param Request $request
+     * @return View
      */
-    public function index(Request $request)
+    public function index(Request $request): View
     {
-        $currentMonth = date('m');
-        $currentYear = date('Y');
-        $monthQuery = $request->query('month');
-        $yearQuery = $request->query('year');
-        if ($monthQuery && $yearQuery) {
-            $currentMonth = $monthQuery;
-            $currentYear = $yearQuery;
-        }
+        $currentMonth = $request->query('month', date('m'));
+        $currentYear = $request->query('year', date('Y'));
 
         $user = Auth::user();
 
@@ -41,30 +41,42 @@ class TransactionController extends Controller
             ->where('finish_date', null)
             ->orderBy('created_at', 'DESC')
             ->get();
+
         $ongoingPriorityTransactions = Transaction::whereYear('created_at', $currentYear)
             ->whereMonth('created_at', $currentMonth)
             ->where('service_type_id', 2)
             ->where('finish_date', null)
             ->orderBy('created_at', 'DESC')
             ->get();
+
         $finishedTransactions = Transaction::whereYear('created_at', $currentYear)
             ->whereMonth('created_at', $currentMonth)
             ->where('finish_date', '!=', null)
             ->orderBy('created_at', 'DESC')
             ->get();
+
         $status = Status::all();
         $years = Transaction::selectRaw('YEAR(created_at) as Tahun')->distinct()->get();
 
-        return view('admin.transactions_history', compact('user', 'status', 'years', 'currentYear', 'currentMonth', 'ongoingTransactions', 'ongoingPriorityTransactions', 'finishedTransactions'));
+        return view('admin.transactions_history', compact(
+            'user',
+            'status',
+            'years',
+            'currentYear',
+            'currentMonth',
+            'ongoingTransactions',
+            'ongoingPriorityTransactions',
+            'finishedTransactions'
+        ));
     }
 
     /**
      * Function to show admin input transaction view
      *
      * @param Request $request
-     * @return void
+     * @return View
      */
-    public function create(Request $request)
+    public function create(Request $request): View
     {
         $user = Auth::user();
         $items = Item::all();
@@ -97,9 +109,12 @@ class TransactionController extends Controller
     }
 
     /**
-     * Fungsi untuk menyimpan transaksi dari sesi transaksi
+     * Store transaction to database
+     *
+     * @param Request $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         DB::beginTransaction();
 
@@ -142,7 +157,8 @@ class TransactionController extends Controller
 
         // Check if payment < total
         if ($request->input('payment-amount') < $totalPrice) {
-            return redirect('admin/input-transaksi')->with('error', 'Pembayaran kurang');
+            return redirect()->route('admin.transactions.create')
+                ->with('error', 'Pembayaran kurang');
         }
 
         $transaction = new Transaction([
@@ -185,13 +201,18 @@ class TransactionController extends Controller
 
         DB::commit();
 
-        return redirect('admin/input-transaksi')->with('success', 'Transaksi berhasil disimpan')->with('id_trs', $transaction->id);
+        return redirect()->route('admin.transactions.create')
+            ->with('success', 'Transaksi berhasil disimpan')
+            ->with('id_trs', $transaction->id);
     }
 
     /**
-     * Fungsi untuk mengambil detail transaksi dari ajax
+     * Return transaction data by id
+     *
+     * @param Transaction $transaction
+     * @return JsonResponse
      */
-    public function show(Transaction $transaction)
+    public function show(Transaction $transaction): JsonResponse
     {
         $transaction = $transaction->with(['transaction_detail', 'transaction.service_type', 'price_list', 'price_list.item', 'price_list.service', 'price_list.category'])->get();
 
@@ -199,7 +220,11 @@ class TransactionController extends Controller
     }
 
     /**
-     * Fungsi untuk mengubah status transaksi dari sedang dikerjakan menjadi selesai
+     * Change transaction status
+     *
+     * @param Transaction $transaction
+     * @param Request $request
+     * @return void
      */
     public function update(Transaction $transaction, Request $request)
     {
@@ -209,8 +234,7 @@ class TransactionController extends Controller
             $currentDate = date('Y-m-d H:i:s');
         }
 
-        $transaction = Transaction::where('id', $request->input('id_transaksi'))->first();
-        $transaction->status_id = $request->input('val');
+        $transaction->status_id = $request->input('val', 2);
         $transaction->finish_date = $currentDate;
         $transaction->save();
     }

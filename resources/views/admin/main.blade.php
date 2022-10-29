@@ -43,7 +43,7 @@
                         {{ $user->name }}
                     </a>
                     <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
-                        <a href="{{ url('profile') }}" class="dropdown-item">
+                        <a href="{{ route('profile.index') }}" class="dropdown-item">
                             <i class="fas fa-user-edit mr-2"></i> Edit Profil
                         </a>
                         <div class="dropdown-divider"></div>

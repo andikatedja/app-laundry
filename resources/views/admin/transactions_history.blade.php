@@ -109,7 +109,7 @@
                                                 <a href="#" class="badge badge-info btn-detail" data-toggle="modal"
                                                     data-target="#detailTransaksiModal"
                                                     data-id="{{ $item->id }}">Detail</a>
-                                                <a href="{{ url('admin/cetak-transaksi') . '/' . $item->id }}"
+                                                <a href="{{ route('admin.transactions.print.index', ['transaction' => $item->id]) }}"
                                                     class="badge badge-primary" target="_blank">Cetak</a>
                                             </td>
                                         </tr>
@@ -167,7 +167,7 @@
                                                 <a href="#" class="badge badge-info btn-detail" data-toggle="modal"
                                                     data-target="#detailTransaksiModal"
                                                     data-id="{{ $item->id }}">Detail</a>
-                                                <a href="{{ url('admin/cetak-transaksi') . '/' . $item->id }}"
+                                                <a href="{{ route('admin.transactions.print.index', ['transaction' => $item->id]) }}"
                                                     class="badge badge-primary" target="_blank">Cetak</a>
                                             </td>
                                         </tr>
@@ -225,7 +225,7 @@
                                                 <a href="#" class="badge badge-info btn-detail" data-toggle="modal"
                                                     data-target="#detailTransaksiModal"
                                                     data-id="{{ $item->id }}">Detail</a>
-                                                <a href="{{ url('admin/cetak-transaksi') . '/' . $item->id }}"
+                                                <a href="{{ route('admin.transactions.print.index', ['transaction' => $item->id]) }}"
                                                     class="badge badge-primary" target="_blank">Cetak</a>
                                             </td>
                                         </tr>

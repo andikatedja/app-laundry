@@ -18,7 +18,7 @@ class TransactionSessionController extends Controller
      * @param Request $request
      * @return void
      */
-    public function tambahTransaksi(Request $request)
+    public function store(Request $request)
     {
         $itemId = $request->input('item');
         $serviceId = $request->input('service');
@@ -32,12 +32,12 @@ class TransactionSessionController extends Controller
             'category_id' => $categoryId,
             'service_id' => $serviceId
         ])->exists()) {
-            return redirect('admin/input-transaksi')->with('error', 'Harga tidak ditemukan!');
+            return redirect()->route('admin.transactions.create')->with('error', 'Harga tidak ditemukan!');
         }
 
         // Check if member exist
         if ($memberId != null && !User::where('id', $memberId)->where('role', 2)->exists()) {
-            return redirect('admin/input-transaksi')->with('error', 'Member tidak ditemukan!');
+            return redirect()->route('admin.transactions.create')->with('error', 'Member tidak ditemukan!');
         }
 
         // Get price list's price from database
@@ -97,7 +97,7 @@ class TransactionSessionController extends Controller
             }
         }
 
-        return redirect('admin/input-transaksi');
+        return redirect()->route('admin.transactions.create');
     }
 
     /**
@@ -116,11 +116,11 @@ class TransactionSessionController extends Controller
         if ($sessionTransaction == []) {
             $request->session()->forget('transaction');
             $request->session()->forget('memberIdTransaction');
-            return redirect('admin/input-transaksi');
+            return redirect()->route('admin.transactions.create');
         } else {
             $request->session()->put('transaction', $sessionTransaction);
         }
 
-        return redirect('admin/input-transaksi');
+        return redirect()->route('admin.transactions.create');
     }
 }

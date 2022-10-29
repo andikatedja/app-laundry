@@ -8,15 +8,20 @@ use App\Models\Item;
 use App\Models\PriceList;
 use App\Models\Service;
 use App\Models\ServiceType;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PriceListController extends Controller
 {
     /**
-     * Fungsi untuk menampilkan halaman daftar harga
+     * Display price lists view
+     *
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
         $user = Auth::user();
         $satuan = PriceList::where('category_id', 1)->get();
@@ -30,17 +35,23 @@ class PriceListController extends Controller
     }
 
     /**
-     * Fungsi untuk mengambil harga untuk ajax
+     * Get price list price
+     *
+     * @param PriceList $priceList
+     * @return JsonResponse
      */
-    public function show(PriceList $priceList)
+    public function show(PriceList $priceList): JsonResponse
     {
         return response()->json($priceList);
     }
 
     /**
-     * Fungsi untuk menambah harga baru
+     * Store new price list to database
+     *
+     * @param Request $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'harga' => 'required'
@@ -51,7 +62,8 @@ class PriceListController extends Controller
             'category_id' => $request->input('kategori'),
             'service_id' => $request->input('servis')
         ])->exists()) {
-            return redirect('admin/harga')->with('error', 'Harga tidak dapat ditambah karena sudah tersedia!');
+            return redirect()->route('admin.price-lists.index')
+                ->with('error', 'Harga tidak dapat ditambah karena sudah tersedia!');
         }
 
         $priceList = new PriceList([
@@ -62,7 +74,8 @@ class PriceListController extends Controller
         ]);
         $priceList->save();
 
-        return redirect('admin/harga')->with('success', 'Harga berhasil ditambahkan!');
+        return redirect()->route('admin.price-lists.index')
+            ->with('success', 'Harga berhasil ditambahkan!');
     }
 
     /**
@@ -73,6 +86,7 @@ class PriceListController extends Controller
         $priceList->price = $request->input('harga');
         $priceList->save();
 
-        return redirect('admin/harga')->with('success', 'Harga berhasil diubah!');
+        return redirect()->route('admin.price-lists.index')
+            ->with('success', 'Harga berhasil diubah!');
     }
 }

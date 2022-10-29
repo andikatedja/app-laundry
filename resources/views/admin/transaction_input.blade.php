@@ -45,7 +45,7 @@
                     @endif
                     <div class="card">
                         <div class="card-body">
-                            <form action="{{ url('admin/tambah-transaksi') }}" method="post">
+                            <form action="{{ route('admin.transactions.session.store') }}" method="post">
                                 @csrf
                                 <div class="form-group row">
                                     <label for="id-member" class="col-sm-2 col-form-label">ID Member</label>
@@ -138,7 +138,7 @@
                                                 <td>{{ $transaction['quantity'] }}</td>
                                                 <td>{{ $transaction['subTotal'] }}</td>
                                                 <td>
-                                                    <a href="{{ url('admin/hapus-transaksi') . '/' . $transaction['rowId'] }}"
+                                                    <a href="{{ route('admin.transactions.session.destroy', ['rowId' => $transaction['rowId']]) }}"
                                                         class="btn btn-danger">Hapus</a>
                                                 </td>
                                             </tr>
@@ -167,7 +167,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{ url('admin/simpan-transaksi') }}" method="post">
+                <form action="{{ route('admin.transactions.store') }}" method="post">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
@@ -243,7 +243,7 @@
 
     @if (session('id_trs'))
         <script type="text/javascript">
-            window.open('{{ url('admin/cetak-transaksi' . '/' . session('id_trs')) }}', '_blank');
+            window.open('{{ route('admin.transactions.print.index', ['transaction' => session('id_trs')]) }}', '_blank');
         </script>
     @endif
 @endsection

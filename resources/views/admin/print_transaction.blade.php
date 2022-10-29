@@ -20,7 +20,7 @@
         <hr>
         <div class="row">
             <div class="col-6">
-                <p>No Transaksi: {{ $id }}</p>
+                <p>No Transaksi: {{ $transaction->id }}</p>
             </div>
             <div class="col-6 text-right">
                 <p>{{ date('d F Y', strtotime($transaction->created_at)) }}</p>

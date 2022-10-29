@@ -48,7 +48,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h5>Tambah Harga</h5>
-                            <form action="{{ url('admin/tambah-harga') }}" method="post">
+                            <form action="{{ route('admin.price-lists.store') }}" method="post">
                                 @csrf
                                 <div class="row">
                                     <div class="col-6">
@@ -227,7 +227,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ url('admin/ubah-harga') }}" method="post">
+                    <form action="{{ route('admin.price-lists.update', ['priceList' => 'id']) }}" method="post">
                         @csrf
                         <input id="id-harga-modal" type="hidden" name="id_harga">
                         <div class="form-group">
@@ -255,7 +255,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ url('admin/update-service-type') }}" method="POST">
+                    <form action="{{ route('admin.service-types.update', ['serviceType' => 'id']) }}" method="POST">
                         @method('PATCH')
                         @csrf
                         <input id="id-cost-modal" type="hidden" name="id_cost">
@@ -284,7 +284,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ url('admin/tambah-barang') }}" method="post">
+                    <form action="{{ route('admin.items.store') }}" method="post">
                         @csrf
                         <div class="form-group">
                             <label for="barang">Nama Barang</label>
@@ -311,7 +311,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ url('admin/tambah-servis') }}" method="post">
+                    <form action="{{ route('admin.services.store') }}" method="post">
                         @csrf
                         <div class="form-group">
                             <label for="servis">Nama Servis</label>
