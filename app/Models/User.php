@@ -95,6 +95,20 @@ class User extends Authenticatable
         return 'public';
     }
 
+    /**
+     * Mutator for getting file asset path
+     *
+     * @return string|null
+     */
+    public function getFileAsset(): ?string
+    {
+        if (!$this->hasFile() || $this->isDefaultFileName()) {
+            return asset('img/profile/' . $this->getDefaultFileName());
+        }
+
+        return $this->getFileStorage()->url($this->getFullFilePath());
+    }
+
     public function password(): Attribute
     {
         return Attribute::make(
