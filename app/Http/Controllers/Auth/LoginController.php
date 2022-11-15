@@ -14,7 +14,7 @@ class LoginController extends Controller
     /**
      * Method to show login view
      *
-     * @return void
+     * @return \Illuminate\Contracts\View\View
      */
     public function show(): View
     {
@@ -24,8 +24,8 @@ class LoginController extends Controller
     /**
      * Method to authenticate login
      *
-     * @param Request $request
-     * @return void
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function authenticate(Request $request): RedirectResponse
     {
@@ -40,9 +40,9 @@ class LoginController extends Controller
             $request->session()->regenerate();
 
             if (Auth::user()->role == 1) {
-                return redirect('admin');
+                return redirect()->route('admin.index');
             } else {
-                return redirect('member');
+                return redirect()->route('member.index');
             }
         }
 
@@ -54,8 +54,8 @@ class LoginController extends Controller
     /**
      * Method to logout user from session
      *
-     * @param Request $request
-     * @return RedirectResponse
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function logout(Request $request): RedirectResponse
     {

@@ -15,7 +15,7 @@ class RegisterController extends Controller
     /**
      * Method to show register view
      *
-     * @return View
+     * @return \Illuminate\Contracts\View\View
      */
     public function show(): View
     {
@@ -25,21 +25,22 @@ class RegisterController extends Controller
     /**
      * Method to register a new user
      *
-     * @param RegisterMemberRequest $request
-     * @return RedirectResponse
+     * @param  \App\Http\Requests\Auth\RegisterMemberRequest $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function register(RegisterMemberRequest $request): RedirectResponse
     {
         User::create($request->safe()->all());
 
-        return redirect('login')->with('success', Lang::get('auth.register_success'));
+        return redirect()->route('login.show')
+            ->with('success', Lang::get('auth.register_success'));
     }
 
 
     /**
      * Method to show register admin view
      *
-     * @return View
+     * @return \Illuminate\Contracts\View\View
      */
     public function registerAdminView(): View
     {
@@ -49,8 +50,8 @@ class RegisterController extends Controller
     /**
      * Method to add new admin-level user
      *
-     * @param RegisterAdminRequest $request
-     * @return RedirectResponse
+     * @param  \App\Http\Requests\Auth\RegisterAdminRequest $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function registerAdmin(RegisterAdminRequest $request): RedirectResponse
     {
