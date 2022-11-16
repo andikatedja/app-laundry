@@ -14,8 +14,8 @@ class VoucherController extends Controller
     /**
      * Method to process point redemption
      *
-     * @param Voucher $voucher_id
-     * @return RedirectResponse
+     * @param  \App\Models\Voucher $voucher
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Voucher $voucher): RedirectResponse
     {
@@ -26,8 +26,8 @@ class VoucherController extends Controller
         if ($user->point >= $voucher->point_need) {
             $user_voucher = new UserVoucher([
                 'voucher_id' => $voucher->id,
-                'user_id' => $user->id,
-                'used' => 0,
+                'user_id'    => $user->id,
+                'used'       => 0,
             ]);
             $user_voucher->save();
 

@@ -14,7 +14,7 @@ class PriceListController extends Controller
     /**
      * Method to show price lists view
      *
-     * @return View
+     * @return \Illuminate\Contracts\View\View
      */
     public function index(): View
     {
@@ -23,6 +23,11 @@ class PriceListController extends Controller
         $kiloan = PriceList::where('category_id', 2)->get();
         $serviceTypes = ServiceType::all();
 
-        return view('member.price_lists', compact('user', 'satuan', 'kiloan', 'serviceTypes'));
+        return view('member.price_lists', compact(
+            'user',
+            'satuan',
+            'kiloan',
+            'serviceTypes'
+        ));
     }
 }

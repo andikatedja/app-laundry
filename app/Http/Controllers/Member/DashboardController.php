@@ -13,7 +13,7 @@ class DashboardController extends Controller
     /**
      * Method to show member dashboard view
      *
-     * @return View
+     * @return \Illuminate\Contracts\View\View
      */
     public function index(): View
     {

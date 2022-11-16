@@ -46,13 +46,13 @@
                                         @csrf
                                         <h5>Silahkan isi form dibawah ini sesuai kriteria</h5>
                                         <div class="form-group">
-                                            <select class="form-control" id="tipe" name="tipe">
+                                            <select class="form-control" id="tipe" name="type">
                                                 <option value="1">Saran</option>
                                                 <option value="2">Komplain</option>
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <textarea class="form-control" id="form_sarankomplain" rows="4" name="isi_sarankomplain"></textarea>
+                                            <textarea class="form-control" id="form_sarankomplain" rows="4" name="body"></textarea>
                                         </div>
                                         <button class="btn btn-primary badge-pill float-right w-25"
                                             type="submit">Kirim</button>

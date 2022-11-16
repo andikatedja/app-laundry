@@ -14,7 +14,7 @@ class TransactionController extends Controller
     /**
      * Method to show transactions history based on current logged on member
      *
-     * @return View
+     * @return \Illuminate\Contracts\View\View
      */
     public function index(): View
     {
@@ -30,8 +30,8 @@ class TransactionController extends Controller
     /**
      * Method to show detail transaction
      *
-     * @param string|int $id
-     * @return View
+     * @param  string|int $id
+     * @return \Illuminate\Contracts\View\View
      */
     public function show(string|int $id): View
     {

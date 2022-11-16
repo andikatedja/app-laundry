@@ -14,7 +14,7 @@ class ComplaintSuggestionController extends Controller
     /**
      * method to show complaint suggestion view
      *
-     * @return View
+     * @return \Illuminate\Contracts\View\View
      */
     public function index(): View
     {
@@ -27,26 +27,28 @@ class ComplaintSuggestionController extends Controller
     /**
      * Method to process complaint suggestion
      *
-     * @param Request $request
-     * @return RedirectResponse
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'isi_sarankomplain' => 'required'
+            'body' => ['required'],
+            'type' => ['required'],
         ]);
 
         $user = Auth::user();
 
         $complaintSuggestion = new ComplaintSuggestion([
-            'body' => $request->input('isi_sarankomplain'),
-            'type' => $request->input('tipe'),
+            'body'    => $request->input('body'),
+            'type'    => $request->input('type'),
             'user_id' => $user->id,
-            'reply' => '',
+            'reply'   => '',
         ]);
 
         $complaintSuggestion->save();
 
-        return redirect()->route('member.complaints.index')->with('success', 'Saran/komplain berhasil dikirim!');
+        return redirect()->route('member.complaints.index')
+            ->with('success', 'Saran/komplain berhasil dikirim!');
     }
 }

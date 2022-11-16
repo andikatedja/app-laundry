@@ -17,7 +17,7 @@ class PointController extends Controller
     /**
      * Method to show member points view
      *
-     * @return View
+     * @return \Illuminate\Contracts\View\View
      */
     public function index(): View
     {
