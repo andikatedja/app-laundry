@@ -26,15 +26,15 @@ $(document).on("click", ".lihat-isi", function () {
 $(document).on("click", "#btn-kirim-balasan", function () {
     let id = $(this).data("id");
     if (id != "") {
-        let balasan = $("#balas").val();
+        let reply = $("#balas").val();
         $.ajax({
             url: route("admin.complaint-suggestions.update", {
                 complaintSuggestion: id,
             }),
             data: {
-                balasan: balasan,
+                reply: reply,
             },
-            method: "POST",
+            method: "PATCH",
             success: function () {
                 alert("Balasan berhasil dikirim");
                 location.reload();

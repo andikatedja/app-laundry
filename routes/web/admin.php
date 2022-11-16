@@ -62,7 +62,7 @@ Route::group([
 ], function () {
     Route::get('/', [ComplaintSuggestionController::class, 'index'])->name('index');
     Route::get('/{complaintSuggestion}', [ComplaintSuggestionController::class, 'show'])->name('show');
-    Route::post('/{complaintSuggestion}', [ComplaintSuggestionController::class, 'update'])->name('update');
+    Route::patch('/{complaintSuggestion}', [ComplaintSuggestionController::class, 'update'])->name('update');
 });
 
 Route::group([
