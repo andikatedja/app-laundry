@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Voucher extends Model
 {
@@ -16,7 +17,13 @@ class Voucher extends Model
         'point_need',
     ];
 
-    public function user_vouchers()
+
+    /**
+     * User voucher relation
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function user_vouchers(): HasMany
     {
         return $this->hasMany(UserVoucher::class);
     }

@@ -8,6 +8,7 @@ use App\Models\Concerns\UploadFile;
 use App\Models\Contracts\UploadedFilesInterface;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
@@ -52,19 +53,31 @@ class User extends Authenticatable implements UploadedFilesInterface
     ];
 
     /**
-     * Get user transactions
+     * Transaction relation
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function transactions()
+    public function transactions(): HasMany
     {
         return $this->hasMany(Transaction::class, 'member_id');
     }
 
-    public function vouchers()
+    /**
+     * Vouchers relation
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function vouchers(): HasMany
     {
         return $this->hasMany(UserVoucher::class);
     }
 
-    public function complaint_suggestions()
+    /**
+     * Complaint suggestions relation
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function complaint_suggestions(): HasMany
     {
         return $this->hasMany(ComplaintSuggestion::class);
     }
@@ -113,6 +126,11 @@ class User extends Authenticatable implements UploadedFilesInterface
         return $this->getFileStorage()->url($this->getFullFilePath());
     }
 
+    /**
+     * Password mutator
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
     public function password(): Attribute
     {
         return Attribute::make(
