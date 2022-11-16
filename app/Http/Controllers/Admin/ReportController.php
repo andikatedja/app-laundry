@@ -17,7 +17,7 @@ class ReportController extends Controller
     /**
      * Show report page
      *
-     * @return View
+     * @return \Illuminate\Contracts\View\View
      */
     public function index(): View
     {
@@ -31,20 +31,28 @@ class ReportController extends Controller
     /**
      * Print report as pdf
      *
-     * @param Request $request
-     * @return Response
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
      */
     public function print(Request $request): Response
     {
-        $monthInput = $request->input('bulan');
-        $yearInput = $request->input('tahun');
+        $monthInput = $request->input('month');
+        $yearInput = $request->input('year');
         $dateObj = DateTime::createFromFormat('!m', $monthInput);
         $month = $dateObj->format('F');
         $revenue = Transaction::whereMonth('created_at', $monthInput)
             ->whereYear('created_at', $yearInput)->sum('total');
         $transactionsCount = Transaction::whereMonth('created_at', $monthInput)
             ->whereYear('created_at', $yearInput)->count();
-        $pdf = PDF::loadview('admin.report_pdf', compact('monthInput', 'yearInput', 'revenue', 'transactionsCount'));
+        $pdf = PDF::loadview(
+            'admin.report_pdf',
+            compact(
+                'monthInput',
+                'yearInput',
+                'revenue',
+                'transactionsCount'
+            )
+        );
         // return $pdf->download('laporan-keuangan-' . $bulan . '-' . $tahun . '.pdf');
 
         return $pdf->stream();
@@ -53,12 +61,12 @@ class ReportController extends Controller
     /**
      * Get month by year report
      *
-     * @param Request $request
-     * @return JsonResponse
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function getMonth(Request $request): JsonResponse
     {
-        $year = $request->input('tahun');
+        $year = $request->input('year');
         $month = Transaction::whereYear('created_at', $year)->selectRaw('MONTH(created_at) as Bulan')->distinct()->get();
 
         return response()->json($month);

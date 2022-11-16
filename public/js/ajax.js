@@ -71,12 +71,12 @@ $(document).on("change", ".select-status", function () {
 });
 
 $(document).on("change", "#tahun", function () {
-    let tahun = $(this).val();
+    let year = $(this).val();
     let option = "";
     $.ajax({
         url: route("admin.reports.get-month"),
         data: {
-            tahun: tahun,
+            year: year,
         },
         method: "POST",
         dataType: "json",

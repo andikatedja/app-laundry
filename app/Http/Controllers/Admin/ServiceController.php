@@ -12,13 +12,17 @@ class ServiceController extends Controller
     /**
      * Add new service to database
      *
-     * @param Request $request
-     * @return RedirectResponse
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request): RedirectResponse
     {
+        $request->validate([
+            'service_name' => ['required'],
+        ]);
+
         $service = new Service([
-            'name' => ucfirst($request->input('servis'))
+            'name' => ucfirst($request->input('service_name'))
         ]);
         $service->save();
 

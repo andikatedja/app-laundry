@@ -15,7 +15,7 @@ class VoucherController extends Controller
     /**
      * Show voucher page
      *
-     * @return View
+     * @return \Illuminate\Contracts\View\View
      */
     public function index(): View
     {
@@ -28,24 +28,30 @@ class VoucherController extends Controller
     /**
      * Add new voucher to database
      *
-     * @param Request $request
-     * @return RedirectResponse
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request): RedirectResponse
     {
+        $input = $request->validate([
+            'discount_value' => ['required'],
+            'point_need'     => ['required'],
+        ]);
+
         // Cek apakah potongan ada yang sama di database
-        if (Voucher::where('discount_value', $request->input('potongan'))->exists()) {
+        $voucherExists = Voucher::where('discount_value', $input['discount_value'])->exists();
+        if ($voucherExists) {
             return redirect()->route('admin.vouchers.index')
-                ->with('error', 'Voucher potongan ' . $request->input('potongan') . ' sudah ada');
+                ->with('error', 'Voucher potongan ' . $input['discount_value'] . ' sudah ada');
         }
 
         // Masukkan potongan ke dalam tabel vouchers
         $voucher = new Voucher([
-            'name' => 'Potongan ' . number_format($request->input('potongan'), 0, ',', '.'),
-            'discount_value' => $request->input('potongan'),
-            'point_need' => $request->input('poin'),
-            'description' => 'Mendapatkan potongan harga ' . number_format($request->input('potongan'), 0, ',', '.') . ' dari total transaksi',
-            'active_status' => 1
+            'name'           => 'Potongan ' . number_format($input['discount_value'], 0, ',', '.'),
+            'discount_value' => $input['discount_value'],
+            'point_need'     => $input['point_need'],
+            'description'    => 'Mendapatkan potongan harga ' . number_format($input['discount_value'], 0, ',', '.') . ' dari total transaksi',
+            'active_status'  => 1,
         ]);
         $voucher->save();
 
@@ -56,8 +62,8 @@ class VoucherController extends Controller
     /**
      * Update voucher status
      *
-     * @param Voucher $voucher
-     * @return JsonResponse
+     * @param  \App\Models\Voucher $voucher
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Voucher $voucher): JsonResponse
     {

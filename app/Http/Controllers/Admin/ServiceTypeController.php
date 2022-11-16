@@ -13,8 +13,8 @@ class ServiceTypeController extends Controller
     /**
      * Get service type data
      *
-     * @param ServiceType $serviceType
-     * @return JsonResponse
+     * @param  \App\Models\ServiceType $serviceType
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(ServiceType $serviceType): JsonResponse
     {
@@ -24,9 +24,9 @@ class ServiceTypeController extends Controller
     /**
      * Update service type cost
      *
-     * @param ServiceType $serviceType
-     * @param Request $request
-     * @return RedirectResponse
+     * @param  \App\Models\ServiceType $serviceType
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(ServiceType $serviceType, Request $request): RedirectResponse
     {

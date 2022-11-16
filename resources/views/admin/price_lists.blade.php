@@ -56,7 +56,7 @@
                                             <label for="barang">Barang</label>
                                             <div class="row">
                                                 <div class="col-8">
-                                                    <select class="form-control" id="barang" name="barang">
+                                                    <select class="form-control" id="barang" name="item">
                                                         @foreach ($items as $item)
                                                             <option value="{{ $item->id }}">{{ $item->name }}</option>
                                                         @endforeach
@@ -74,7 +74,7 @@
                                             <label for="servis">Servis</label>
                                             <div class="row">
                                                 <div class="col-8">
-                                                    <select class="form-control" id="servis" name="servis">
+                                                    <select class="form-control" id="servis" name="service">
                                                         @foreach ($services as $service)
                                                             <option value="{{ $service->id }}">{{ $service->name }}
                                                             </option>
@@ -93,7 +93,7 @@
                                     <div class="col-6">
                                         <div class="form-group">
                                             <label for="kategori">Kategori</label>
-                                            <select class="form-control" id="kategori" name="kategori">
+                                            <select class="form-control" id="kategori" name="category">
                                                 @foreach ($categories as $category)
                                                     <option value="{{ $category->id }}">{{ $category->name }}</option>
                                                 @endforeach
@@ -101,7 +101,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="harga-modal">Harga</label>
-                                            <input type="number" class="form-control" id="harga" name="harga"
+                                            <input type="number" class="form-control" id="harga" name="price"
                                                 required>
                                         </div>
                                     </div>
@@ -234,7 +234,7 @@
                         <input id="id-harga-modal" type="hidden" name="id_harga">
                         <div class="form-group">
                             <label for="harga-modal">Harga</label>
-                            <input type="number" class="form-control" id="harga-modal" name="harga">
+                            <input type="number" class="form-control" id="harga-modal" name="price">
                         </div>
                 </div>
                 <div class="modal-footer">
@@ -291,7 +291,7 @@
                         @csrf
                         <div class="form-group">
                             <label for="barang">Nama Barang</label>
-                            <input type="text" class="form-control" id="barang" name="barang">
+                            <input type="text" class="form-control" id="barang" name="item_name">
                         </div>
                 </div>
                 <div class="modal-footer">
@@ -318,7 +318,7 @@
                         @csrf
                         <div class="form-group">
                             <label for="servis">Nama Servis</label>
-                            <input type="text" class="form-control" id="servis" name="servis">
+                            <input type="text" class="form-control" id="servis" name="service_name">
                         </div>
                 </div>
                 <div class="modal-footer">

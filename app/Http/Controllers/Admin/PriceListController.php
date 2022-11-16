@@ -19,7 +19,7 @@ class PriceListController extends Controller
     /**
      * Display price lists view
      *
-     * @return View
+     * @return \Illuminate\Contracts\View\View
      */
     public function index(): View
     {
@@ -37,8 +37,8 @@ class PriceListController extends Controller
     /**
      * Get price list price
      *
-     * @param PriceList $priceList
-     * @return JsonResponse
+     * @param  \App\Models\PriceList $priceList
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(PriceList $priceList): JsonResponse
     {
@@ -48,29 +48,29 @@ class PriceListController extends Controller
     /**
      * Store new price list to database
      *
-     * @param Request $request
-     * @return RedirectResponse
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'harga' => 'required'
+            'price' => 'required'
         ]);
 
         if (PriceList::where([
-            'item_id' => $request->input('barang'),
-            'category_id' => $request->input('kategori'),
-            'service_id' => $request->input('servis')
+            'item_id'     => $request->input('item'),
+            'category_id' => $request->input('category'),
+            'service_id'  => $request->input('service')
         ])->exists()) {
             return redirect()->route('admin.price-lists.index')
                 ->with('error', 'Harga tidak dapat ditambah karena sudah tersedia!');
         }
 
         $priceList = new PriceList([
-            'item_id' => $request->input('barang'),
-            'category_id' => $request->input('kategori'),
-            'service_id' => $request->input('servis'),
-            'price' => $request->input('harga')
+            'item_id'     => $request->input('item'),
+            'category_id' => $request->input('category'),
+            'service_id'  => $request->input('service'),
+            'price'       => $request->input('price')
         ]);
         $priceList->save();
 
@@ -81,13 +81,13 @@ class PriceListController extends Controller
     /**
      * Change price list price
      *
-     * @param PriceList $priceList
-     * @param Request $request
-     * @return RedirectResponse
+     * @param  \App\Models\PriceList $priceList
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(PriceList $priceList, Request $request): RedirectResponse
     {
-        $priceList->price = $request->input('harga');
+        $priceList->price = $request->input('price');
         $priceList->save();
 
         return redirect()->route('admin.price-lists.index')

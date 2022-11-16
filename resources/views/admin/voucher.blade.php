@@ -108,12 +108,12 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="potongan">Potongan</label>
-                            <input type="number" class="form-control" id="potongan" name="potongan"
+                            <input type="number" class="form-control" id="potongan" name="discount_value"
                                 placeholder="Besar potongan harga" required>
                         </div>
                         <div class="form-group">
                             <label for="poin">Poin diperlukan</label>
-                            <input type="number" class="form-control" id="poin" name="poin"
+                            <input type="number" class="form-control" id="poin" name="point_need"
                                 placeholder="Poin diperlukan" required>
                         </div>
                     </div>

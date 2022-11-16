@@ -12,13 +12,17 @@ class ItemController extends Controller
     /**
      * Add new item to database
      *
-     * @param Request $request
-     * @return RedirectResponse
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request): RedirectResponse
     {
+        $request->validate([
+            'item_name' => ['required'],
+        ]);
+
         $item = new Item([
-            'name' => ucfirst($request->input('barang'))
+            'name' => ucfirst($request->input('item_name'))
         ]);
         $item->save();
 

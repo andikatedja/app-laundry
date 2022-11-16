@@ -29,7 +29,7 @@
                                         <div class="form-group row">
                                             <label for="tahun" class="col-sm-4 col-form-label">Tahun</label>
                                             <div class="col-sm-6">
-                                                <select class="form-control" id="tahun" name="tahun">
+                                                <select class="form-control" id="tahun" name="year">
                                                     <option value="0" selected="selected" disabled="true">-- Please
                                                         Select
                                                         --</option>
@@ -42,7 +42,7 @@
                                         <div class="form-group row">
                                             <label for="bulan" class="col-sm-4 col-form-label">Bulan</label>
                                             <div class="col-sm-6">
-                                                <select class="form-control" id="bulan" name="bulan">
+                                                <select class="form-control" id="bulan" name="month">
                                                     <option value="0" selected="selected" disabled="true">-- Select
                                                         Year
                                                         First --</option>
