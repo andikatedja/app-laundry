@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterAdminRequest;
 use App\Http\Requests\Auth\RegisterMemberRequest;
@@ -64,7 +65,7 @@ class RegisterController extends Controller
         $user = new User(
             $request->safe()->all()
         );
-        $user->role = 1;
+        $user->role = Role::Admin->value;
         $user->saveOrFail();
 
         return redirect()->route('login.show')

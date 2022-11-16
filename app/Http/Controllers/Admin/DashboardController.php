@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 use App\Models\User;
@@ -27,7 +28,7 @@ class DashboardController extends Controller
             ->limit(10)
             ->get();
 
-        $membersCount = User::where('role', 2)->count();
+        $membersCount = User::where('role', Role::Member)->count();
 
         $transactionsCount = Transaction::count();
 

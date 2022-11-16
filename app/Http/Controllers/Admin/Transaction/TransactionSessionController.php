@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Transaction;
 
+use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Item;
@@ -37,7 +38,7 @@ class TransactionSessionController extends Controller
         }
 
         // Check if member exist
-        if ($memberId != null && !User::where('id', $memberId)->where('role', 2)->exists()) {
+        if ($memberId != null && !User::where('id', $memberId)->where('role', Role::Member)->exists()) {
             return redirect()->route('admin.transactions.create')->with('error', 'Member tidak ditemukan!');
         }
 

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\Role;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -21,7 +22,7 @@ class UserSeeder extends Seeder
             'email' => 'admin@laundryxyz.com',
             'password' => Hash::make('admin123'),
             'name' => 'Admin Laundry',
-            'role' => 1
+            'role' => Role::Admin->value,
         ]);
         $user->save();
     }

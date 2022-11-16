@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
@@ -39,7 +40,7 @@ class LoginController extends Controller
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
 
-            if (Auth::user()->role == 1) {
+            if (Auth::user()->role == Role::Admin) {
                 return redirect()->route('admin.index');
             } else {
                 return redirect()->route('member.index');

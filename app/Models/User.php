@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Role;
 use App\Models\Concerns\ProfilePicture;
 use App\Models\Concerns\UploadFile;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -35,7 +36,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
     /**
@@ -45,6 +47,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'role' => Role::class,
     ];
 
     /**
