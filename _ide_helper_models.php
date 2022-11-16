@@ -286,7 +286,7 @@ namespace App\Models{
  * @property string $email
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
- * @property int $role
+ * @property \App\Enums\Role $role
  * @property string|null $gender
  * @property string|null $address
  * @property string|null $phone_number
@@ -321,7 +321,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRole($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  */
-	class User extends \Eloquent {}
+	class User extends \Eloquent implements \App\Models\Contracts\UploadedFilesInterface {}
 }
 
 namespace App\Models{

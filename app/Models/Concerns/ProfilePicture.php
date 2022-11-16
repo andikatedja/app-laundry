@@ -19,30 +19,40 @@ trait ProfilePicture
      */
     public static function bootProfilePicture(): void
     {
-        static::saving(function (Model $model) {
-            // Check if there is any changes in image attribute
-            // Such as storing and updating to table
-            if ($model->isDirty(attributes: $model->fileColumn())) {
-                // When updating, usually model has previous file
-                // Check if model has previous file
-                // If has previous file, then delete
-                if ($model->hasPreviousFile() && !$model->isDefaultFileName()) {
-                    $model->deletePreviousFile();
-                }
+        static::saving(
+            /**
+             * @param \Illuminate\Database\Eloquent\Model<\App\Models\Contracts\UploadedFilesInterface> $model
+             */
+            function ($model) {
+                // Check if there is any changes in image attribute
+                // Such as storing and updating to table
+                if ($model->isDirty(attributes: $model->fileColumn())) {
+                    // When updating, usually model has previous file
+                    // Check if model has previous file
+                    // If has previous file, then delete
+                    if ($model->hasPreviousFile() && !$model->isDefaultFileName()) {
+                        $model->deletePreviousFile();
+                    }
 
-                // Get the attribute value
-                $file = $model->getAttribute(key: $model->fileColumn());
+                    // Get the attribute value
+                    $file = $model->getAttribute(key: $model->fileColumn());
 
-                // Check if file is really a file
-                if ($file instanceof UploadedFile) {
-                    $model->saveFile(file: $file);
+                    // Check if file is really a file
+                    if ($file instanceof UploadedFile) {
+                        $model->saveFile(file: $file);
+                    }
                 }
             }
-        });
+        );
 
-        static::deleting(function (Model $model) {
-            $model->deletePreviousFile();
-        });
+        static::deleting(
+            /**
+             * @param \Illuminate\Database\Eloquent\Model<\App\Models\Contracts\UploadedFilesInterface> $model
+             */
+            function ($model) {
+                $model->deletePreviousFile();
+            }
+        );
     }
 
     /**
@@ -163,7 +173,7 @@ trait ProfilePicture
      *
      * @return void
      *
-     * @throws App\Exceptions\UploadedFileException
+     * @throws \App\Exceptions\ProfilePictureException
      */
     public function saveFile(UploadedFile $file): void
     {

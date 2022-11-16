@@ -65,7 +65,7 @@ class RegisterController extends Controller
         $user = new User(
             $request->safe()->all()
         );
-        $user->role = Role::Admin->value;
+        $user->role = Role::Admin;
         $user->saveOrFail();
 
         return redirect()->route('login.show')

@@ -148,6 +148,7 @@ class TransactionController extends Controller
         }
 
         // Cek apakah menggunakan service type non reguler
+        $cost = 0;
         if ($request->input('service-type') != 0) {
             $serviceTypeCost = ServiceType::where('id', $request->input('service-type'))->first();
             $cost = $serviceTypeCost->cost;

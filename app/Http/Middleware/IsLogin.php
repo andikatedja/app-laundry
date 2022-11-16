@@ -29,7 +29,6 @@ class IsLogin
                 } else {
                     return redirect('member');
                 }
-                break;
 
             case 'admin':
                 if (!Auth::check()) {
@@ -41,7 +40,6 @@ class IsLogin
                 } else {
                     return redirect('member');
                 }
-                break;
 
             case 'member':
                 if (!Auth::check()) {
@@ -53,11 +51,9 @@ class IsLogin
                 } else {
                     return redirect('admin');
                 }
-                break;
 
             default:
                 return $next($request);
-                break;
         }
     }
 }

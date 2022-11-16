@@ -107,7 +107,7 @@ class TransactionSessionController extends Controller
     /**
      * Method for delete current transaction in session
      *
-     * @param  string $row_id
+     * @param  string $rowId
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
