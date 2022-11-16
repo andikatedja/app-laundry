@@ -39,7 +39,13 @@ class ReportController extends Controller
         $monthInput = $request->input('month');
         $yearInput = $request->input('year');
         $dateObj = DateTime::createFromFormat('!m', $monthInput);
-        $month = $dateObj->format('F');
+
+        if ($dateObj) {
+            $month = $dateObj->format('F');
+        } else {
+            abort(500);
+        }
+
         $revenue = Transaction::whereMonth('created_at', $monthInput)
             ->whereYear('created_at', $yearInput)->sum('total');
         $transactionsCount = Transaction::whereMonth('created_at', $monthInput)

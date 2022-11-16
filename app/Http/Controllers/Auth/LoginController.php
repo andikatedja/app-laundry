@@ -40,7 +40,15 @@ class LoginController extends Controller
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
 
-            if (Auth::user()->role == Role::Admin) {
+            $user = Auth::user();
+
+            if (!$user) {
+                return redirect()->route('login.show')
+                    ->with('error', Lang::get('auth.error_email_password'))
+                    ->withInput();
+            }
+
+            if ($user->role == Role::Admin) {
                 return redirect()->route('admin.index');
             } else {
                 return redirect()->route('member.index');

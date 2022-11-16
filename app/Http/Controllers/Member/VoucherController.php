@@ -21,6 +21,10 @@ class VoucherController extends Controller
     {
         $user = Auth::user();
 
+        if (!$user) {
+            abort(403);
+        }
+
         // Check if member's points are sufficient to redeem
         // If points are sufficient, then save to database
         if ($user->point >= $voucher->point_need) {

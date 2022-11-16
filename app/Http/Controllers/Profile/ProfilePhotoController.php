@@ -18,6 +18,11 @@ class ProfilePhotoController extends Controller
     public function destroy(): RedirectResponse
     {
         $user = Auth::user();
+
+        if (!$user) {
+            abort(403);
+        }
+
         $user->profile_picture = 'default.jpg';
         $user->save();
 

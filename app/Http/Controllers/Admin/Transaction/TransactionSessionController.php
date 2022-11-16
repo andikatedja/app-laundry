@@ -49,15 +49,15 @@ class TransactionSessionController extends Controller
             'item_id'     => $itemId,
             'category_id' => $categoryId,
             'service_id'  => $serviceId
-        ])->first()->price;
+        ])->firstOrFail()->price;
 
         // Calculate sub total
         $subTotal = $price * $quantity;
 
         // Get item name, service name, and category name based on id
-        $itemName     = Item::where('id', $itemId)->first()->name;
-        $serviceName  = Service::where('id', $serviceId)->first()->name;
-        $categoryName = Category::where('id', $categoryId)->first()->name;
+        $itemName     = Item::where('id', $itemId)->firstOrFail()->name;
+        $serviceName  = Service::where('id', $serviceId)->firstOrFail()->name;
+        $categoryName = Category::where('id', $categoryId)->firstOrFail()->name;
 
         // make new transaction row to store in session
         $rowId = md5($memberId . serialize($itemId) . serialize($serviceId) . serialize($categoryId));

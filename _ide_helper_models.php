@@ -12,28 +12,6 @@
 
 namespace App\Models{
 /**
- * App\Models\Admin_model
- *
- * @method static \Illuminate\Database\Eloquent\Builder|Admin_model newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Admin_model newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Admin_model query()
- */
-	class Admin_model extends \Eloquent {}
-}
-
-namespace App\Models{
-/**
- * App\Models\Auth_model
- *
- * @method static \Illuminate\Database\Eloquent\Builder|Auth_model newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Auth_model newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Auth_model query()
- */
-	class Auth_model extends \Eloquent {}
-}
-
-namespace App\Models{
-/**
  * App\Models\Category
  *
  * @property int $id
@@ -98,17 +76,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Item whereUpdatedAt($value)
  */
 	class Item extends \Eloquent {}
-}
-
-namespace App\Models{
-/**
- * App\Models\Member_model
- *
- * @method static \Illuminate\Database\Eloquent\Builder|Member_model newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Member_model newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Member_model query()
- */
-	class Member_model extends \Eloquent {}
 }
 
 namespace App\Models{

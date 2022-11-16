@@ -18,6 +18,11 @@ class DashboardController extends Controller
     public function index(): View
     {
         $user = Auth::user();
+
+        if (!$user) {
+            abort(403);
+        }
+
         $latestTransactions = Transaction::with('status')->where('member_id', $user->id)
             ->orderBy('created_at', 'DESC')
             ->orderBy('status_id', 'ASC')

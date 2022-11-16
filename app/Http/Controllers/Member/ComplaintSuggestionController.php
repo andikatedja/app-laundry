@@ -19,6 +19,11 @@ class ComplaintSuggestionController extends Controller
     public function index(): View
     {
         $user = Auth::user();
+
+        if (!$user) {
+            abort(403);
+        }
+
         $complaintSuggestions = ComplaintSuggestion::where('user_id', $user->id)->get();
 
         return view('member.complaint_suggestions', compact('user', 'complaintSuggestions'));
@@ -38,6 +43,10 @@ class ComplaintSuggestionController extends Controller
         ]);
 
         $user = Auth::user();
+
+        if (!$user) {
+            abort(403);
+        }
 
         $complaintSuggestion = new ComplaintSuggestion([
             'body'    => $request->input('body'),

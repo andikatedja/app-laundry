@@ -25,6 +25,10 @@ class ProfilePasswordController extends Controller
 
         $user = Auth::user();
 
+        if (!$user) {
+            abort(403);
+        }
+
         // Check if current password is the same
         if (!Hash::check($request->input('current_password'), $user->password)) {
             return redirect('profile')->with('error', 'Kata sandi sekarang salah!');

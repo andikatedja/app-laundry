@@ -18,35 +18,37 @@ class IsLogin
      */
     public function handle($request, Closure $next)
     {
+        $user = Auth::user();
+
         switch ($request->segment(1)) {
             case 'login':
-                if (!Auth::check()) {
+                if (!$user) {
                     return $next($request);
                 }
 
-                if (Auth::user()->role == Role::Admin) {
+                if ($user->role == Role::Admin) {
                     return redirect('admin');
                 } else {
                     return redirect('member');
                 }
 
             case 'admin':
-                if (!Auth::check()) {
+                if (!$user) {
                     return redirect('login')->with('error', Lang::get('auth.please_login'));
                 }
 
-                if (Auth::user()->role == Role::Admin) {
+                if ($user->role == Role::Admin) {
                     return $next($request);
                 } else {
                     return redirect('member');
                 }
 
             case 'member':
-                if (!Auth::check()) {
+                if (!$user) {
                     return redirect('login')->with('error', Lang::get('auth.please_login'));
                 }
 
-                if (Auth::user()->role == Role::Member) {
+                if ($user->role == Role::Member) {
                     return $next($request);
                 } else {
                     return redirect('admin');

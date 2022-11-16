@@ -30,27 +30,27 @@ class TransactionController extends Controller
      */
     public function index(Request $request): View
     {
-        $currentMonth = $request->query('month', date('m'));
-        $currentYear = $request->query('year', date('Y'));
+        $currentMonth = $request->input('month', date('m'));
+        $currentYear = $request->input('year', date('Y'));
 
         $user = Auth::user();
 
-        $ongoingTransactions = Transaction::whereYear('created_at', $currentYear)
-            ->whereMonth('created_at', $currentMonth)
+        $ongoingTransactions = Transaction::whereYear('created_at', '=', $currentYear)
+            ->whereMonth('created_at', '=', $currentMonth)
             ->where('service_type_id', 1)
             ->where('finish_date', null)
             ->orderBy('created_at', 'DESC')
             ->get();
 
-        $ongoingPriorityTransactions = Transaction::whereYear('created_at', $currentYear)
-            ->whereMonth('created_at', $currentMonth)
+        $ongoingPriorityTransactions = Transaction::whereYear('created_at', '=', $currentYear)
+            ->whereMonth('created_at', '=', $currentMonth)
             ->where('service_type_id', 2)
             ->where('finish_date', null)
             ->orderBy('created_at', 'DESC')
             ->get();
 
-        $finishedTransactions = Transaction::whereYear('created_at', $currentYear)
-            ->whereMonth('created_at', $currentMonth)
+        $finishedTransactions = Transaction::whereYear('created_at', '=', $currentYear)
+            ->whereMonth('created_at', '=', $currentMonth)
             ->where('finish_date', '!=', null)
             ->orderBy('created_at', 'DESC')
             ->get();
@@ -119,7 +119,13 @@ class TransactionController extends Controller
         DB::beginTransaction();
 
         $memberId = $request->session()->get('memberIdTransaction');
-        $adminId = Auth::user()->id;
+        $user = Auth::user();
+
+        if (!$user) {
+            abort(403);
+        }
+
+        $adminId = $user->id;
         $sessionTransaction = $request->session()->get('transaction');
 
         // Hitung total harga
@@ -133,7 +139,11 @@ class TransactionController extends Controller
         if ($request->input('voucher') != 0) {
             // Ambil banyak potongan dari database
 
-            $userVoucher = UserVoucher::where('id', $request->input('voucher'))->first();
+            $userVoucher = UserVoucher::where('id', $request->input('voucher'))->firstOrFail();
+            if (!$userVoucher->voucher) {
+                abort(404);
+            }
+
             $discount = $userVoucher->voucher->discount_value;
 
             // Kurangi harga dengan potongan
@@ -150,7 +160,7 @@ class TransactionController extends Controller
         // Cek apakah menggunakan service type non reguler
         $cost = 0;
         if ($request->input('service-type') != 0) {
-            $serviceTypeCost = ServiceType::where('id', $request->input('service-type'))->first();
+            $serviceTypeCost = ServiceType::where('id', $request->input('service-type'))->firstOrFail();
             $cost = $serviceTypeCost->cost;
             // Tambahkan harga dengan cost
             $totalPrice += $cost;
@@ -180,7 +190,7 @@ class TransactionController extends Controller
                 'item_id'     => $trs['itemId'],
                 'category_id' => $trs['categoryId'],
                 'service_id'  => $trs['serviceId']
-            ])->first();
+            ])->firstOrFail();
 
             $transaction_detail = new TransactionDetail([
                 'transaction_id' => $transaction->id,
@@ -192,7 +202,7 @@ class TransactionController extends Controller
             $transaction_detail->save();
         }
 
-        $user = User::where('id', $memberId)->first();
+        $user = User::where('id', $memberId)->firstOrFail();
         $user->point = $user->point + 1;
         $user->save();
 
