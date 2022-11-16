@@ -17,59 +17,61 @@ class TransactionSessionController extends Controller
     /**
      * Method to add new transaction to session
      *
-     * @param Request $request
-     * @return RedirectResponse
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request): RedirectResponse
     {
-        $itemId = $request->input('item');
-        $serviceId = $request->input('service');
+        $itemId     = $request->input('item');
+        $serviceId  = $request->input('service');
         $categoryId = $request->input('category');
-        $memberId = $request->input('member-id');
-        $quantity = $request->input('quantity');
+        $memberId   = $request->input('member-id');
+        $quantity   = $request->input('quantity');
 
         // Check if price list exist in database
         if (!PriceList::where([
-            'item_id' => $itemId,
+            'item_id'     => $itemId,
             'category_id' => $categoryId,
-            'service_id' => $serviceId
+            'service_id'  => $serviceId
         ])->exists()) {
             return redirect()->route('admin.transactions.create')->with('error', 'Harga tidak ditemukan!');
         }
 
         // Check if member exist
-        if ($memberId != null && !User::where('id', $memberId)->where('role', Role::Member)->exists()) {
+        $memberExists = !User::where('id', $memberId)->where('role', Role::Member)->exists();
+
+        if ($memberId && $memberExists) {
             return redirect()->route('admin.transactions.create')->with('error', 'Member tidak ditemukan!');
         }
 
         // Get price list's price from database
         $price = PriceList::where([
-            'item_id' => $itemId,
+            'item_id'     => $itemId,
             'category_id' => $categoryId,
-            'service_id' => $serviceId
+            'service_id'  => $serviceId
         ])->first()->price;
 
         // Calculate sub total
         $subTotal = $price * $quantity;
 
         // Get item name, service name, and category name based on id
-        $itemName = Item::where('id', $itemId)->first()->name;
-        $serviceName = Service::where('id', $serviceId)->first()->name;
+        $itemName     = Item::where('id', $itemId)->first()->name;
+        $serviceName  = Service::where('id', $serviceId)->first()->name;
         $categoryName = Category::where('id', $categoryId)->first()->name;
 
         // make new transaction row to store in session
         $rowId = md5($memberId . serialize($itemId) . serialize($serviceId) . serialize($categoryId));
         $data = [
             $rowId => [
-                'itemId' => $itemId,
-                'itemName' => $itemName,
-                'categoryId' => $categoryId,
+                'itemId'       => $itemId,
+                'itemName'     => $itemName,
+                'categoryId'   => $categoryId,
                 'categoryName' => $categoryName,
-                'serviceId' => $serviceId,
-                'serviceName' => $serviceName,
-                'quantity' => $quantity,
-                'subTotal' => $subTotal,
-                'rowId' => $rowId
+                'serviceId'    => $serviceId,
+                'serviceName'  => $serviceName,
+                'quantity'     => $quantity,
+                'subTotal'     => $subTotal,
+                'rowId'        => $rowId
             ]
         ];
 
@@ -105,9 +107,9 @@ class TransactionSessionController extends Controller
     /**
      * Method for delete current transaction in session
      *
-     * @param mixed $row_id
-     * @param Request $request
-     * @return RedirectResponse
+     * @param  string $row_id
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(string $rowId, Request $request): RedirectResponse
     {

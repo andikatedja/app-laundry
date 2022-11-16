@@ -12,8 +12,8 @@ class PrintTransactionController extends Controller
     /**
      * Print transaction
      *
-     * @param Transaction $transaction
-     * @return View
+     * @param  \App\Models\Transaction $transaction
+     * @return \Illuminate\Contracts\View\View
      */
     public function index(Transaction $transaction): View
     {

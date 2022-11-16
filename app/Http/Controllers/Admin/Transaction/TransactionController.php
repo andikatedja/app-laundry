@@ -25,8 +25,8 @@ class TransactionController extends Controller
     /**
      * Display all transaction histories
      *
-     * @param Request $request
-     * @return View
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Contracts\View\View
      */
     public function index(Request $request): View
     {
@@ -73,8 +73,8 @@ class TransactionController extends Controller
     /**
      * Function to show admin input transaction view
      *
-     * @param Request $request
-     * @return View
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Contracts\View\View
      */
     public function create(Request $request): View
     {
@@ -93,7 +93,7 @@ class TransactionController extends Controller
             // Get user's voucher
             $vouchers = UserVoucher::where([
                 'user_id' => $memberIdSessionTransaction,
-                'used' => 0
+                'used'    => 0
             ])->get();
 
             // Sum total price
@@ -111,8 +111,8 @@ class TransactionController extends Controller
     /**
      * Store transaction to database
      *
-     * @param Request $request
-     * @return RedirectResponse
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request): RedirectResponse
     {
@@ -162,32 +162,31 @@ class TransactionController extends Controller
         }
 
         $transaction = new Transaction([
-            'status_id' => 1,
-            'member_id' => $memberId,
-            'admin_id' => $adminId,
-            'finish_date' => null,
-            'discount' => $discount,
-            'total' => $totalPrice,
+            'status_id'       => 1,
+            'member_id'       => $memberId,
+            'admin_id'        => $adminId,
+            'finish_date'     => null,
+            'discount'        => $discount,
+            'total'           => $totalPrice,
             'service_type_id' => $request->input('service-type'),
-            'service_cost' => $cost,
-            'payment_amount' => $request->input('payment-amount'),
+            'service_cost'    => $cost,
+            'payment_amount'  => $request->input('payment-amount'),
         ]);
         $transaction->save();
 
         foreach ($sessionTransaction as &$trs) {
-            // dd($trs);
             $price = PriceList::where([
-                'item_id' => $trs['itemId'],
+                'item_id'     => $trs['itemId'],
                 'category_id' => $trs['categoryId'],
-                'service_id' => $trs['serviceId']
+                'service_id'  => $trs['serviceId']
             ])->first();
 
             $transaction_detail = new TransactionDetail([
                 'transaction_id' => $transaction->id,
-                'price_list_id' => $price->id,
-                'quantity' => $trs['quantity'],
-                'price' => $price->price,
-                'sub_total' => $trs['subTotal']
+                'price_list_id'  => $price->id,
+                'quantity'       => $trs['quantity'],
+                'price'          => $price->price,
+                'sub_total'      => $trs['subTotal']
             ]);
             $transaction_detail->save();
         }
@@ -209,8 +208,8 @@ class TransactionController extends Controller
     /**
      * Return transaction data by id
      *
-     * @param Transaction $transaction
-     * @return JsonResponse
+     * @param  \App\Models\Transaction $transaction
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Transaction $transaction): JsonResponse
     {
@@ -229,11 +228,11 @@ class TransactionController extends Controller
     /**
      * Change transaction status
      *
-     * @param Transaction $transaction
-     * @param Request $request
-     * @return void
+     * @param  \App\Models\Transaction $transaction
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Transaction $transaction, Request $request)
+    public function update(Transaction $transaction, Request $request): JsonResponse
     {
         $currentDate = null;
         // Jika status 3 maka artinya sudah selesai, set tgl menjadi tgl selesai
@@ -244,5 +243,7 @@ class TransactionController extends Controller
         $transaction->status_id = $request->input('val', 2);
         $transaction->finish_date = $currentDate;
         $transaction->save();
+
+        return response()->json();
     }
 }
