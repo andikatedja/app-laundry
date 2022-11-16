@@ -17,7 +17,7 @@ class ProfileController extends Controller
     /**
      * Method to show user profile
      *
-     * @return View
+     * @return \Illuminate\Contracts\View\View
      */
     public function index(): View
     {
@@ -29,8 +29,8 @@ class ProfileController extends Controller
     /**
      * Method to process user profile edit
      *
-     * @param UpdateProfileRequest $request
-     * @return RedirectResponse
+     * @param  \App\Http\Requests\Profile\UpdateProfileRequest $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(UpdateProfileRequest $request): RedirectResponse
     {
@@ -39,6 +39,7 @@ class ProfileController extends Controller
         $user->fill($request->safe()->all());
         $user->save();
 
-        return redirect('profile')->with('success', 'Profil berhasil diedit!');
+        return redirect()->route('profile.index')
+            ->with('success', 'Profil berhasil diedit!');
     }
 }

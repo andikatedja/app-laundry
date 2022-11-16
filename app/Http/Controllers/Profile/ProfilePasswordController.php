@@ -13,14 +13,14 @@ class ProfilePasswordController extends Controller
     /**
      * Method to update user's password
      *
-     * @param Request $request
-     * @return RedirectResponse
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request): RedirectResponse
     {
         $request->validate([
             'current_password' => ['required'],
-            'password' => ['required', 'min:8', 'confirmed'],
+            'password'         => ['required', 'min:8', 'confirmed'],
         ]);
 
         $user = Auth::user();
@@ -33,6 +33,7 @@ class ProfilePasswordController extends Controller
         $user->fill($request->only(['password']));
         $user->saveOrFail();
 
-        return redirect()->route('profile.index')->with('success', 'Kata sandi berhasil diubah');
+        return redirect()->route('profile.index')
+            ->with('success', 'Kata sandi berhasil diubah');
     }
 }

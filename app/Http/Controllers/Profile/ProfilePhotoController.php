@@ -13,7 +13,7 @@ class ProfilePhotoController extends Controller
     /**
      * Method to reset user profile picture
      *
-     * @return RedirectResponse
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(): RedirectResponse
     {
@@ -21,6 +21,7 @@ class ProfilePhotoController extends Controller
         $user->profile_picture = 'default.jpg';
         $user->save();
 
-        return redirect('profile')->with('success', 'Foto profil berhasil direset');
+        return redirect()->route('profile.index')
+            ->with('success', 'Foto profil berhasil direset');
     }
 }
