@@ -1,4 +1,4 @@
-@extends($user->role == \App\Enums\Role::Member ? 'member.main' : 'admin.main')
+@extends($user->role == \App\Enums\Role::Member ? 'member.template.main' : 'admin.template.main')
 
 @section('main-content')
     <!-- Content Header (Page header) -->

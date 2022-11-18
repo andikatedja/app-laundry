@@ -35,21 +35,21 @@ class TransactionController extends Controller
 
         $user = Auth::user();
 
-        $ongoingTransactions = Transaction::whereYear('created_at', '=', $currentYear)
+        $ongoingTransactions = Transaction::with('member')->whereYear('created_at', '=', $currentYear)
             ->whereMonth('created_at', '=', $currentMonth)
             ->where('service_type_id', 1)
             ->where('finish_date', null)
             ->orderBy('created_at', 'DESC')
             ->get();
 
-        $ongoingPriorityTransactions = Transaction::whereYear('created_at', '=', $currentYear)
+        $ongoingPriorityTransactions = Transaction::with('member')->whereYear('created_at', '=', $currentYear)
             ->whereMonth('created_at', '=', $currentMonth)
             ->where('service_type_id', 2)
             ->where('finish_date', null)
             ->orderBy('created_at', 'DESC')
             ->get();
 
-        $finishedTransactions = Transaction::whereYear('created_at', '=', $currentYear)
+        $finishedTransactions = Transaction::with('member')->whereYear('created_at', '=', $currentYear)
             ->whereMonth('created_at', '=', $currentMonth)
             ->where('finish_date', '!=', null)
             ->orderBy('created_at', 'DESC')

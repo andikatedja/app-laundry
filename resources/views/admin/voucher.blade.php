@@ -1,4 +1,4 @@
-@extends('admin.main')
+@extends('admin.template.main')
 
 @section('css')
     <link href="{{ asset('vendor/datatables-bs4/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
@@ -46,7 +46,7 @@
                     @endif
                     <div class="card">
                         <div class="card-body">
-                            <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#tambahVoucher">Tambah
+                            <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#addVoucherModal">Tambah
                                 Voucher</button>
                             <h3>Daftar Voucher</h3>
                             <table id="tbl-members" class="table dt-responsive nowrap" style="width: 100%">
@@ -91,40 +91,10 @@
             </div>
         </div><!-- /.container-fluid -->
     </div>
+@endsection
 
-    <!-- Modal -->
-    <div class="modal fade" id="tambahVoucher" tabindex="-1" role="dialog" aria-labelledby="tambahVoucherLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="tambahVoucherLabel">Tambah Voucher</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form action="{{ route('admin.vouchers.store') }}" method="post">
-                    @csrf
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="potongan">Potongan</label>
-                            <input type="number" class="form-control" id="potongan" name="discount_value"
-                                placeholder="Besar potongan harga" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="poin">Poin diperlukan</label>
-                            <input type="number" class="form-control" id="poin" name="point_need"
-                                placeholder="Poin diperlukan" required>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary">Tambah</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+@section('modals')
+    <x-admin.modals.add-voucher-modal />
 @endsection
 
 @section('scripts')

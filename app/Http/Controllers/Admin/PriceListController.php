@@ -24,8 +24,17 @@ class PriceListController extends Controller
     public function index(): View
     {
         $user = Auth::user();
-        $satuan = PriceList::where('category_id', 1)->get();
-        $kiloan = PriceList::where('category_id', 2)->get();
+
+        $priceList = PriceList::with(['service', 'item'])->get();
+
+        $satuan = $priceList->filter(function (PriceList $value, $key) {
+            return $value->category_id == 1;
+        })->all();
+
+        $kiloan = $priceList->filter(function (PriceList $value, $key) {
+            return $value->category_id == 2;
+        })->all();
+
         $items = Item::all();
         $services = Service::all();
         $categories = Category::all();

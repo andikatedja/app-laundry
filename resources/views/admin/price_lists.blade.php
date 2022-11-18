@@ -1,4 +1,4 @@
-@extends('admin.main')
+@extends('admin.template.main')
 
 @section('css')
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -64,7 +64,7 @@
                                                 </div>
                                                 <div class="col-4">
                                                     <a id="tambah-barang" class="text-white btn btn-primary"
-                                                        data-toggle="modal" data-target="#tambahBarangModal"><i
+                                                        data-toggle="modal" data-target="#addItemModal"><i
                                                             class="fas fa-plus"></i>
                                                         Barang</a>
                                                 </div>
@@ -83,7 +83,7 @@
                                                 </div>
                                                 <div class="col-4">
                                                     <a id="tambah-servis" class="text-white btn btn-primary"
-                                                        data-toggle="modal" data-target="#tambahServisModal"><i
+                                                        data-toggle="modal" data-target="#addServiceModal"><i
                                                             class="fas fa-plus"></i>
                                                         Servis</a>
                                                 </div>
@@ -144,7 +144,7 @@
                                                     <td>
                                                         <a href="#" class="badge badge-warning btn-ubah-harga"
                                                             data-id="{{ $item->id }}" data-toggle="modal"
-                                                            data-target="#ubahHargaModal">Ubah Harga</a>
+                                                            data-target="#changePriceModal">Ubah Harga</a>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -173,7 +173,7 @@
                                                     <td>
                                                         <a href="#" class="badge badge-warning btn-ubah-harga"
                                                             data-id="{{ $item->id }}" data-toggle="modal"
-                                                            data-target="#ubahHargaModal">Ubah Harga</a>
+                                                            data-target="#changePriceModal">Ubah Harga</a>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -215,120 +215,16 @@
             </div>
         </div><!-- /.container-fluid -->
     </div>
-    <!-- Modal -->
-    <div class="modal fade" id="ubahHargaModal" tabindex="-1" role="dialog" aria-labelledby="ubahHargaModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="ubahHargaModalLabel">Ubah Harga</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{ route('admin.price-lists.update', ['priceList' => 'id']) }}" method="post"
-                        id="updatePriceForm">
-                        @csrf
-                        @method('PATCH')
-                        <input id="id-harga-modal" type="hidden" name="id_harga">
-                        <div class="form-group">
-                            <label for="harga-modal">Harga</label>
-                            <input type="number" class="form-control" id="harga-modal" name="price">
-                        </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Ubah Harga</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+@endsection
 
-    <div class="modal fade" id="updateCostModal" tabindex="-1" role="dialog" aria-labelledby="updateCostModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="updateCostModalLabel">Ubah Biaya Service</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="serviceTypeForm"
-                        action="{{ route('admin.service-types.update', ['serviceType' => 'id']) }}" method="POST">
-                        @method('PATCH')
-                        @csrf
-                        <input id="id-cost-modal" type="hidden" name="id_cost">
-                        <div class="form-group">
-                            <label for="cost-modal">Biaya</label>
-                            <input type="number" class="form-control" id="cost-modal" name="cost">
-                        </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Ubah Biaya</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+@section('modals')
+    <x-admin.modals.change-price-modal />
 
-    <div class="modal fade" id="tambahBarangModal" tabindex="-1" role="dialog"
-        aria-labelledby="tambahBarangModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="tambahBarangModalLabel">Tambah Barang</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{ route('admin.items.store') }}" method="post">
-                        @csrf
-                        <div class="form-group">
-                            <label for="barang">Nama Barang</label>
-                            <input type="text" class="form-control" id="barang" name="item_name">
-                        </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Tambah Barang</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+    <x-admin.modals.update-cost-modal />
 
-    <div class="modal fade" id="tambahServisModal" tabindex="-1" role="dialog"
-        aria-labelledby="tambahServisModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="tambahServisModalLabel">Tambah Servis</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{ route('admin.services.store') }}" method="post">
-                        @csrf
-                        <div class="form-group">
-                            <label for="servis">Nama Servis</label>
-                            <input type="text" class="form-control" id="servis" name="service_name">
-                        </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Tambah Servis</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+    <x-admin.modals.add-item-modal />
+
+    <x-admin.modals.add-service-modal />
 @endsection
 
 @section('scripts')

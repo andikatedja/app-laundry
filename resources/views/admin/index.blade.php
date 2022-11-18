@@ -1,4 +1,4 @@
-@extends('admin.main')
+@extends('admin.template.main')
 
 @section('css')
     <!-- Ionicons -->

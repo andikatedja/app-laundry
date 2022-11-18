@@ -1,4 +1,5 @@
-@extends('admin.main')
+@extends('admin.template.main')
+
 @section('css')
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="base_url" content="{{ url('admin') }}">
@@ -61,6 +62,7 @@
         </div><!-- /.container-fluid -->
     </div>
 @endsection
+
 @section('scripts')
     <script src="{{ asset('js/ajax.js') }}"></script>
 @endsection
