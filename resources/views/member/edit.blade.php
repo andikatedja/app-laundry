@@ -1,4 +1,4 @@
-@extends('member.main')
+@extends('member.template.main')
 
 @section('main-content')
     <!-- Content Header (Page header) -->
