@@ -23,6 +23,11 @@ class ServiceType extends Model
         return $this->hasMany(Transaction::class);
     }
 
+    /**
+     * Get formatted number of cost
+     *
+     * @return string
+     */
     public function getFormattedCost(): string
     {
         return 'Rp ' . number_format($this->cost, 0, ',', '.');
