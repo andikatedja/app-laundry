@@ -40,6 +40,7 @@ class VoucherController extends Controller
 
         // Cek apakah potongan ada yang sama di database
         $voucherExists = Voucher::where('discount_value', $input['discount_value'])->exists();
+
         if ($voucherExists) {
             return redirect()->route('admin.vouchers.index')
                 ->with('error', 'Voucher potongan ' . $input['discount_value'] . ' sudah ada');

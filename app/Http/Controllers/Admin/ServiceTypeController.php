@@ -30,6 +30,10 @@ class ServiceTypeController extends Controller
      */
     public function update(ServiceType $serviceType, Request $request): RedirectResponse
     {
+        $request->validate([
+            'cost' => ['required'],
+        ]);
+
         $serviceType->cost = $request->input('cost');
         $serviceType->save();
 

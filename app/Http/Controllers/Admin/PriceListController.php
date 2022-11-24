@@ -40,7 +40,15 @@ class PriceListController extends Controller
         $categories = Category::all();
         $serviceTypes = ServiceType::all();
 
-        return view('admin.price_lists', compact('user', 'satuan', 'kiloan', 'items', 'services', 'categories', 'serviceTypes'));
+        return view('admin.price_lists', compact(
+            'user',
+            'satuan',
+            'kiloan',
+            'items',
+            'services',
+            'categories',
+            'serviceTypes',
+        ));
     }
 
     /**
@@ -69,7 +77,7 @@ class PriceListController extends Controller
         if (PriceList::where([
             'item_id'     => $request->input('item'),
             'category_id' => $request->input('category'),
-            'service_id'  => $request->input('service')
+            'service_id'  => $request->input('service'),
         ])->exists()) {
             return redirect()->route('admin.price-lists.index')
                 ->with('error', 'Harga tidak dapat ditambah karena sudah tersedia!');
@@ -79,7 +87,7 @@ class PriceListController extends Controller
             'item_id'     => $request->input('item'),
             'category_id' => $request->input('category'),
             'service_id'  => $request->input('service'),
-            'price'       => $request->input('price')
+            'price'       => $request->input('price'),
         ]);
         $priceList->save();
 

@@ -56,10 +56,9 @@ class ReportController extends Controller
                 'monthInput',
                 'yearInput',
                 'revenue',
-                'transactionsCount'
+                'transactionsCount',
             )
         );
-        // return $pdf->download('laporan-keuangan-' . $bulan . '-' . $tahun . '.pdf');
 
         return $pdf->stream();
     }
@@ -72,8 +71,11 @@ class ReportController extends Controller
      */
     public function getMonth(Request $request): JsonResponse
     {
-        $year = $request->input('year');
-        $month = Transaction::whereYear('created_at', $year)->selectRaw('MONTH(created_at) as Bulan')->distinct()->get();
+        $year = $request->input('year', now()->year);
+        $month = Transaction::whereYear('created_at', $year)
+            ->selectRaw('MONTH(created_at) as Bulan')
+            ->distinct()
+            ->get();
 
         return response()->json($month);
     }

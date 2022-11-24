@@ -44,7 +44,7 @@ class DashboardController extends Controller
             'recentTransactions',
             'membersCount',
             'transactionsCount',
-            'priorityTransactions'
+            'priorityTransactions',
         ));
     }
 }
