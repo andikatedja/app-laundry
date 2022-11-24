@@ -27,7 +27,7 @@ class PriceListController extends Controller
             'user',
             'satuan',
             'kiloan',
-            'serviceTypes'
+            'serviceTypes',
         ));
     }
 }

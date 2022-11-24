@@ -30,7 +30,7 @@ class PointController extends Controller
         $vouchers = Voucher::where('active_status', 1)->get();
         $memberVouchers = UserVoucher::with('voucher')->where([
             'user_id' => $user->id,
-            'used' => 0
+            'used' => 0,
         ])->get();
 
         return view('member.point', compact('user', 'vouchers', 'memberVouchers'));
