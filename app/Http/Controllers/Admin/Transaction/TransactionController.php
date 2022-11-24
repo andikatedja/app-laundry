@@ -93,7 +93,7 @@ class TransactionController extends Controller
             // Get user's voucher
             $vouchers = UserVoucher::where([
                 'user_id' => $memberIdSessionTransaction,
-                'used'    => 0
+                'used'    => 0,
             ])->get();
 
             // Sum total price
@@ -102,10 +102,26 @@ class TransactionController extends Controller
                 $totalPrice += $transaction['subTotal'];
             }
 
-            return view('admin.transaction_input', compact('user', 'items', 'categories', 'services', 'serviceTypes', 'sessionTransaction', 'memberIdSessionTransaction', 'totalPrice', 'vouchers'));
+            return view('admin.transaction_input', compact(
+                'user',
+                'items',
+                'categories',
+                'services',
+                'serviceTypes',
+                'sessionTransaction',
+                'memberIdSessionTransaction',
+                'totalPrice',
+                'vouchers',
+            ));
         }
 
-        return view('admin.transaction_input', compact('user', 'items', 'categories', 'services', 'serviceTypes'));
+        return view('admin.transaction_input', compact(
+            'user',
+            'items',
+            'categories',
+            'services',
+            'serviceTypes',
+        ));
     }
 
     /**
@@ -116,6 +132,10 @@ class TransactionController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $request->validate([
+            'payment-amount' => ['required', 'integer'],
+        ]);
+
         DB::beginTransaction();
 
         $memberId = $request->session()->get('memberIdTransaction');
@@ -189,7 +209,7 @@ class TransactionController extends Controller
             $price = PriceList::where([
                 'item_id'     => $trs['itemId'],
                 'category_id' => $trs['categoryId'],
-                'service_id'  => $trs['serviceId']
+                'service_id'  => $trs['serviceId'],
             ])->firstOrFail();
 
             $transaction_detail = new TransactionDetail([
@@ -197,7 +217,7 @@ class TransactionController extends Controller
                 'price_list_id'  => $price->id,
                 'quantity'       => $trs['quantity'],
                 'price'          => $price->price,
-                'sub_total'      => $trs['subTotal']
+                'sub_total'      => $trs['subTotal'],
             ]);
             $transaction_detail->save();
         }
@@ -230,7 +250,7 @@ class TransactionController extends Controller
             'transaction_details.price_list.item',
             'transaction_details.price_list.service',
             'transaction_details.price_list.category',
-            'service_type'
+            'service_type',
         ]);
 
         return response()->json($transaction);
