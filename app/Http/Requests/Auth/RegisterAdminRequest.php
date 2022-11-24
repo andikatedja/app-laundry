@@ -24,10 +24,10 @@ class RegisterAdminRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required'],
-            'email' => ['required', 'email', 'unique:users'],
+            'name'     => ['required'],
+            'email'    => ['required', 'email', 'unique:users'],
             'password' => ['required', 'confirmed', 'min:8'],
-            'secret' => ['required'],
+            'secret'   => ['required'],
         ];
     }
 }
