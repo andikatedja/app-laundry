@@ -6,8 +6,6 @@ Aplikasi ini merupakan aplikasi laundry sederhana yang dibuat dengan framework L
 
 Daftar/Register admin dengan url `/register-admin`. Secret key dapat diubah di env atau default "Secret123".
 
-Demo website: [App Laundry Heroku](http://mpi-applaundry.herokuapp.com)
-
 Login admin:  
 Email : admin@laundryxyz.com  
 Pass : admin123
