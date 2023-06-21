@@ -44,13 +44,13 @@
                                 @lang('landing.langtext')
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="{{url('id')}}">Indonesia</a>
-                                <a class="dropdown-item" href="{{url('en')}}">English</a>
+                                <a class="dropdown-item" href="{{ url('id') }}">Indonesia</a>
+                                <a class="dropdown-item" href="{{ url('en') }}">English</a>
                             </div>
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn-success" href="{{url('login')}}">@lang('landing.loginOrRegister')</a>
+                        <a class="btn btn-success" href="{{ url('login') }}">@lang('landing.loginOrRegister')</a>
                     </li>
                 </ul>
             </div>
@@ -66,7 +66,8 @@
                     <p class="lead mb-5 text-white-50">@lang('landing.tagline')</p>
                 </div>
                 <div class="col-lg-6">
-                    <img class="img-fluid d-none d-lg-block" src="{{asset('img/landing/header.png')}}" alt="" srcset="">
+                    <img class="img-fluid d-none d-lg-block" src="{{ asset('img/landing/header.png') }}" alt=""
+                        srcset="">
                 </div>
             </div>
         </div>
@@ -86,7 +87,8 @@
                         baju tidak perlu dijemur dan mengurangi debu pada baju</p>
                 </div>
                 <div class="col-lg-6">
-                    <img class="img-fluid d-none d-lg-block" src="{{asset('img/landing/alat.png')}}" alt="" srcset="">
+                    <img class="img-fluid d-none d-lg-block" src="{{ asset('img/landing/alat.png') }}" alt=""
+                        srcset="">
                 </div>
             </div>
         </div>
@@ -96,8 +98,8 @@
         <div class="container p-5">
             <div class="row">
                 <div class="col-lg-6">
-                    <img class="img-fluid d-none d-lg-block" src="{{asset('img/landing/tipebaju.png')}}" alt=""
-                        srcset="">
+                    <img class="img-fluid d-none d-lg-block" src="{{ asset('img/landing/tipebaju.png') }}"
+                        alt="" srcset="">
                 </div>
                 <div class="col-lg-6">
                     <h4>Segala Tipe Pakaian</h4>
@@ -117,8 +119,8 @@
                         cukup baik dan handal di bidangnya sehingga membuat laundry kami minim kesalahan</p>
                 </div>
                 <div class="col-lg-6">
-                    <img class="img-fluid d-none d-lg-block" src="{{asset('img/landing/pegawai.png')}}" alt=""
-                        srcset="">
+                    <img class="img-fluid d-none d-lg-block" src="{{ asset('img/landing/pegawai.png') }}"
+                        alt="" srcset="">
                 </div>
             </div>
         </div>
@@ -133,7 +135,7 @@
             <div class="row flex-row flex-nowrap kategori">
                 <div class="col-4 mb-2">
                     <div class="card">
-                        <img src="{{asset('img/landing/Baju.jpg')}}" class="card-img-top" alt="">
+                        <img src="{{ asset('img/landing/Baju.jpg') }}" class="card-img-top" alt="">
                         <div class="card-body d-none d-lg-block">
                             <p class="card-text">Baju</p>
                         </div>
@@ -141,7 +143,7 @@
                 </div>
                 <div class="col-4 mb-2">
                     <div class="card">
-                        <img src="{{asset('img/landing/Celana.jpg')}}" class="card-img-top" alt="">
+                        <img src="{{ asset('img/landing/Celana.jpg') }}" class="card-img-top" alt="">
                         <div class="card-body d-none d-lg-block">
                             <p class="card-text">Celana</p>
                         </div>
@@ -149,7 +151,7 @@
                 </div>
                 <div class="col-4 mb-2">
                     <div class="card">
-                        <img src="{{asset('img/landing/Jas.jpg')}}" class="card-img-top" alt="">
+                        <img src="{{ asset('img/landing/Jas.jpg') }}" class="card-img-top" alt="">
                         <div class="card-body d-none d-lg-block">
                             <p class="card-text">Jas</p>
                         </div>
@@ -157,7 +159,7 @@
                 </div>
                 <div class="col-4 mb-2">
                     <div class="card">
-                        <img src="{{asset('img/landing/Selimut.jpg')}}" class="card-img-top" alt="">
+                        <img src="{{ asset('img/landing/Selimut.jpg') }}" class="card-img-top" alt="">
                         <div class="card-body d-none d-lg-block">
                             <p class="card-text">Selimut</p>
                         </div>
@@ -197,7 +199,7 @@
     <!-- Footer -->
     <footer class="py-5 bg-dark">
         <div class="container">
-            <p class="m-0 text-center text-white">Copyright &copy; {{config('app.name')}} 2020</p>
+            <p class="m-0 text-center text-white">Copyright &copy; {{ config('app.name') }} 2023</p>
         </div>
         <!-- /.container -->
     </footer>
