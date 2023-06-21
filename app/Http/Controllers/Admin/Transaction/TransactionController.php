@@ -153,6 +153,16 @@ class TransactionController extends Controller
         foreach ($sessionTransaction as &$trs) {
             $totalPrice += $trs['subTotal'];
         }
+
+        // Cek apakah menggunakan service type non reguler
+        $cost = 0;
+        if ($request->input('service-type') != 0) {
+            $serviceTypeCost = ServiceType::where('id', $request->input('service-type'))->firstOrFail();
+            $cost = $serviceTypeCost->cost;
+            // Tambahkan harga dengan cost
+            $totalPrice += $cost;
+        }
+
         $discount = 0;
 
         //Cek apakah ada voucher yang digunakan
@@ -175,15 +185,6 @@ class TransactionController extends Controller
             // Ganti status used pada tabel users_vouchers
             $userVoucher->used = 1;
             $userVoucher->save();
-        }
-
-        // Cek apakah menggunakan service type non reguler
-        $cost = 0;
-        if ($request->input('service-type') != 0) {
-            $serviceTypeCost = ServiceType::where('id', $request->input('service-type'))->firstOrFail();
-            $cost = $serviceTypeCost->cost;
-            // Tambahkan harga dengan cost
-            $totalPrice += $cost;
         }
 
         // Check if payment < total
