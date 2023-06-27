@@ -13,6 +13,7 @@ yarn-error.log
 /public/img/profile/*
 _ide_helper_models.php
 _ide_helper.php
+/public/build
 
 # exception to the rule
 !/public/img/profile/.gitkeep
