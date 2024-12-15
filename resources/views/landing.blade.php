@@ -176,7 +176,7 @@
             <div class="row">
                 <div class="col-md-6 mb-4 mb-sm-0">
                     <h5>Alamat</h5>
-                    <p>Jalan Raya Sempidi No. 69 Lukluk, Mengwi, Badung, Bali</p>
+                    <p>Jalan Sianipar</p>
                     <br>
                     <h5>Kontak</h5>
                     <p>laundryxyz@gmail.com</p>
@@ -185,7 +185,7 @@
                 </div>
                 <div class="col-md-6">
                     <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3945.0551329606237!2d115.18456241433559!3d-8.59069798958535!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd2394d265755b3%3A0xb025730a3074e799!2sJl.%20Raya%20Lukluk%20-%20Sempidi%2C%20Lukluk%2C%20Kec.%20Mengwi%2C%20Kabupaten%20Badung%2C%20Bali!5e0!3m2!1sid!2sid!4v1589257661013!5m2!1sid!2sid"
+                        src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d63784.65951407885!2d99.0681676!3d2.3223929!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x302e04584fee0d55%3A0xd13973a06cb33d47!2sJl.%20Sianipar%2C%20Pardede%20Onan%2C%20Kec.%20Balige%2C%20Toba%2C%20Sumatera%20Utara!5e0!3m2!1sen!2sid!4v1734233039352!5m2!1sen!2sid"
                         width="100%" height="400" frameborder="0" style="border:0;" allowfullscreen=""
                         aria-hidden="false" tabindex="0"></iframe>
                 </div>
